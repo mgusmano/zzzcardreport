@@ -3,9 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.5",
+    "@mui/lab": "^5.0.0-alpha.63",
+    "@mui/material": "^5.2.7",
+    "axios": "^0.24.0",
+    "flex-splitter-directive": "^0.2.0",
+    "font-awesome": "^4.7.0",
+    "google-map-react": "^2.1.10",
     "react": "^17.0.2",
+    "react-checkbox-tree": "^1.7.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "5.0.0"
+    "react-draggable": "^4.4.4",
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "5.0.0",
+    "styled-components": "^5.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

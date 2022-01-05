@@ -21,9 +21,7 @@ function Login(props) {
 
   function postLogin() {
     //setIsLoading(false);
-    var where
-    //where = '/trainingmatrix'
-    where = '/cardcbet'
+    var where = '/cardcbet'
     setReferer(where)
     setAuthTokens(password);
     setLoggedIn(true);

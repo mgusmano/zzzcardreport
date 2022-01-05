@@ -57,13 +57,14 @@ const CardReport = (props) => {
   return (
     <Horizontal >
       {/* column 1 */}
-      <Vertical style={{flex:'1'}}>
+      <Vertical style={{flex:'1',overflow:'hidden'}}>
 
         <div style={{overflow:'hidden',height:'75px',display:'flex',justifyContent:'space-between',flexDirection:'row',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
 
           <div style={{padding:'5px 0 0 20px',fontSize:'12px'}}>
               <img src={logoImg} alt="SKILLNET" style={{width:'90px'}} />
               <span><i>{reportName}</i></span>
+              <div style={{margin:'0 0 0 100px',width:'90px',fontSize:'10px'}}>v2022-01-05-a</div>
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>
@@ -103,14 +104,18 @@ const CardReport = (props) => {
       <Splitter/>
 
       {/* column 2 */}
+      {PartnerID !== 409 &&
       <Vertical style={{display:filterdisplay,width:propertywidth}}>
         <CardWidgetProperties propertywidth={propertywidth} Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
       </Vertical>
+      }
 
       {/* column 2 */}
+      {PartnerID === 409 &&
       <Vertical style={{display:filterdisplay,width:propertywidth}}>
         <CardWidgetProperties2 propertywidth={propertywidth} Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
       </Vertical>
+      }
 
     </Horizontal>
   )

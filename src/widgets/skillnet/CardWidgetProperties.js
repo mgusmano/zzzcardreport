@@ -322,7 +322,7 @@ const CardWidgetProperties = (props) => {
     //console.log('useEffect CardWidgetProperties')
 
     setRatingsourcesString(props.Partner.ratingsources)
-    onApplyClick()
+    //onApplyClick()
 
 
 

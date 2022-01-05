@@ -14,7 +14,7 @@ const Card = (props) => {
   const [ratinglabel, setRatinglabel] = useState('')
 
   if (user.Avatar === "https://azureportal.skillnet.net/") {
-    user.Avatar = 'Icons/a.png'
+    user.Avatar = 'icons/a.png'
   }
 
 

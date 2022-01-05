@@ -168,7 +168,6 @@ const CardWidgetProperties2 = (props) => {
   const [numberofusersdisplayed, setNumberofusersdisplayed] = useState(null)
   const [buttonlabel, setButtonLabel] = useState('Loading...')
 
-
   useEffect(() => {
     async function doData() {
       try {
@@ -191,6 +190,7 @@ const CardWidgetProperties2 = (props) => {
           }}/>)
         }
         setDropdowns(d)
+        onApplyClick()
       } catch (err) {
         console.error(err);
       }
@@ -235,43 +235,7 @@ const CardWidgetProperties2 = (props) => {
 
     console.log('filters to send')
     console.log(filters)
-    setButtonLabel('Apply All Filters')
-    //return
 
-
-    //var url = 'https://skillnetusersapi.azurewebsites.net/api/cardreportusers?' +
-    // 'personid=' + PersonID + '&' +
-    // 'groupid=' + GroupID + '&' +
-    // 'lobids=' + lobidsstring + '&' +
-    // 'leaderids=' + leaderidsstring + '&' +
-    // 'smeids=' + smeidsstring  + '&' +
-    // 'ratingsources=' + ratingsourcesstring + '&' +
-    // 'segmentids=' + segmentidsstring  + '&' +
-    // 'functionids=' + functionidsstring  + '&' +
-    // 'subfunctionids=' + subfunctionidsstring  + '&' +
-    // 'jobids=' + jobidsstring  + '&' +
-    // 'partnerlocationids=' + locationidsstring + '&' +
-    // 'managerids=' + manageridsstring + '&' +
-    // 'percentages=' + percentidsstring + '&' +
-    // 'skillids=' + skillidsstring
-
-    // axios
-    // .get(url, {
-    //   auth: {username: 'skillnet',password: 'demo'}
-    // })
-    // .then((response) => {
-    //   //console.log('filtered users', response)
-    //   setNumberofusersdisplayed(response.data.length)
-    //   //console.log('dummy data here')
-    //   //console.log(response.data)
-    //   SendIt('fromcardfilteredusers', {users: response.data})
-    //   setButtonLabel('Apply All Filters')
-    // })
-    // .catch((error) => {
-    //   console.log(error)
-    // })
-
-    var blankString = ''
     var blankString = ''
     var url = 'https://skillnetusersapi.azurewebsites.net/api/CardReportUsersNew?' +
     'personid=' + PersonID + '&' +
@@ -280,19 +244,22 @@ const CardWidgetProperties2 = (props) => {
     'percentages=' + blankString + '&' +
     'skillids=' + blankString
 
-    console.log('url',url)
-
-    axios({
+    //console.log('url',url)
+    var axiosParams = {
       method: 'post',
       url: url,
-      data: filters,
       headers: {auth: {username: 'skillnet',password: 'demo'}}
-      })
+    }
+    //console.log(filters.length)
+    if (filters.length !== 0) {
+      axiosParams.data = filters
+    }
+    //console.log(axiosParams)
+
+    axios(axiosParams)
     .then((response) => {
-      console.log('filtered users', response)
+      //console.log('filtered users', response)
       setNumberofusersdisplayed(response.data.length)
-      //console.log('dummy data here')
-      //console.log(response.data)
       SendIt('fromcardfilteredusers', {users: response.data})
       setButtonLabel('Apply All Filters')
     })
@@ -312,9 +279,11 @@ const CardWidgetProperties2 = (props) => {
         {buttonlabel}
       </Button>
 
-      {numberofusersdisplayed !== null &&
-        <div style={{marginTop:'40px'}}>Number of Users Displayed: {numberofusersdisplayed}</div>
-      }
+      <div style={{marginTop:'40px',height:'20px'}}>
+        {numberofusersdisplayed !== null &&
+          <div>Number of Users Displayed: {numberofusersdisplayed}</div>
+        }  
+      </div>
 
       <div style={{display:'flex',flexDirection:'column'}}>
         {dropdowns && dropdowns}
@@ -325,3 +294,67 @@ const CardWidgetProperties2 = (props) => {
 }
 
 export default CardWidgetProperties2
+
+
+// [
+//   {
+//     "attributeid": 147,
+//     "attributename": "Region",
+//     "values": [
+//       {
+//         "id": 1829,
+//         "value": "North",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       },
+//       {
+//         "id": 1830,
+//         "value": "South",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       },
+//       {
+//         "id": 1831,
+//         "value": "East",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       },
+//       {
+//         "id": 1832,
+//         "value": "West",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       },
+//       {
+//         "id": 1833,
+//         "value": "Northeast",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       },
+//       {
+//         "id": 1834,
+//         "value": "Northwest",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       },
+//       {
+//         "id": 1835,
+//         "value": "Southeast",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       },
+//       {
+//         "id": 1836,
+//         "value": "Southwest",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       },
+//       {
+//         "id": 1837,
+//         "value": "Midwest",
+//         "attributeid": 147,
+//         "attributename": "Region"
+//       }
+//     ]
+//   }
+// ]

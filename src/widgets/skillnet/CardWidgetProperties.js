@@ -17,7 +17,6 @@ import TreeItem from '@mui/lab/TreeItem';
 //import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -94,25 +93,19 @@ const CardWidgetProperties = (props) => {
   const [checkboxdisplay, setCheckboxdisplay] = useState('none')
   const [arrowclass, setArrowclass] = useState('css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator')
   const [treedata, setTreeData] = useState(null)
-
   const [leaders, setLeaders] = useState(null)
   const [smes, setSmes] = useState(null)
   const [lobs, setLobs] = useState(null)
-
-
   const [positions, setPositions] = useState(null)
   const [locations, setLocations] = useState(null)
   const [managers, setManagers] = useState(null)
   const [percents, setPercents] = useState(null)
   const [competencygroups, setCompetencyGroups] = useState(null)
-
   //const [subjectmatterexperts, setSubjectmatterexperts] = useState(null)
   //const [filteredsubjectmatterexperts, setFilteredsubjectmatterexperts] = useState([])
-
   const [segments, setSegments] = useState(null)
   const [functions, setFunctions] = useState(null)
   const [subfunctions, setSubfunctions] = useState(null)
-
   const [ratingsourcesstring, setRatingsourcesString] = useState('')
   const [leaderidsstring, setLeaderidsString] = useState('')
   const [smeidsstring, setSmeidsString] = useState('')
@@ -126,207 +119,11 @@ const CardWidgetProperties = (props) => {
   const [subfunctionidsstring, setSubfunctionidsString] = useState('')
   const [skillidsstring, setSkillidsString] = useState('')
 
-  const filterChanged = (checked, who) => {
-    //console.log(checked,who)
-    var suffix = ''
-    var idVal = ''
-    switch(who) {
-      case 'leaders':
-        suffix = ''
-        idVal = 'LeaderID'
-        break;
-      case 'smes':
-        suffix = ''
-        idVal = 'SmeID'
-        break;
-      case 'lobs':
-        //console.log('here')
-        suffix = ''
-        idVal = 'LobID'
-        break;
-      case 'positions':
-        suffix = ':0'
-        idVal = 'JobID'
-        break;
-      case 'locations':
-        suffix = ''
-        idVal = 'LocationID'
-        break;
-      case 'managers':
-        suffix = ''
-        idVal = 'ManagerID'
-        break;
-      case 'percents':
-        suffix = ''
-        idVal = 'PercentID'
-        break;
-      case 'segments':
-        suffix = ''
-        idVal = 'SegmentID'
-        break;
-      case 'functions':
-        suffix = ''
-        idVal = 'FunctionID'
-        break;
-      case 'subfunctions':
-        suffix = ''
-        idVal = 'SubfunctionID'
-        break;
-      case 'skills':
-        suffix = ':0'
-        idVal = ''
-        break;
-      default:
-        suffix = ''
-    }
-    var checkedString = ''
-    //console.log(Array.isArray(checked))
-
-    if (Array.isArray(checked)) {
-      checked.forEach(check => {
-        //console.log(check)
-        if (idVal === '') {
-          checkedString = checkedString + check + suffix + ','
-        }
-        else {
-          checkedString = checkedString + check[idVal] + suffix + ','
-        }
-      })
-    }
-    else {
-      if (checked !== null) {
-        checkedString = checked[idVal] + suffix + ','
-      }
-      else {
-        checkedString = ''
-      }
-    }
-    //console.log(checkedString)
-    var finalString = checkedString.slice(0, -1)
-    switch(who) {
-      case 'leaders':
-        setLeaderidsString(finalString)
-        break;
-      case 'smes':
-        setSmeidsString(finalString)
-        break;
-      case 'lobs':
-        //console.log(finalString)
-        setLobidsString(finalString)
-        break;
-      case 'positions':
-        setJobidsString(finalString)
-        break;
-      case 'locations':
-        setLocationidsString(finalString)
-        break;
-      case 'managers':
-        setManageridsString(finalString)
-        break;
-      case 'percents':
-        setPercentidsString(finalString)
-        break;
-      case 'segments':
-        setSegmentidsString(finalString)
-        break;
-      case 'functions':
-        setFunctionidsString(finalString)
-        break;
-      case 'subfunctions':
-        setSubfunctionidsString(finalString)
-        break;
-      case 'skills':
-        setSkillidsString(finalString)
-        break;
-      default:
-    }
-    setButtonLabel('Click to Apply All Filters')
-  };
-
-  // const skillsChanged = (checked) => {
-  //   console.log('skillsChanged',checked)
-  //   var checkedString = ''
-  //   checked.forEach(check => {
-  //     checkedString = checkedString + check + ':0,'
-  //   })
-  //   //setFilteredSkills(checked)
-  //   setSkillidsString(checkedString)
-  //   setButtonLabel('Apply All Filters')
-  // };
-
-
-  // const skillsChanged = (event, value, reason) => {
-  //   var filtersSkills = value.map(skill => {
-  //     return skill.SkillName
-  //   })
-  //   console.log('skillsChanged',filtersSkills)
-  //   setFilteredSkills(filtersSkills)
-  //   setButtonLabel('Apply All Filters')
-  // };
-
-
-
-
-  //const [filteredsegments, setFilteredSegments] = useState([])
-  //const refSegments = useRef(null);
-  // const segmentsChanged = (event, value, reason) => {
-  //   var filtersSegments = value.map(segment => {
-  //     return segment.SegmentName
-  //   })
-  //   console.log('segmentsChanged',filtersSegments)
-  //   setFilteredSegments(filtersSegments)
-  //   setButtonLabel('Apply All Filters')
-  // };
-
-
-  //const [filteredfunctions, setFilteredFunctions] = useState([])
-  //const refSegments = useRef(null);
-  // const functionsChanged = (event, value, reason) => {
-  //   var filtersFunctions = value.map(funct => {
-  //     return funct.FunctionName
-  //   })
-  //   console.log('functionsChanged',filtersFunctions)
-  //   setFilteredFunctions(filtersFunctions)
-  //   setButtonLabel('Apply All Filters')
-  // };
-
-
-
-  // const [filteredsubfunctions, setFilteredSubfunctions] = useState([])
-  // //const refSegments = useRef(null);
-  // const subfunctionsChanged = (event, value, reason) => {
-  //   var filtersSubfunctions = value.map(subfunct => {
-  //     return subfunct.SubfunctionName
-  //   })
-  //   console.log('subfunctionsChanged',filtersSubfunctions)
-  //   setFilteredSubfunctions(filtersSubfunctions)
-  //   setButtonLabel('Apply All Filters')
-  // };
-
-
-
-
-
-  // const refApplyButton = useRef(null);
-  // const refPositions = useRef(null);
-  // const refLocations = useRef(null);
-  // const refManagers = useRef(null);
-  // const refSkills = useRef(null);
-  // const refFitpercents = useRef(null);
-  // const refSubjectmatterexperts = useRef(null);
-
-
-
-  //var PartnerID = 395;  var PartnerName = 'CNA'; var PersonID = 275399;
-  //var PartnerID = 426;  var PartnerName = 'General Mills'; var PersonID = 277356;
-
   useEffect(() => {
     //console.log('useEffect CardWidgetProperties')
 
     setRatingsourcesString(props.Partner.ratingsources)
-    //onApplyClick()
-
-
+    onApplyClick()
 
     if (showlob === true) {
       //Lobs
@@ -350,7 +147,6 @@ const CardWidgetProperties = (props) => {
         console.log(error)
       })
     }
-
 
     if (SMEOnly === true) {
       //Leaders
@@ -706,7 +502,202 @@ const CardWidgetProperties = (props) => {
 
 
 
-  }, [PartnerID, PartnerName]);
+  }, [PartnerID]);
+
+
+  const filterChanged = (checked, who) => {
+    //console.log(checked,who)
+    var suffix = ''
+    var idVal = ''
+    switch(who) {
+      case 'leaders':
+        suffix = ''
+        idVal = 'LeaderID'
+        break;
+      case 'smes':
+        suffix = ''
+        idVal = 'SmeID'
+        break;
+      case 'lobs':
+        //console.log('here')
+        suffix = ''
+        idVal = 'LobID'
+        break;
+      case 'positions':
+        suffix = ':0'
+        idVal = 'JobID'
+        break;
+      case 'locations':
+        suffix = ''
+        idVal = 'LocationID'
+        break;
+      case 'managers':
+        suffix = ''
+        idVal = 'ManagerID'
+        break;
+      case 'percents':
+        suffix = ''
+        idVal = 'PercentID'
+        break;
+      case 'segments':
+        suffix = ''
+        idVal = 'SegmentID'
+        break;
+      case 'functions':
+        suffix = ''
+        idVal = 'FunctionID'
+        break;
+      case 'subfunctions':
+        suffix = ''
+        idVal = 'SubfunctionID'
+        break;
+      case 'skills':
+        suffix = ':0'
+        idVal = ''
+        break;
+      default:
+        suffix = ''
+    }
+    var checkedString = ''
+    //console.log(Array.isArray(checked))
+
+    if (Array.isArray(checked)) {
+      checked.forEach(check => {
+        //console.log(check)
+        if (idVal === '') {
+          checkedString = checkedString + check + suffix + ','
+        }
+        else {
+          checkedString = checkedString + check[idVal] + suffix + ','
+        }
+      })
+    }
+    else {
+      if (checked !== null) {
+        checkedString = checked[idVal] + suffix + ','
+      }
+      else {
+        checkedString = ''
+      }
+    }
+    //console.log(checkedString)
+    var finalString = checkedString.slice(0, -1)
+    switch(who) {
+      case 'leaders':
+        setLeaderidsString(finalString)
+        break;
+      case 'smes':
+        setSmeidsString(finalString)
+        break;
+      case 'lobs':
+        //console.log(finalString)
+        setLobidsString(finalString)
+        break;
+      case 'positions':
+        setJobidsString(finalString)
+        break;
+      case 'locations':
+        setLocationidsString(finalString)
+        break;
+      case 'managers':
+        setManageridsString(finalString)
+        break;
+      case 'percents':
+        setPercentidsString(finalString)
+        break;
+      case 'segments':
+        setSegmentidsString(finalString)
+        break;
+      case 'functions':
+        setFunctionidsString(finalString)
+        break;
+      case 'subfunctions':
+        setSubfunctionidsString(finalString)
+        break;
+      case 'skills':
+        setSkillidsString(finalString)
+        break;
+      default:
+    }
+    setButtonLabel('Click to Apply All Filters')
+  };
+
+  // const skillsChanged = (checked) => {
+  //   console.log('skillsChanged',checked)
+  //   var checkedString = ''
+  //   checked.forEach(check => {
+  //     checkedString = checkedString + check + ':0,'
+  //   })
+  //   //setFilteredSkills(checked)
+  //   setSkillidsString(checkedString)
+  //   setButtonLabel('Apply All Filters')
+  // };
+
+
+  // const skillsChanged = (event, value, reason) => {
+  //   var filtersSkills = value.map(skill => {
+  //     return skill.SkillName
+  //   })
+  //   console.log('skillsChanged',filtersSkills)
+  //   setFilteredSkills(filtersSkills)
+  //   setButtonLabel('Apply All Filters')
+  // };
+
+
+
+
+  //const [filteredsegments, setFilteredSegments] = useState([])
+  //const refSegments = useRef(null);
+  // const segmentsChanged = (event, value, reason) => {
+  //   var filtersSegments = value.map(segment => {
+  //     return segment.SegmentName
+  //   })
+  //   console.log('segmentsChanged',filtersSegments)
+  //   setFilteredSegments(filtersSegments)
+  //   setButtonLabel('Apply All Filters')
+  // };
+
+
+  //const [filteredfunctions, setFilteredFunctions] = useState([])
+  //const refSegments = useRef(null);
+  // const functionsChanged = (event, value, reason) => {
+  //   var filtersFunctions = value.map(funct => {
+  //     return funct.FunctionName
+  //   })
+  //   console.log('functionsChanged',filtersFunctions)
+  //   setFilteredFunctions(filtersFunctions)
+  //   setButtonLabel('Apply All Filters')
+  // };
+
+
+
+  // const [filteredsubfunctions, setFilteredSubfunctions] = useState([])
+  // //const refSegments = useRef(null);
+  // const subfunctionsChanged = (event, value, reason) => {
+  //   var filtersSubfunctions = value.map(subfunct => {
+  //     return subfunct.SubfunctionName
+  //   })
+  //   console.log('subfunctionsChanged',filtersSubfunctions)
+  //   setFilteredSubfunctions(filtersSubfunctions)
+  //   setButtonLabel('Apply All Filters')
+  // };
+
+
+
+
+
+  // const refApplyButton = useRef(null);
+  // const refPositions = useRef(null);
+  // const refLocations = useRef(null);
+  // const refManagers = useRef(null);
+  // const refSkills = useRef(null);
+  // const refFitpercents = useRef(null);
+  // const refSubjectmatterexperts = useRef(null);
+
+
+
+  //var PartnerID = 395;  var PartnerName = 'CNA'; var PersonID = 275399;
+  //var PartnerID = 426;  var PartnerName = 'General Mills'; var PersonID = 277356;
 
   const SendIt = (type, payload) => {
     window.dispatchEvent(new CustomEvent('mjg',{detail:{type:type,payload:payload}}));
@@ -715,7 +706,9 @@ const CardWidgetProperties = (props) => {
   const onApplyClick = (event) => {
     if (buttonlabel === 'No Filters Selected') {return}
 
-    SendIt('fromcardwaiting', {})
+    //mjg SendIt('fromcardfilters', {filters: filters})
+
+    //SendIt('fromcardwaiting', {})
 
     var url = 'https://skillnetusersapi.azurewebsites.net/api/cardreportusers?' +
     'personid=' + PersonID + '&' +
@@ -743,7 +736,7 @@ const CardWidgetProperties = (props) => {
       setNumberofusersdisplayed(response.data.length)
       //console.log('dummy data here')
       //console.log(response.data)
-      SendIt('fromcardfilteredusers', {users: response.data})
+      //SendIt('fromcardfilteredusers', {users: response.data})
       setButtonLabel('Apply All Filters')
     })
     .catch((error) => {

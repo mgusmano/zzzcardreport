@@ -1832,7 +1832,7 @@ export default class CheckboxWidget extends React.Component {
         nodes = nodesGMI
       }
       console.log('skills')
-      console.log(nodes)
+     console.log(nodes)
       this.state = {
         checked: [],
         expanded: [],

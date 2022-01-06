@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
-
 import Star from '@mui/icons-material/Star';
 import ProfileDialog from './ProfileDialog'
 //import Button from '@material-ui/core/Button';
-
 
 const Card = (props) => {
   const {user, Partner, SMEOnly, showratings} = props
@@ -16,8 +14,6 @@ const Card = (props) => {
   if (user.Avatar === "https://azureportal.skillnet.net/") {
     user.Avatar = 'icons/a.png'
   }
-
-
 
   // if (PartnerName === 'General Mills') {
   //   user.Rating = user.SelfRating
@@ -109,8 +105,6 @@ const Card = (props) => {
     return <div key={index} >SME: {SME}</div>
   })
 
-
-
   return (
     <div key={user.PersonID} style={{display:'flex',flexDirection:'column',margin:'10px 10px 10px 10px',padding:'10px',width:'300px',xheight:'150px',border:'1px solid lightgray',boxShadow: '0 10px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)'}}>
 
@@ -132,12 +126,12 @@ const Card = (props) => {
         <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>&nbsp;{PartnerName}</div>
         <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.location !== undefined && <div>Locationx: {user.Location}</div>}</div>
 
-{SMEOnly === true &&
+        {SMEOnly === true &&
         <>
         <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.Leader !== '' && <div>Leader: {user.Leader}</div>}</div>
         <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.SME !== '' && <div>{all}</div>}</div>
         </>
-}
+        }
 
         {PartnerName === 'General Mills' &&
         <>
@@ -146,8 +140,6 @@ const Card = (props) => {
         <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.Subfunction !== '' && <div>SubFunction: {user.Subfunction}</div>}</div>
         </>
         }
-
-
 
       </div>
 
@@ -160,9 +152,9 @@ const Card = (props) => {
     <div style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
       <div style={{fontSize:'11px'}}>{user.Email}</div>
       {idshow}
-{showratings === true &&
+      {showratings === true &&
       <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{ratinglabel}: {user.Rating}</div>
-}
+      }
       </div>
 
   </div>

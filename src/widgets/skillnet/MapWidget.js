@@ -11,6 +11,7 @@ const MapWidget = (props) => {
   const [waiting, setWaiting] = useState(false)
 
   async function doData2(filters) {
+    setWaiting(true)
     try {
       var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?partnerid=' + PartnerID;
       const response = await axios.get(url, {auth: {username: 'skillnet',password: 'demo'}});
@@ -22,9 +23,9 @@ const MapWidget = (props) => {
           Longitude: item.Longitude
         }
       })
-      console.log('locations',arrayLocations)
+      //console.log('locations',arrayLocations)
       setFilteredlocations(arrayLocations)
-      setWaiting(false)
+      //setWaiting(false)
     } catch (err) {
       console.error(err);
     }
@@ -36,10 +37,10 @@ const MapWidget = (props) => {
     var payload = e.detail.payload
     switch (type) {    
       case 'fromcardfilters':
-        setWaiting(true)
+
         setFilteredlocations([])
-        console.log('fromcardfilters')
-        console.log(payload.filters)
+        //console.log('fromcardfilters')
+        //console.log(payload.filters)
         doData2(payload.filters)
         setTimeout(() => {setWaiting(false)}, 500);
         break;
@@ -49,7 +50,7 @@ const MapWidget = (props) => {
   }
 
   useEffect(() => {
-    setWaiting(true)
+    //setWaiting(true)
     doData2([])   
   }, [PartnerID]);
 

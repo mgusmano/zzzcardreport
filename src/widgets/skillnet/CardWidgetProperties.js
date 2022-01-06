@@ -706,6 +706,7 @@ const CardWidgetProperties = (props) => {
   const onApplyClick = (event) => {
     if (buttonlabel === 'No Filters Selected') {return}
 
+
     //mjg SendIt('fromcardfilters', {filters: filters})
 
     //SendIt('fromcardwaiting', {})
@@ -732,11 +733,11 @@ const CardWidgetProperties = (props) => {
       auth: {username: 'skillnet',password: 'demo'}
     })
     .then((response) => {
-      //console.log('filtered users', response)
+      console.log('filtered users', response)
       setNumberofusersdisplayed(response.data.length)
       //console.log('dummy data here')
       //console.log(response.data)
-      //SendIt('fromcardfilteredusers', {users: response.data})
+      SendIt('fromcardfilteredusers', {users: response.data})
       setButtonLabel('Apply All Filters')
     })
     .catch((error) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from "axios";
-import './CardWidget.css'
+//import './CardWidget.css'
 import Card from'./Card'
 
 const CardWidget = (props) => {
@@ -15,6 +15,7 @@ const CardWidget = (props) => {
   }
   
   async function doData2(filters) {
+    setWaiting(true)
     try {
       var blankString = ''
       var url = 'https://skillnetusersapi.azurewebsites.net/api/CardReportUsersNew?' +
@@ -32,7 +33,7 @@ const CardWidget = (props) => {
         axiosParams.data = filters
       }
       const response = await axios(axiosParams)
-      console.log('filtered users', response)
+      //console.log('filtered users', response)
       setUsers(response.data)
       SendIt('fromcardwidget', {number: response.data.length})
       setWaiting(false)
@@ -47,12 +48,29 @@ const CardWidget = (props) => {
     var payload = e.detail.payload
     switch (type) {
       case 'fromcardfilters':
-        setWaiting(true)
         setUsers([])
-        console.log('fromcardfilters')
-        console.log(payload.filters)
+        //console.log('fromcardfilters')
+        //console.log(payload.filters)
         doData2(payload.filters)
-        setTimeout(() => {setWaiting(false)}, 500);
+        break;
+      case 'fromcardfilteredusers': //old one
+        setWaiting(true)
+        var toShow = []
+        if (props.SMEOnly === true) {
+          payload.users.map(user => {
+            if (user.Leader === '' && user.SME === '') {
+            }
+            else {
+              toShow.push(user)
+            }
+            return null
+          })
+          setUsers(toShow)
+        }
+        else {
+          setUsers(payload.users)
+        }
+        //setWaiting(false)
         break;
       default:
         break;
@@ -69,12 +87,10 @@ const CardWidget = (props) => {
   return (
     <div ref={cardRef} style={{display:'flex',flex:props.flex,flexWrap:'wrap',flexDirection:'row',overflow:'auto',alignContent:'flex-start'}} xstyle={{flex:'auto',flexWrap:'wrap',flexDirection:'row',justifyContent:'space-between',display:'flex',overflow:'auto'}}>
       {waiting === true && <div style={{padding:'30px',fontSize:'48px'}}>Loading...</div>}
-      {users !== null &&
+      {users !== null && 
         users.map((user, index) => {
-          return (
-            <Card key={index} user={user} Partner={props.Partner} SMEOnly={props.SMEOnly}/>
-          )
-        })
+          return <Card key={index} user={user} Partner={props.Partner} SMEOnly={props.SMEOnly}/>
+        }) 
       }
     </div>
   )

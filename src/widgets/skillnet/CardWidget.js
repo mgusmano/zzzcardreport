@@ -4,11 +4,12 @@ import axios from "axios";
 import Card from'./Card'
 
 const CardWidget = (props) => {
-  const cardRef = useRef(null);
-  const [users, setUsers] = useState(null)
-  const [waiting, setWaiting] = useState(false)
   const { Partner } = props
-  const { PartnerID, PartnerName, PersonID, GroupID, SMEOnly, showlob, showskills } = Partner;
+  const { PersonID, GroupID } = Partner;
+  const [waiting, setWaiting] = useState(false)
+  const [users, setUsers] = useState(null)
+
+  //const cardRef = useRef(null);
 
   const SendIt = (type, payload) => {
     window.dispatchEvent(new CustomEvent('mjg',{detail:{type:type,payload:payload}}));
@@ -27,7 +28,7 @@ const CardWidget = (props) => {
       var axiosParams = {
         method: 'post',
         url: url,
-        headers: {auth: {username: 'skillnet',password: 'demo'}}
+        auth: {username: 'skillnet',password: 'demo'}
       }
       if (filters.length !== 0) {
         axiosParams.data = filters
@@ -84,8 +85,10 @@ const CardWidget = (props) => {
     };
   }, [onMessage]);
 
+  //    <div ref={cardRef} style={{display:'flex',flex:props.flex,flexWrap:'wrap',flexDirection:'row',overflow:'auto',alignContent:'flex-start'}} xstyle={{flex:'auto',flexWrap:'wrap',flexDirection:'row',justifyContent:'space-between',display:'flex',overflow:'auto'}}>
+
   return (
-    <div ref={cardRef} style={{display:'flex',flex:props.flex,flexWrap:'wrap',flexDirection:'row',overflow:'auto',alignContent:'flex-start'}} xstyle={{flex:'auto',flexWrap:'wrap',flexDirection:'row',justifyContent:'space-between',display:'flex',overflow:'auto'}}>
+    <div style={{display:'flex',flex:props.flex,flexWrap:'wrap',flexDirection:'row',overflow:'auto',alignContent:'flex-start'}}>
       {waiting === true && <div style={{padding:'30px',fontSize:'48px'}}>Loading...</div>}
       {users !== null && 
         users.map((user, index) => {

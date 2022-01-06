@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import Marker from './Marker';
 import GoogleMap from './GoogleMap';
-import axios from "axios";
 
 const MapWidget = (props) => {
   const { Partner } = props
   const { PartnerID } = Partner;
+  const [waiting, setWaiting] = useState(false)
   const [filteredlocations, setFilteredlocations] = useState(null)
   const [currid, setCurrId] = useState(null)
-  const [waiting, setWaiting] = useState(false)
 
   async function doData2(filters) {
     setWaiting(true)
     try {
-      var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?partnerid=' + PartnerID;
-      const response = await axios.get(url, {auth: {username: 'skillnet',password: 'demo'}});
+      var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?' + 
+      'partnerid=' + PartnerID;
+      var axiosParams = {
+        method: 'get',
+        url: url,
+        auth: {username: 'skillnet',password: 'demo'}
+      }
+      const response = await axios(axiosParams)
       var arrayLocations = response.data.map(item => {
         return {
           PartnerLocationID: item.PartnerLocationID,
@@ -25,7 +31,7 @@ const MapWidget = (props) => {
       })
       //console.log('locations',arrayLocations)
       setFilteredlocations(arrayLocations)
-      //setWaiting(false)
+      setWaiting(false)
     } catch (err) {
       console.error(err);
     }
@@ -37,12 +43,10 @@ const MapWidget = (props) => {
     var payload = e.detail.payload
     switch (type) {    
       case 'fromcardfilters':
-
         setFilteredlocations([])
         //console.log('fromcardfilters')
         //console.log(payload.filters)
         doData2(payload.filters)
-        setTimeout(() => {setWaiting(false)}, 500);
         break;
       default:
         break;
@@ -50,16 +54,15 @@ const MapWidget = (props) => {
   }
 
   useEffect(() => {
-    //setWaiting(true)
     doData2([])   
-  }, [PartnerID]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('mjg', onMessage);
     return function cleanup() {
       window.removeEventListener('mjg', onMessage);
     };
-  }, [])
+  }, [onMessage])
 
   const defaultProps = {
     center: {lat: 39.099728,lng: -94.578568},

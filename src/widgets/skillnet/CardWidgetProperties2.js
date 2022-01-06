@@ -61,7 +61,6 @@ const CardWidgetProperties2 = (props) => {
     var payload = e.detail.payload
     switch (type) {
       case 'fromcardwidget':
-        console.log('fromcardwidget')
         setNumberofusersdisplayed(payload.number)
         setButtonLabel('Apply All Filters')
         break;

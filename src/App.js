@@ -16,6 +16,7 @@ var PartnerCNA = {
   ratingsources: '4', //ManagerRating
   SMEOnly: true,
   showlob: false,
+  showskills: true,
   reportName: 'Risk Control Skills Report',
   image: './images/CNA.png'
 }
@@ -30,6 +31,7 @@ var PartnerGMIsb = {
   ratingsources: '1000', //SelfRating
   SMEOnly: false,
   showlob: false,
+  showskills: true,
   reportName: 'Card Report',
   image: './images/GMI.png'
 }
@@ -44,6 +46,7 @@ var PartnerCBET = {
   ratingsources: '1000', //SelfRating
   SMEOnly: false,
   showlob: false,
+  showskills: true,
   reportName: 'Card Report',
   image: './images/BIO.png'
 }

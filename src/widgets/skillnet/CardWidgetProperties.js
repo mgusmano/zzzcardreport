@@ -80,8 +80,8 @@ const DropDown = (props) => {
 }
 
 const CardWidgetProperties = (props) => {
-  const {SMEOnly, showlob, Partner} = props
-  const { PartnerID, PartnerName, PersonID, GroupID } = Partner;
+  const {Partner} = props
+  const { PartnerID, PartnerName, PersonID, GroupID, SMEOnly, showlob, showskills } = Partner;
 
   //title:Card Report//title:
   //x:30//x:
@@ -1000,62 +1000,31 @@ onClick={e => (e.stopPropagation())}
 <DropDown multiple={true} who="Sub Functions" onChanged={(event,checked) => filterChanged(checked,'subfunctions')} options={subfunctions} name="SubfunctionName"/>
 }
 
+{showskills === true &&
+<div style={{marginTop:'20px',padding:'0',border:'0px solid gray'}}>
 
-<div className="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon css-16awh2u-MuiAutocomplete-root" role="combobox" aria-expanded="false" style={{width:"100%",marginTop:"20px"}}>
-  <div className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root">
-    <label className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root" data-shrink="false" id="mui-54-label" htmlFor="mui-54">
-      Skills
-    </label>
-    <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-ghsjzk-MuiInputBase-root-MuiInput-root">
-      <input aria-invalid="false" autoComplete="off" placeholder="" type="text" className="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1x51dt5-MuiInputBase-input-MuiInput-input" aria-autocomplete="list" autoCapitalize="none" spellCheck="false" id="mui-54"/>
-      <div className="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment">
-        <button onClick={changeIt} className={`MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator ${arrowclass}`} tabIndex="-1" type="button" aria-label="Open" title="Open">
-          <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowDropDownIcon">
-            <path d="M7 10l5 5 5-5z"></path>
-          </svg>
-          <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span>
-        </button>
+  <div className="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon css-16awh2u-MuiAutocomplete-root" role="combobox" aria-expanded="false" style={{width:"100%",marginTop:"20px"}}>
+    <div className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root">
+      <label className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root" data-shrink="false" id="mui-54-label" htmlFor="mui-54">
+        Skills
+      </label>
+      <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-ghsjzk-MuiInputBase-root-MuiInput-root">
+        <input aria-invalid="false" autoComplete="off" placeholder="" type="text" className="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1x51dt5-MuiInputBase-input-MuiInput-input" aria-autocomplete="list" autoCapitalize="none" spellCheck="false" id="mui-54"/>
+        <div className="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment">
+          <button onClick={changeIt} className={`MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator ${arrowclass}`} tabIndex="-1" type="button" aria-label="Open" title="Open">
+            <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowDropDownIcon">
+              <path d="M7 10l5 5 5-5z"></path>
+            </svg>
+            <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div style={{display:checkboxdisplay}}>
-  <CheckboxWidget Partner={Partner} onCheck={(checked) => filterChanged(checked,'skills')}/>
-</div>
-
-
-
-{true === false &&
-<div style={{marginTop:'20px',padding:'0',border:'0px solid gray'}}>
-  <div style={{width:'100%',marginTop:'20px'}} className="MuiInputBase-root MuiInput-root MuiInput-underline MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedEnd">
-    <input aria-invalid="false" placeholder="" type="text" style={{fontWeight:'400',color:'rgba(0, 0, 0, 0.87)'}} className="MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd" aria-autocomplete="list" defaultValue="Skills" id="mui-44339"></input>
-    <div className="MuiAutocomplete-endAdornment">
-      <button className="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator" tabIndex="-1" type="button" aria-label="Clear" title="Clear">
-          <span className="MuiIconButton-label">
-            <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-            </svg>
-          </span>
-        <span className="MuiTouchRipple-root"></span>
-      </button>
-      <button className={`MuiButtonBase-root MuiIconButton-root MuiAutocomplete-popupIndicator ${arrowclass}`} tabIndex="-1" type="button" aria-label="Open" title="Open" onClick={changeIt}>
-        <span className="MuiIconButton-label">
-          <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 10l5 5 5-5z">
-            </path>
-          </svg>
-        </span>
-        <span className="MuiTouchRipple-root"></span>
-      </button>
-    </div>
-</div>
-
-<div style={{display:checkboxdisplay}}>
-  hi
-  {/* <CheckboxWidget Partner={Partner} onCheck={(checked) => filterChanged(checked,'skills')}/> */}
-</div>
-
+  <div style={{display:checkboxdisplay}}>
+    <CheckboxWidget Partner={Partner} onCheck={(checked) => filterChanged(checked,'skills')}/>
+  </div>
 </div>
 }
 
@@ -1070,20 +1039,6 @@ onClick={e => (e.stopPropagation())}
   {renderTree(treedata)}
 </TreeView>
 } */}
-
-
-{/* <Autocomplete
-      id="virtualize-demo"
-      style={{ width: 300 }}
-      disableListWrap
-      //classes={classes}
-      ListboxComponent={ListboxComponent}
-      //renderGroup={renderGroup}
-      options={OPTIONS}
-      //groupBy={(option) => option[0].toUpperCase()}
-      renderInput={(params) => <TextField {...params} variant="outlined" label="10,000 options" />}
-      renderOption={(option) => <Typography noWrap>{option}</Typography>}
-    /> */}
 
 
 

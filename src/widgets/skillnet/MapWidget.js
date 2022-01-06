@@ -87,11 +87,14 @@ const MapWidget = (props) => {
 
 
   useEffect(() => {
+    var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?partnerid=' + props.PartnerID;
+    console.log(url)
     axios
-    .get('https://skillnetpartnerlocationsapi.azurewebsites.net//api/PartnerLocations?partnerid=' + props.PartnerID, {
+    .get(url, {
       auth: {username: 'skillnet',password: 'demo'}
     })
     .then((response) => {
+      console.log(response.data)
       var arrayLocations = response.data.map(item => {
         return {
           PartnerLocationID: item.PartnerLocationID,
@@ -100,7 +103,8 @@ const MapWidget = (props) => {
           Longitude: item.Longitude
         }
       })
-      //console.log('locations',arrayLocations)
+      //console.log(response.data)
+      console.log('locations',arrayLocations)
       //originallocations = arrayLocations
       setFilteredlocations(arrayLocations)
       //setLocations(arrayLocations)

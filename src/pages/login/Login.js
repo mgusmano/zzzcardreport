@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 //import logoImg from "../img/logo.jpg";
-import logoImg from "../../images/logo.png";
+//import logoImg from "../../images/logo.png";
 import { Card, Logo, Form, Input, Button, Error } from "../../components/AuthForms";
 import { useAuth } from "../../context/auth";
 
@@ -108,7 +108,7 @@ function Login(props) {
 
   return (
     <Card>
-      <Logo src={logoImg} />
+      {/* <Logo src={'../../../images/logo.png'} /> */}
       <Form>
         <Input
           type="username"

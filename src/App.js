@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { AuthContext } from "./context/auth";
-import PrivateRoute from './PrivateRoute';
+//import PrivateRoute from './PrivateRoute';
 //import { useLocation, Route, Switch, useHistory, Redirect } from 'react-router-dom';
-import { Link , Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/login/Login";
 import CardReport from './CardReport';
 
@@ -33,6 +33,7 @@ var PartnerGMIsb = {
   reportName: 'Card Report',
   image: './images/GMI.png'
 }
+
 var PartnerCBET = {
   PartnerID: 409,
   PartnerShort: 'CBET',
@@ -47,11 +48,8 @@ var PartnerCBET = {
   image: './images/BIO.png'
 }
 
-
 function App() {
   const [authTokens, setAuthTokens] = useState('');
-
-  //const history = useHistory();
 
   const setTokens = (data) => {
     localStorage.setItem("tokens", JSON.stringify(data));
@@ -60,14 +58,7 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
-      <div
-        style={{flex:'1',
-        border:'0px solid green',
-        background:'whitesmoke',
-        overflow:'hidden',
-        width: '100%',
-        height: '100%',
-      }}>
+      <div style={{flex:'1',overflow:'hidden',width:'100%',height:'100%'}}>
         <Routes>
           <Route path="/" element={<Login replace to="/login" />} />
           <Route path="/login" element={<Login />} />

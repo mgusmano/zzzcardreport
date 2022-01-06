@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logoImg from './images/logo.png';
+//import logoImg from './images/logo.png';
 
 import CardWidget from './widgets/skillnet/CardWidget'
 import MapWidget from './widgets/skillnet/MapWidget'
@@ -62,13 +62,13 @@ const CardReport = (props) => {
         <div style={{overflow:'hidden',height:'75px',display:'flex',justifyContent:'space-between',flexDirection:'row',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
 
           <div style={{padding:'5px 0 0 20px',fontSize:'12px'}}>
-              <img src={logoImg} alt="SKILLNET" style={{width:'90px'}} />
+              <img src={'../images/logo.png'} alt="SKILLNET" style={{width:'90px'}} />
               <span><i>{reportName}</i></span>
-              <div style={{margin:'0 0 0 100px',width:'90px',fontSize:'10px'}}>v2022-01-05-a</div>
+              <div style={{margin:'0 0 0 100px',width:'90px',fontSize:'10px'}}>v2022-01-06-a</div>
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>
-            <img src={image} style={{marginTop:'10px',height:'50px'}} alt={PartnerName} />
+            <img src={image} style={{marginTop:'10px',height:'50px',color:'black'}} alt={PartnerName} />
           </div>
 
           <div>

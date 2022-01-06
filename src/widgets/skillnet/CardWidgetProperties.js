@@ -9,8 +9,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
-//import CheckBoxOutlineBlankIcon from '@mui/icons/CheckBoxOutlineBlank';
-//import CheckBoxIcon from '@mui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 //import { SettingsSystemDaydreamTwoTone } from '@material-ui/icons';
 import TreeItem from '@mui/lab/TreeItem';
 //import TreeView from '@material-ui/lab/TreeView';
@@ -18,8 +18,8 @@ import TreeItem from '@mui/lab/TreeItem';
 //import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 
-//const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-//const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const DropDown = (props) => {
   //const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -46,25 +46,27 @@ const DropDown = (props) => {
   return (
     <Autocomplete
       //ref={refSegments}
-      onChange={onChanged}
       style={{width:'100%',marginTop:'20px'}}
-      multiple={multiple}
-      disableCloseOnSelect={true}
+      multiple
+      onChange={onChanged}
+
+      //disableCloseOnSelect={true}
       options={options}
+
       getOptionLabel={options => typeof options === 'string' ? options : options[name]}
       //defaultValue={[]}
-      renderOption={multiple === true ?
-        (options, { selected }) => (
-          <React.Fragment>
-            <Checkbox
-              //icon={icon}
-              //checkedIcon={checkedIcon}
-              style={{ marginRight: 8 }}
-              checked={selected}
-            />
-            {options[name]}
-          </React.Fragment>
-        ) : undefined}
+      // renderOption={multiple === true ?
+      //   (options, { selected }) => (
+      //     <React.Fragment>
+      //       <Checkbox
+      //         icon={icon}
+      //         checkedIcon={checkedIcon}
+      //         style={{ marginRight: 8 }}
+      //         checked={selected}
+      //       />
+      //       {options[name]}
+      //     </React.Fragment>
+      //   ) : undefined}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -90,7 +92,7 @@ const CardWidgetProperties = (props) => {
   const [numberofusersdisplayed, setNumberofusersdisplayed] = useState(null)
   const [buttonlabel, setButtonLabel] = useState('Loading...')
   const [checkboxdisplay, setCheckboxdisplay] = useState('none')
-  const [arrowclass, setArrowclass] = useState('')
+  const [arrowclass, setArrowclass] = useState('css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator')
   const [treedata, setTreeData] = useState(null)
 
   const [leaders, setLeaders] = useState(null)
@@ -881,13 +883,16 @@ onClick={e => (e.stopPropagation())}
   );
 
   const changeIt = () => {
+    console.log('changeIt')
+    console.log(checkboxdisplay)
     if (checkboxdisplay === 'none') {
+      console.log('here')
       setCheckboxdisplay('block')
-      setArrowclass('MuiAutocomplete-popupIndicatorOpen')
+      setArrowclass(' MuiAutocomplete-popupIndicatorOpen css-113ntv0-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator ')
     }
     else {
       setCheckboxdisplay('none')
-      setArrowclass('')
+      setArrowclass(' css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator ')
     }
   };
 
@@ -995,7 +1000,33 @@ onClick={e => (e.stopPropagation())}
 <DropDown multiple={true} who="Sub Functions" onChanged={(event,checked) => filterChanged(checked,'subfunctions')} options={subfunctions} name="SubfunctionName"/>
 }
 
-{SMEOnly === false &&
+
+<div className="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon css-16awh2u-MuiAutocomplete-root" role="combobox" aria-expanded="false" style={{width:"100%",marginTop:"20px"}}>
+  <div className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root">
+    <label className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root" data-shrink="false" id="mui-54-label" htmlFor="mui-54">
+      Skills
+    </label>
+    <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-ghsjzk-MuiInputBase-root-MuiInput-root">
+      <input aria-invalid="false" autoComplete="off" placeholder="" type="text" className="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1x51dt5-MuiInputBase-input-MuiInput-input" aria-autocomplete="list" autoCapitalize="none" spellCheck="false" id="mui-54"/>
+      <div className="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment">
+        <button onClick={changeIt} className={`MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator ${arrowclass}`} tabIndex="-1" type="button" aria-label="Open" title="Open">
+          <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowDropDownIcon">
+            <path d="M7 10l5 5 5-5z"></path>
+          </svg>
+          <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style={{display:checkboxdisplay}}>
+  <CheckboxWidget Partner={Partner} onCheck={(checked) => filterChanged(checked,'skills')}/>
+</div>
+
+
+
+{true === false &&
 <div style={{marginTop:'20px',padding:'0',border:'0px solid gray'}}>
   <div style={{width:'100%',marginTop:'20px'}} className="MuiInputBase-root MuiInput-root MuiInput-underline MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedEnd">
     <input aria-invalid="false" placeholder="" type="text" style={{fontWeight:'400',color:'rgba(0, 0, 0, 0.87)'}} className="MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd" aria-autocomplete="list" defaultValue="Skills" id="mui-44339"></input>
@@ -1020,9 +1051,9 @@ onClick={e => (e.stopPropagation())}
     </div>
 </div>
 
-
 <div style={{display:checkboxdisplay}}>
-  <CheckboxWidget Partner={Partner} onCheck={(checked) => filterChanged(checked,'skills')}/>
+  hi
+  {/* <CheckboxWidget Partner={Partner} onCheck={(checked) => filterChanged(checked,'skills')}/> */}
 </div>
 
 </div>

@@ -14,6 +14,7 @@ const DropDown = (props) => {
   return (
     <Autocomplete
       style={{width:'100%',marginTop:'20px'}}
+      multiple
       onChange={(event,checked,reason)=>{
         var currentFilters = {
           attributeid,
@@ -26,7 +27,7 @@ const DropDown = (props) => {
         }
         onChanged(event,checked,reason,currentFilters)
       }}
-      multiple
+
       id="tags-filled"
       options={options.map((option) => option.value)}
       renderTags={(value, getTagProps) =>

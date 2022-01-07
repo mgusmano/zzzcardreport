@@ -13,14 +13,23 @@ const MapWidget = (props) => {
   async function doData2(filters) {
     setWaiting(true)
     try {
-      var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?' + 
+      //var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?' + 
+      //'partnerid=' + PartnerID;
+      var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 
       'partnerid=' + PartnerID;
+      //console.log(url)
       var axiosParams = {
-        method: 'get',
+        method: 'post',
         url: url,
-        auth: {username: 'skillnet',password: 'demo'}
+        auth: {username: 'skillnet',password: 'demo'},
+        data: filters
       }
+      // if (filters.length !== 0) {
+      //   axiosParams.data = filters
+      // }
+      console.log(axiosParams)
       const response = await axios(axiosParams)
+      console.log(response.data)
       var arrayLocations = response.data.map(item => {
         return {
           PartnerLocationID: item.PartnerLocationID,

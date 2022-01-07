@@ -1825,21 +1825,14 @@ export default class CheckboxWidget extends React.Component {
       super(props);
 
       var nodes
-
-      if (props.nodes === undefined) {     
-        if (this.props.Partner.PartnerID === 395) {
-          nodes = nodesCNA
-        }
-        else {
-          nodes = nodesGMI
-        }
-        //console.log('skills')
-        //console.log(nodes)
+      if (this.props.Partner.PartnerID === 395) {
+        nodes = nodesCNA
       }
       else {
-        nodes=props.nodes
+        nodes = nodesGMI
       }
-
+      console.log('skills')
+     console.log(nodes)
       this.state = {
         checked: [],
         expanded: [],
@@ -1850,26 +1843,17 @@ export default class CheckboxWidget extends React.Component {
     render() {
         return (
             <CheckboxTree
-                onlyLeafCheckboxes={false}
-                showNodeIcon={false}
+            onlyLeafCheckboxes={false}
+            showNodeIcon={false}
                 nodes={this.state.nodes}
                 checked={this.state.checked}
                 expanded={this.state.expanded}
-                onCheck={(checked,a,b,c,d) => {
-                  console.log(checked)
-                  console.log(a)
-                  console.log(b)
-                  console.log(c)
-                  console.log(d)
+                onCheck={checked => {
                   this.props.onCheck(checked)
                   this.setState({ checked })
                 }}
-                onCheck2={(checked,a,b,c,d) => {
+                onCheck2={checked => {
                   console.log(checked)
-                  console.log(a)
-                  console.log(b)
-                  console.log(c)
-                  console.log(d)
                   this.setState({ checked })
                 }}
                 onExpand={expanded => this.setState({ expanded })}

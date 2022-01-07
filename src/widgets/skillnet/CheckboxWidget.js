@@ -1855,21 +1855,14 @@ export default class CheckboxWidget extends React.Component {
                 nodes={this.state.nodes}
                 checked={this.state.checked}
                 expanded={this.state.expanded}
-                onCheck={(checked,a,b,c,d) => {
+                noCascade={true}
+                checkModel='leaf'
+                showExpandAll={true}
+                onlyLeafCheckboxes={true}
+                onCheck={(checked,a) => {
                   console.log(checked)
                   console.log(a)
-                  console.log(b)
-                  console.log(c)
-                  console.log(d)
                   this.props.onCheck(checked)
-                  this.setState({ checked })
-                }}
-                onCheck2={(checked,a,b,c,d) => {
-                  console.log(checked)
-                  console.log(a)
-                  console.log(b)
-                  console.log(c)
-                  console.log(d)
                   this.setState({ checked })
                 }}
                 onExpand={expanded => this.setState({ expanded })}

@@ -19,7 +19,7 @@ const CardReport = (props) => {
   const { PartnerID, PartnerName, PersonID, SMEOnly, showlob, reportName, image } = props.Partner;
   //const [addWidgetOpen, setAddWidgetOpen] = useState(false);
   const [filterdisplay, setFilterDisplay] = useState('block')
-  const [propertywidth] = useState('375px')
+  const [propertywidth] = useState('550px')
   const [cardflex, setCardflex] = useState(1)
   const [mapflex, setMapflex] = useState(0)
   const [alignment, setAlignment] = React.useState('Card');
@@ -64,7 +64,7 @@ const CardReport = (props) => {
           <div style={{padding:'5px 0 0 20px',fontSize:'12px'}}>
               <img src={'../images/logo.png'} alt="SKILLNET" style={{width:'90px'}} />
               <span><i>{reportName}</i></span>
-              <div style={{margin:'0 0 0 100px',width:'90px',fontSize:'10px'}}>v2022-01-07-e</div>
+              <div style={{margin:'0 0 0 100px',width:'90px',fontSize:'10px'}}>v2022-01-07-f</div>
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>
@@ -105,15 +105,15 @@ const CardReport = (props) => {
 
       {/* column 2 */}
       {PartnerID !== 409 &&
-      <Vertical style={{display:filterdisplay,width:propertywidth}}>
-        <CardWidgetProperties2 propertywidth={propertywidth} Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
+      <Vertical style={{display:filterdisplay}}>
+        <CardWidgetProperties2 Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
       </Vertical>
       }
 
       {/* column 2 */}
       {PartnerID === 409 &&
-      <Vertical style={{display:filterdisplay,width:propertywidth}}>
-        <CardWidgetProperties2 propertywidth={propertywidth} Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
+      <Vertical style={{display:filterdisplay}}>
+        <CardWidgetProperties2 Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
       </Vertical>
       }
 

@@ -286,7 +286,7 @@ const CardWidgetProperties2 = (props) => {
 
 
         {skills !== null && 
-        <div style={{marginTop:'10px',padding:'0',border:'0px solid gray'}}>
+          <>
           <div className="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon css-16awh2u-MuiAutocomplete-root" role="combobox" aria-expanded="false" style={{width:"100%",marginTop:"20px"}}>
             <div className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root">
               <label className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root" data-shrink="false" id="mui-54-label" htmlFor="mui-54">
@@ -308,7 +308,7 @@ const CardWidgetProperties2 = (props) => {
           <div style={{margin:'10px 0 0 0',display:checkboxdisplay}}>
             <CheckboxWidget nodes={skills} Partner={Partner} onCheck={(checked,a,b,c,d) => filterSkillsChanged(checked,'skills',a,b,c,d)}/>
           </div>
-        </div>
+          </>      
         }
 
 

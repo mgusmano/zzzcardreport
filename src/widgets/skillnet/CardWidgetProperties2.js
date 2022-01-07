@@ -56,6 +56,7 @@ const CardWidgetProperties2 = (props) => {
   const [numberofusersdisplayed, setNumberofusersdisplayed] = useState(null)
   const [buttonlabel, setButtonLabel] = useState('Loading...')
   const [checkboxdisplay, setCheckboxdisplay] = useState('none')
+  const [checkboxtext, setCheckboxText] = useState('Show Skills')
   const [arrowclass, setArrowclass] = useState('css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator')
 
   const SendIt = (type, payload) => {
@@ -256,10 +257,12 @@ const CardWidgetProperties2 = (props) => {
     //console.log(checkboxdisplay)
     if (checkboxdisplay === 'none') {
       setCheckboxdisplay('block')
+      setCheckboxText('Hide Skills')
       setArrowclass(' MuiAutocomplete-popupIndicatorOpen css-113ntv0-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator ')
     }
     else {
       setCheckboxdisplay('none')
+      setCheckboxText('Show Skills')
       setArrowclass(' css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator ')
     }
   };
@@ -287,23 +290,8 @@ const CardWidgetProperties2 = (props) => {
 
         {skills !== null && 
           <>
-          <div className="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon css-16awh2u-MuiAutocomplete-root" role="combobox" aria-expanded="false" style={{width:"100%",marginTop:"20px"}}>
-            <div className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root">
-              <label className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root" data-shrink="false" id="mui-54-label" htmlFor="mui-54">
-                Skills
-              </label>
-              <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-ghsjzk-MuiInputBase-root-MuiInput-root">
-                <input aria-invalid="false" autoComplete="off" placeholder="" type="text" className="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1x51dt5-MuiInputBase-input-MuiInput-input" aria-autocomplete="list" autoCapitalize="none" spellCheck="false" id="mui-54"/>
-                <div className="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment">
-                  <button onClick={changeIt} className={`MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator ${arrowclass}`} tabIndex="-1" type="button" aria-label="Open" title="Open">
-                    <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowDropDownIcon">
-                      <path d="M7 10l5 5 5-5z"></path>
-                    </svg>
-                    <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span>
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div style={{borderBottom:'1px solid black',margin:'20px 0 0 0',padding:'0 0 6px 0',width:'100%',display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+              <div style={{fontWeight:'100'}}>Skills</div><button onClick={changeIt}>{checkboxtext}</button>
           </div>
           <div style={{margin:'10px 0 0 0',display:checkboxdisplay}}>
             <CheckboxWidget nodes={skills} Partner={Partner} onCheck={(checked,a,b,c,d) => filterSkillsChanged(checked,'skills',a,b,c,d)}/>
@@ -321,3 +309,24 @@ const CardWidgetProperties2 = (props) => {
 }
 
 export default CardWidgetProperties2
+
+
+
+{/* <div className="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon css-16awh2u-MuiAutocomplete-root" role="combobox" aria-expanded="false" style={{width:"100%",marginTop:"20px"}}>
+<div className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root">
+  <label className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root" data-shrink="false" id="mui-54-label" htmlFor="mui-54">
+    Skills
+  </label>
+  <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-ghsjzk-MuiInputBase-root-MuiInput-root">
+    <input aria-invalid="false" autoComplete="off" placeholder="" type="text" className="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1x51dt5-MuiInputBase-input-MuiInput-input" aria-autocomplete="list" autoCapitalize="none" spellCheck="false" id="mui-54"/>
+    <div className="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment">
+      <button onClick={changeIt} className={`MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator ${arrowclass}`} tabIndex="-1" type="button" aria-label="Open" title="Open">
+        <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowDropDownIcon">
+          <path d="M7 10l5 5 5-5z"></path>
+        </svg>
+        <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span>
+      </button>
+    </div>
+  </div>
+</div>
+</div> */}

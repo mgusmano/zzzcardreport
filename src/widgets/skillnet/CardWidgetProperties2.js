@@ -5,6 +5,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 import CheckboxWidget from './CheckboxWidget'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 const DropDown = (props) => {
   const { attributeid, attributename, onChanged, options, name, multiple} = props;
@@ -286,21 +288,22 @@ const CardWidgetProperties2 = (props) => {
 
 
       <div style={{display:'flex',flexDirection:'column'}}>
-
-
         {skills !== null && 
           <>
           <div style={{borderBottom:'1px solid black',margin:'20px 0 0 0',padding:'0 0 6px 0',width:'100%',display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-              <div style={{fontWeight:'100'}}>Skills</div><button onClick={changeIt}>{checkboxtext}</button>
+              <div style={{fontWeight:'100'}}>Skills</div>
+              {checkboxtext === 'Show Skills' &&
+              <ArrowDropDownIcon onClick={changeIt}/>
+              }
+              {checkboxtext === 'Hide Skills' &&
+              <ArrowDropUpIcon onClick={changeIt}/>
+              }
           </div>
           <div style={{margin:'10px 0 0 0',display:checkboxdisplay}}>
             <CheckboxWidget nodes={skills} Partner={Partner} onCheck={(checked,a,b,c,d) => filterSkillsChanged(checked,'skills',a,b,c,d)}/>
           </div>
           </>      
         }
-
-
-
         {dropdowns && dropdowns}
       </div>
 

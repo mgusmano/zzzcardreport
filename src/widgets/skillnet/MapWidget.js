@@ -43,13 +43,15 @@ const MapWidget = (props) => {
       console.log(response.data)
       var arrayLocations = response.data.map(item => {
         return {
+          num: item.Users.length,
           PartnerLocationID: item.PartnerLocationID,
           LocationName: item.LocationName,
           Latitude: item.Latitude,
-          Longitude: item.Longitude
+          Longitude: item.Longitude,
+          Users: item.Users
         }
       })
-      //console.log('locations',arrayLocations)
+      console.log('locations',arrayLocations)
       setFilteredlocations(arrayLocations)
       setWaiting(false)
     } catch (err) {
@@ -179,7 +181,7 @@ const MapWidget = (props) => {
                 text={location.LocationName}
                 lat={location.Latitude}
                 lng={location.Longitude}
-                users={location.users}
+                users={location.Users}
               />
             )
           })

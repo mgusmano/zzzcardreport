@@ -63,7 +63,7 @@ const CardReport = (props) => {
           <div style={{padding:'5px 0 0 20px',fontSize:'12px'}}>
               <img src={'../images/logo.png'} alt="SKILLNET" style={{width:'90px'}} />
               <span><i>{reportName}</i></span>
-              <div style={{margin:'0 0 0 100px',width:'90px',fontSize:'10px'}}>v2022-01-07-f</div>
+              <div style={{margin:'0 0 0 100px',width:'90px',fontSize:'10px'}}>v2022-01-26-a</div>
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>

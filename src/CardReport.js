@@ -19,7 +19,6 @@ const CardReport = (props) => {
   const { PartnerID, PartnerName, PersonID, SMEOnly, showlob, reportName, image } = props.Partner;
   //const [addWidgetOpen, setAddWidgetOpen] = useState(false);
   const [filterdisplay, setFilterDisplay] = useState('block')
-  const [propertywidth] = useState('550px')
   const [cardflex, setCardflex] = useState(1)
   const [mapflex, setMapflex] = useState(0)
   const [alignment, setAlignment] = React.useState('Card');

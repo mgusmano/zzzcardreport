@@ -4,8 +4,10 @@ import Marker from './Marker';
 import GoogleMap from './GoogleMap';
 
 const MapWidget = (props) => {
+  // const { Partner } = props
+  // const { PartnerID } = Partner;
   const { Partner } = props
-  const { PartnerID } = Partner;
+  const { PartnerID, PersonID, GroupID } = Partner;
   const [waiting, setWaiting] = useState(false)
   const [filteredlocations, setFilteredlocations] = useState(null)
   const [currid, setCurrId] = useState(null)
@@ -15,8 +17,17 @@ const MapWidget = (props) => {
     try {
       //var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?' + 
       //'partnerid=' + PartnerID;
-      var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 
-      'partnerid=' + PartnerID;
+      // var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 
+      // 'partnerid=' + PartnerID;
+
+      var blankString = ''
+      var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' +
+      'partnerid=' + PartnerID + '&' +
+      'personid=' + PersonID + '&' +
+      'groupid=' + GroupID + '&' +
+      'jobids=' + blankString  + '&' +
+      'percentages=' + blankString + '&' +
+      'skillids=' + blankString
       //console.log(url)
       var axiosParams = {
         method: 'post',

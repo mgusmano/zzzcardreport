@@ -34,7 +34,7 @@ const CardWidget = (props) => {
         axiosParams.data = filters
       }
       const response = await axios(axiosParams)
-      //console.log('filtered users', response)
+      console.log('filtered users', response)
       setUsers(response.data)
       SendIt('fromcardwidget', {number: response.data.length})
       setWaiting(false)

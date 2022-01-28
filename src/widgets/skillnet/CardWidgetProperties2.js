@@ -108,19 +108,38 @@ const CardWidgetProperties2 = (props) => {
         const resp = await axios.get('https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID);
         var d = []
         var attributes = resp.data
+
+
         for (let i = 0; i < attributes.length; i++) {
           var attributename = attributes[i].CustomAttributeName
-          var attributeid = attributes[i].CustomAttributeID
-          var CustomAttributeValues = attributes[i].clsCustomAttributeValues
-          var values = []
-          for (let j = 0; j < CustomAttributeValues.length; j++) {
-            var id = CustomAttributeValues[j].CustomAttributeValueID
-            var value = CustomAttributeValues[j].CustomAttributeValue
-            values.push({id:id,value:value,attributeid:attributeid,attributename:attributename})
+
+          var doIt = true
+          if (PartnerID == 395) { //CNA
+            switch (attributename) {
+              case 'SMEs':
+                attributename = 'Technical SME'
+                break;
+              case 'Leaders':
+                attributename = 'R.C. Home Office Leader'
+                break;
+              default:
+                doIt = false;
+            }
           }
-          d.push(<DropDown multiple={true} key={i} name='value' attributeid={attributeid} attributename={attributename} who={attributename} options={values} onChanged={(event,checked,reason,currentFilters) => {
-            filterChanged(currentFilters)
-          }}/>)
+
+          if (doIt === true) {
+            var attributeid = attributes[i].CustomAttributeID
+            var CustomAttributeValues = attributes[i].clsCustomAttributeValues
+            var values = []
+            for (let j = 0; j < CustomAttributeValues.length; j++) {
+              var id = CustomAttributeValues[j].CustomAttributeValueID
+              var value = CustomAttributeValues[j].CustomAttributeValue
+              values.push({id:id,value:value,attributeid:attributeid,attributename:attributename})
+            }
+            d.push(<DropDown multiple={true} key={i} name='value' attributeid={attributeid} attributename={attributename} who={attributename} options={values} onChanged={(event,checked,reason,currentFilters) => {
+              filterChanged(currentFilters)
+            }}/>)
+          }
         }
         setDropdowns(d)
         onApplyClick()

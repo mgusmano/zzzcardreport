@@ -99,7 +99,11 @@ const CardWidgetProperties2 = (props) => {
         console.error(err);
       }
     }
-    doDataSkills()
+
+    if (PartnerID !== 395) { //CNA
+      doDataSkills()
+    }
+
   }, []);
 
   useEffect(() => {

@@ -47,7 +47,7 @@ const DropDown = (props) => {
 
 const CardWidgetProperties2 = (props) => {
   const { Partner } = props
-  const { PartnerID, largerButton } = Partner;
+  const { PartnerID, showskills, largerButton } = Partner;
   const [dropdowns, setDropdowns] = useState(null);
   const [skills, setSkills] = useState(null);
   const [filters, setFilters] = useState([]);
@@ -100,7 +100,7 @@ const CardWidgetProperties2 = (props) => {
       }
     }
 
-    if (PartnerID !== 395) { //CNA
+    if (showskills === true) {
       doDataSkills()
     }
 

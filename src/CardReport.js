@@ -58,21 +58,20 @@ const CardReport = (props) => {
       {/* column 1 */}
       <Vertical style={{flex:'1',overflow:'hidden'}}>
 
-        <div style={{overflow:'hidden',height:'75px',display:'flex',justifyContent:'space-between',flexDirection:'row',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
+        <div style={{overflow:'hidden',height:'50px',display:'flex',justifyContent:'space-between',flexDirection:'row',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
 
-          <div style={{padding:'5px 0 0 20px',fontSize:'12px'}}>
-              <img src={'../images/logo.png'} alt="SKILLNET" style={{width:'90px'}} />
-              <span><i>{reportName}</i></span>
-              <div style={{margin:'0 0 0 100px',width:'90px',fontSize:'10px'}}>v2022-01-28-a</div>
+          <div style={{padding:'5px 0 0 10px',fontSize:'12px'}}>
+              {/* <img src={'../images/logo.png'} alt="SKILLNET" style={{width:'90px'}} /> */}
+              <div style={{margin:'10px 0 0 0',fontSize:'18px'}}>{reportName} <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-28-a</span></div>
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>
-            <img src={image} style={{marginTop:'10px',height:'50px',color:'black'}} alt={PartnerName} />
+            <img src={image} style={{height:'40px',color:'black'}} alt={PartnerName} />
           </div>
 
           <div>
             <ToggleButtonGroup
-              style={{padding:'15px 0 0 0',border:'none',marginRight:'20px'}}
+              style={{padding:'1px 0 0 0',border:'none',marginRight:'20px'}}
               size="small"
               exclusive
               onChange={handleAlignment}

@@ -4,7 +4,7 @@ import { HashRouter } from "react-router-dom";
 import App from './App';
 import CardReport from './CardReport';
 
-var PartnerCNA = {
+var Partner = { //CNA
   PartnerID: 395,
   PartnerShort: 'CNA',
   PartnerName: 'CNA',
@@ -16,24 +16,28 @@ var PartnerCNA = {
   showlob: false,
   showskills: true,
   reportName: 'Risk Control Skills Report',
-  image: './images/CNA.png'
+  image: './images/CNA.png',
+  largerButton: false
 }
 
 // import reactToWebComponent from 'react-to-webcomponent';
-// const Index = () => (
-//   <React.StrictMode>
-//     <HashRouter>
-//        <App />
-//     </HashRouter> 
-//   </React.StrictMode>
-// );
+// const Index = (props) =>{
+//   var Partner = JSON.parse(sessionStorage.getItem('Partner')); 
+//   return (
+//     <React.StrictMode>
+//       <HashRouter>
+//       <CardReport Partner={Partner}/>
+//       </HashRouter> 
+//     </React.StrictMode>
+//   )
+// };
 // customElements.define('card-report', reactToWebComponent(Index, React, ReactDOM));
 
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
        {/* <App /> */}
-       <CardReport Partner={PartnerCNA}/>
+       <CardReport Partner={Partner}/>
     </HashRouter> 
   </React.StrictMode>,
   document.getElementById('root')

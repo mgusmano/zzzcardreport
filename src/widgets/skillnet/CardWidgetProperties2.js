@@ -9,7 +9,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 const DropDown = (props) => {
-  const { attributeid, attributename, onChanged, options, name, multiple} = props;
+  const { attributeid, attributename, onChanged, options, name} = props;
   return (
     <Autocomplete
       style={{width:'100%',marginTop:'20px'}}
@@ -47,7 +47,7 @@ const DropDown = (props) => {
 
 const CardWidgetProperties2 = (props) => {
   const { Partner } = props
-  const { PartnerID } = Partner;
+  const { PartnerID, largerButton } = Partner;
   const [dropdowns, setDropdowns] = useState(null);
   const [skills, setSkills] = useState(null);
   const [filters, setFilters] = useState([]);
@@ -118,7 +118,7 @@ const CardWidgetProperties2 = (props) => {
           var attributename = attributes[i].CustomAttributeName
 
           var doIt = true
-          if (PartnerID == 395) { //CNA
+          if (PartnerID === 395) { //CNA
             switch (attributename) {
               case 'SMEs':
                 attributename = 'Technical SME'
@@ -171,7 +171,7 @@ const CardWidgetProperties2 = (props) => {
           }
           filters[objIndex].values.push(v)
         }
-        if (checked.length == 0) {
+        if (checked.length === 0) {
           filters.splice(objIndex, 1);
         }
       }
@@ -182,13 +182,13 @@ const CardWidgetProperties2 = (props) => {
           values: []
         }
         for (let i = 0; i < checked.length; i++) {
-          var v = {
+          var v2 = {
             id: checked[i],
             value: 'value',
             attributeid: '444',
             attributename: 'skills',
           }
-          skillAttribute.values.push(v)
+          skillAttribute.values.push(v2)
         }
         filters.push(skillAttribute)     
       }
@@ -259,7 +259,9 @@ const CardWidgetProperties2 = (props) => {
       >
         {buttonlabel}
       </Button>
+      {largerButton === true && 
       <button onClick={onFilterButtonClick} style={{margin:'10px 0 0 0'}}>{filterbuttontext}</button>
+      }
       <div style={{marginTop:'20px',height:'20px'}}>
         {numberofusersdisplayed !== null &&
         <div>Number of Users Displayed: {numberofusersdisplayed}</div>

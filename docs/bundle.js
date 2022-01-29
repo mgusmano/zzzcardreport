@@ -29842,15 +29842,6 @@
 	    } catch (e) {}
 	  }
 	}
-
-	const alreadyWarned = {};
-
-	function warningOnce(key, cond, message) {
-	  if (!cond && !alreadyWarned[key]) {
-	    alreadyWarned[key] = true;
-	    warning(false, message) ;
-	  }
-	} ///////////////////////////////////////////////////////////////////////////////
 	// CONTEXT
 	///////////////////////////////////////////////////////////////////////////////
 
@@ -29885,24 +29876,6 @@
 	{
 	  RouteContext.displayName = "Route";
 	} ///////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Renders the child route's element, if there is one.
-	 *
-	 * @see https://reactrouter.com/docs/en/v6/api#outlet
-	 */
-	function Outlet(props) {
-	  return useOutlet(props.context);
-	}
-
-	/**
-	 * Declares an element that should be rendered at a certain URL path.
-	 *
-	 * @see https://reactrouter.com/docs/en/v6/api#route
-	 */
-	function Route(_props) {
-	   invariant(false, "A <Route> is only ever to be used as the child of <Routes> element, " + "never rendered directly. Please wrap your <Route> in a <Routes>.")  ;
-	}
 
 	/**
 	 * Provides location context for the rest of the app.
@@ -29972,20 +29945,6 @@
 	    }
 	  }));
 	}
-
-	/**
-	 * A container for a nested tree of <Route> elements that renders the branch
-	 * that best matches the current location.
-	 *
-	 * @see https://reactrouter.com/docs/en/v6/api#routes
-	 */
-	function Routes(_ref4) {
-	  let {
-	    children,
-	    location
-	  } = _ref4;
-	  return useRoutes(createRoutesFromChildren(children), location);
-	} ///////////////////////////////////////////////////////////////////////////////
 	// HOOKS
 	///////////////////////////////////////////////////////////////////////////////
 
@@ -30101,25 +30060,6 @@
 	  }, [basename, navigator, routePathnamesJson, locationPathname]);
 	  return navigate;
 	}
-	const OutletContext = /*#__PURE__*/react.exports.createContext(null);
-	/**
-	 * Returns the element for the child route at this level of the route
-	 * hierarchy. Used internally by <Outlet> to render child routes.
-	 *
-	 * @see https://reactrouter.com/docs/en/v6/api#useoutlet
-	 */
-
-	function useOutlet(context) {
-	  let outlet = react.exports.useContext(RouteContext).outlet;
-
-	  if (outlet) {
-	    return /*#__PURE__*/react.exports.createElement(OutletContext.Provider, {
-	      value: context
-	    }, outlet);
-	  }
-
-	  return outlet;
-	}
 	/**
 	 * Resolves the pathname of the given `to` value against the current location.
 	 *
@@ -30135,387 +30075,6 @@
 	  } = useLocation();
 	  let routePathnamesJson = JSON.stringify(matches.map(match => match.pathnameBase));
 	  return react.exports.useMemo(() => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname), [to, routePathnamesJson, locationPathname]);
-	}
-	/**
-	 * Returns the element of the route that matched the current location, prepared
-	 * with the correct context to render the remainder of the route tree. Route
-	 * elements in the tree must render an <Outlet> to render their child route's
-	 * element.
-	 *
-	 * @see https://reactrouter.com/docs/en/v6/api#useroutes
-	 */
-
-	function useRoutes(routes, locationArg) {
-	  !useInRouterContext() ? invariant(false, // TODO: This error is probably because they somehow have 2 versions of the
-	  // router loaded. We can help them understand how to avoid that.
-	  "useRoutes() may be used only in the context of a <Router> component.")  : void 0;
-	  let {
-	    matches: parentMatches
-	  } = react.exports.useContext(RouteContext);
-	  let routeMatch = parentMatches[parentMatches.length - 1];
-	  let parentParams = routeMatch ? routeMatch.params : {};
-	  let parentPathname = routeMatch ? routeMatch.pathname : "/";
-	  let parentPathnameBase = routeMatch ? routeMatch.pathnameBase : "/";
-	  let parentRoute = routeMatch && routeMatch.route;
-
-	  {
-	    // You won't get a warning about 2 different <Routes> under a <Route>
-	    // without a trailing *, but this is a best-effort warning anyway since we
-	    // cannot even give the warning unless they land at the parent route.
-	    //
-	    // Example:
-	    //
-	    // <Routes>
-	    //   {/* This route path MUST end with /* because otherwise
-	    //       it will never match /blog/post/123 */}
-	    //   <Route path="blog" element={<Blog />} />
-	    //   <Route path="blog/feed" element={<BlogFeed />} />
-	    // </Routes>
-	    //
-	    // function Blog() {
-	    //   return (
-	    //     <Routes>
-	    //       <Route path="post/:id" element={<Post />} />
-	    //     </Routes>
-	    //   );
-	    // }
-	    let parentPath = parentRoute && parentRoute.path || "";
-	    warningOnce(parentPathname, !parentRoute || parentPath.endsWith("*"), "You rendered descendant <Routes> (or called `useRoutes()`) at " + ("\"" + parentPathname + "\" (under <Route path=\"" + parentPath + "\">) but the ") + "parent route path has no trailing \"*\". This means if you navigate " + "deeper, the parent won't match anymore and therefore the child " + "routes will never render.\n\n" + ("Please change the parent <Route path=\"" + parentPath + "\"> to <Route ") + ("path=\"" + (parentPath === "/" ? "*" : parentPath + "/*") + "\">."));
-	  }
-
-	  let locationFromContext = useLocation();
-	  let location;
-
-	  if (locationArg) {
-	    var _parsedLocationArg$pa;
-
-	    let parsedLocationArg = typeof locationArg === "string" ? J$3(locationArg) : locationArg;
-	    !(parentPathnameBase === "/" || ((_parsedLocationArg$pa = parsedLocationArg.pathname) == null ? void 0 : _parsedLocationArg$pa.startsWith(parentPathnameBase))) ? invariant(false, "When overriding the location using `<Routes location>` or `useRoutes(routes, location)`, " + "the location pathname must begin with the portion of the URL pathname that was " + ("matched by all parent routes. The current pathname base is \"" + parentPathnameBase + "\" ") + ("but pathname \"" + parsedLocationArg.pathname + "\" was given in the `location` prop."))  : void 0;
-	    location = parsedLocationArg;
-	  } else {
-	    location = locationFromContext;
-	  }
-
-	  let pathname = location.pathname || "/";
-	  let remainingPathname = parentPathnameBase === "/" ? pathname : pathname.slice(parentPathnameBase.length) || "/";
-	  let matches = matchRoutes(routes, {
-	    pathname: remainingPathname
-	  });
-
-	  {
-	    warning(parentRoute || matches != null, "No routes matched location \"" + location.pathname + location.search + location.hash + "\" ") ;
-	    warning(matches == null || matches[matches.length - 1].route.element !== undefined, "Matched leaf route at location \"" + location.pathname + location.search + location.hash + "\" does not have an element. " + "This means it will render an <Outlet /> with a null value by default resulting in an \"empty\" page.") ;
-	  }
-
-	  return _renderMatches(matches && matches.map(match => Object.assign({}, match, {
-	    params: Object.assign({}, parentParams, match.params),
-	    pathname: joinPaths([parentPathnameBase, match.pathname]),
-	    pathnameBase: match.pathnameBase === "/" ? parentPathnameBase : joinPaths([parentPathnameBase, match.pathnameBase])
-	  })), parentMatches);
-	} ///////////////////////////////////////////////////////////////////////////////
-	// UTILS
-	///////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Creates a route config from a React "children" object, which is usually
-	 * either a `<Route>` element or an array of them. Used internally by
-	 * `<Routes>` to create a route config from its children.
-	 *
-	 * @see https://reactrouter.com/docs/en/v6/api#createroutesfromchildren
-	 */
-
-	function createRoutesFromChildren(children) {
-	  let routes = [];
-	  react.exports.Children.forEach(children, element => {
-	    if (! /*#__PURE__*/react.exports.isValidElement(element)) {
-	      // Ignore non-elements. This allows people to more easily inline
-	      // conditionals in their route config.
-	      return;
-	    }
-
-	    if (element.type === react.exports.Fragment) {
-	      // Transparently support React.Fragment and its children.
-	      routes.push.apply(routes, createRoutesFromChildren(element.props.children));
-	      return;
-	    }
-
-	    !(element.type === Route) ? invariant(false, "[" + (typeof element.type === "string" ? element.type : element.type.name) + "] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>")  : void 0;
-	    let route = {
-	      caseSensitive: element.props.caseSensitive,
-	      element: element.props.element,
-	      index: element.props.index,
-	      path: element.props.path
-	    };
-
-	    if (element.props.children) {
-	      route.children = createRoutesFromChildren(element.props.children);
-	    }
-
-	    routes.push(route);
-	  });
-	  return routes;
-	}
-	/**
-	 * A RouteMatch contains info about how a route matched a URL.
-	 */
-
-	/**
-	 * Matches the given routes to a location and returns the match data.
-	 *
-	 * @see https://reactrouter.com/docs/en/v6/api#matchroutes
-	 */
-	function matchRoutes(routes, locationArg, basename) {
-	  if (basename === void 0) {
-	    basename = "/";
-	  }
-
-	  let location = typeof locationArg === "string" ? J$3(locationArg) : locationArg;
-	  let pathname = stripBasename(location.pathname || "/", basename);
-
-	  if (pathname == null) {
-	    return null;
-	  }
-
-	  let branches = flattenRoutes(routes);
-	  rankRouteBranches(branches);
-	  let matches = null;
-
-	  for (let i = 0; matches == null && i < branches.length; ++i) {
-	    matches = matchRouteBranch(branches[i], pathname);
-	  }
-
-	  return matches;
-	}
-
-	function flattenRoutes(routes, branches, parentsMeta, parentPath) {
-	  if (branches === void 0) {
-	    branches = [];
-	  }
-
-	  if (parentsMeta === void 0) {
-	    parentsMeta = [];
-	  }
-
-	  if (parentPath === void 0) {
-	    parentPath = "";
-	  }
-
-	  routes.forEach((route, index) => {
-	    let meta = {
-	      relativePath: route.path || "",
-	      caseSensitive: route.caseSensitive === true,
-	      childrenIndex: index,
-	      route
-	    };
-
-	    if (meta.relativePath.startsWith("/")) {
-	      !meta.relativePath.startsWith(parentPath) ? invariant(false, "Absolute route path \"" + meta.relativePath + "\" nested under path " + ("\"" + parentPath + "\" is not valid. An absolute child route path ") + "must start with the combined path of all its parent routes.")  : void 0;
-	      meta.relativePath = meta.relativePath.slice(parentPath.length);
-	    }
-
-	    let path = joinPaths([parentPath, meta.relativePath]);
-	    let routesMeta = parentsMeta.concat(meta); // Add the children before adding this route to the array so we traverse the
-	    // route tree depth-first and child routes appear before their parents in
-	    // the "flattened" version.
-
-	    if (route.children && route.children.length > 0) {
-	      !(route.index !== true) ? invariant(false, "Index routes must not have child routes. Please remove " + ("all child routes from route path \"" + path + "\"."))  : void 0;
-	      flattenRoutes(route.children, branches, routesMeta, path);
-	    } // Routes without a path shouldn't ever match by themselves unless they are
-	    // index routes, so don't add them to the list of possible branches.
-
-
-	    if (route.path == null && !route.index) {
-	      return;
-	    }
-
-	    branches.push({
-	      path,
-	      score: computeScore(path, route.index),
-	      routesMeta
-	    });
-	  });
-	  return branches;
-	}
-
-	function rankRouteBranches(branches) {
-	  branches.sort((a, b) => a.score !== b.score ? b.score - a.score // Higher score first
-	  : compareIndexes(a.routesMeta.map(meta => meta.childrenIndex), b.routesMeta.map(meta => meta.childrenIndex)));
-	}
-
-	const paramRe = /^:\w+$/;
-	const dynamicSegmentValue = 3;
-	const indexRouteValue = 2;
-	const emptySegmentValue = 1;
-	const staticSegmentValue = 10;
-	const splatPenalty = -2;
-
-	const isSplat = s => s === "*";
-
-	function computeScore(path, index) {
-	  let segments = path.split("/");
-	  let initialScore = segments.length;
-
-	  if (segments.some(isSplat)) {
-	    initialScore += splatPenalty;
-	  }
-
-	  if (index) {
-	    initialScore += indexRouteValue;
-	  }
-
-	  return segments.filter(s => !isSplat(s)).reduce((score, segment) => score + (paramRe.test(segment) ? dynamicSegmentValue : segment === "" ? emptySegmentValue : staticSegmentValue), initialScore);
-	}
-
-	function compareIndexes(a, b) {
-	  let siblings = a.length === b.length && a.slice(0, -1).every((n, i) => n === b[i]);
-	  return siblings ? // If two routes are siblings, we should try to match the earlier sibling
-	  // first. This allows people to have fine-grained control over the matching
-	  // behavior by simply putting routes with identical paths in the order they
-	  // want them tried.
-	  a[a.length - 1] - b[b.length - 1] : // Otherwise, it doesn't really make sense to rank non-siblings by index,
-	  // so they sort equally.
-	  0;
-	}
-
-	function matchRouteBranch(branch, pathname) {
-	  let {
-	    routesMeta
-	  } = branch;
-	  let matchedParams = {};
-	  let matchedPathname = "/";
-	  let matches = [];
-
-	  for (let i = 0; i < routesMeta.length; ++i) {
-	    let meta = routesMeta[i];
-	    let end = i === routesMeta.length - 1;
-	    let remainingPathname = matchedPathname === "/" ? pathname : pathname.slice(matchedPathname.length) || "/";
-	    let match = matchPath({
-	      path: meta.relativePath,
-	      caseSensitive: meta.caseSensitive,
-	      end
-	    }, remainingPathname);
-	    if (!match) return null;
-	    Object.assign(matchedParams, match.params);
-	    let route = meta.route;
-	    matches.push({
-	      params: matchedParams,
-	      pathname: joinPaths([matchedPathname, match.pathname]),
-	      pathnameBase: joinPaths([matchedPathname, match.pathnameBase]),
-	      route
-	    });
-
-	    if (match.pathnameBase !== "/") {
-	      matchedPathname = joinPaths([matchedPathname, match.pathnameBase]);
-	    }
-	  }
-
-	  return matches;
-	}
-
-	function _renderMatches(matches, parentMatches) {
-	  if (parentMatches === void 0) {
-	    parentMatches = [];
-	  }
-
-	  if (matches == null) return null;
-	  return matches.reduceRight((outlet, match, index) => {
-	    return /*#__PURE__*/react.exports.createElement(RouteContext.Provider, {
-	      children: match.route.element !== undefined ? match.route.element : /*#__PURE__*/react.exports.createElement(Outlet, null),
-	      value: {
-	        outlet,
-	        matches: parentMatches.concat(matches.slice(0, index + 1))
-	      }
-	    });
-	  }, null);
-	}
-	/**
-	 * A PathPattern is used to match on some portion of a URL pathname.
-	 */
-
-
-	/**
-	 * Performs pattern matching on a URL pathname and returns information about
-	 * the match.
-	 *
-	 * @see https://reactrouter.com/docs/en/v6/api#matchpath
-	 */
-	function matchPath(pattern, pathname) {
-	  if (typeof pattern === "string") {
-	    pattern = {
-	      path: pattern,
-	      caseSensitive: false,
-	      end: true
-	    };
-	  }
-
-	  let [matcher, paramNames] = compilePath(pattern.path, pattern.caseSensitive, pattern.end);
-	  let match = pathname.match(matcher);
-	  if (!match) return null;
-	  let matchedPathname = match[0];
-	  let pathnameBase = matchedPathname.replace(/(.)\/+$/, "$1");
-	  let captureGroups = match.slice(1);
-	  let params = paramNames.reduce((memo, paramName, index) => {
-	    // We need to compute the pathnameBase here using the raw splat value
-	    // instead of using params["*"] later because it will be decoded then
-	    if (paramName === "*") {
-	      let splatValue = captureGroups[index] || "";
-	      pathnameBase = matchedPathname.slice(0, matchedPathname.length - splatValue.length).replace(/(.)\/+$/, "$1");
-	    }
-
-	    memo[paramName] = safelyDecodeURIComponent(captureGroups[index] || "", paramName);
-	    return memo;
-	  }, {});
-	  return {
-	    params,
-	    pathname: matchedPathname,
-	    pathnameBase,
-	    pattern
-	  };
-	}
-
-	function compilePath(path, caseSensitive, end) {
-	  if (caseSensitive === void 0) {
-	    caseSensitive = false;
-	  }
-
-	  if (end === void 0) {
-	    end = true;
-	  }
-
-	  warning(path === "*" || !path.endsWith("*") || path.endsWith("/*"), "Route path \"" + path + "\" will be treated as if it were " + ("\"" + path.replace(/\*$/, "/*") + "\" because the `*` character must ") + "always follow a `/` in the pattern. To get rid of this warning, " + ("please change the route path to \"" + path.replace(/\*$/, "/*") + "\".")) ;
-	  let paramNames = [];
-	  let regexpSource = "^" + path.replace(/\/*\*?$/, "") // Ignore trailing / and /*, we'll handle it below
-	  .replace(/^\/*/, "/") // Make sure it has a leading /
-	  .replace(/[\\.*+^$?{}|()[\]]/g, "\\$&") // Escape special regex chars
-	  .replace(/:(\w+)/g, (_, paramName) => {
-	    paramNames.push(paramName);
-	    return "([^\\/]+)";
-	  });
-
-	  if (path.endsWith("*")) {
-	    paramNames.push("*");
-	    regexpSource += path === "*" || path === "/*" ? "(.*)$" // Already matched the initial /, just match the rest
-	    : "(?:\\/(.+)|\\/*)$"; // Don't include the / in params["*"]
-	  } else {
-	    regexpSource += end ? "\\/*$" // When matching to the end, ignore trailing slashes
-	    : // Otherwise, match a word boundary or a proceeding /. The word boundary restricts
-	    // parent routes to matching only their own words and nothing more, e.g. parent
-	    // route "/home" should not match "/home2".
-	    "(?:\\b|\\/|$)";
-	  }
-
-	  let matcher = new RegExp(regexpSource, caseSensitive ? undefined : "i");
-	  return [matcher, paramNames];
-	}
-
-	function safelyDecodeURIComponent(value, paramName) {
-	  try {
-	    return decodeURIComponent(value);
-	  } catch (error) {
-	    warning(false, "The value for the URL param \"" + paramName + "\" will not be decoded because" + (" the string \"" + value + "\" is a malformed URL segment. This is probably") + (" due to a bad percent encoding (" + error + ").")) ;
-	    return value;
-	  }
 	}
 	/**
 	 * Returns a resolved path object relative to the given pathname.
@@ -30674,7 +30233,7 @@
 	  return target;
 	}
 
-	const _excluded$Q = ["onClick", "reloadDocument", "replace", "state", "target", "to"],
+	const _excluded$O = ["onClick", "reloadDocument", "replace", "state", "target", "to"],
 	      _excluded2$4 = ["aria-current", "caseSensitive", "className", "end", "style", "to", "children"];
 
 	/**
@@ -30726,7 +30285,7 @@
 	    target,
 	    to
 	  } = _ref4,
-	      rest = _objectWithoutPropertiesLoose$1(_ref4, _excluded$Q);
+	      rest = _objectWithoutPropertiesLoose$1(_ref4, _excluded$O);
 
 	  let href = useHref(to);
 	  let internalOnClick = useLinkClickHandler(to, {
@@ -30852,29 +30411,6 @@
 	      });
 	    }
 	  }, [location, navigate, path, replaceProp, state, target, to]);
-	}
-
-	const AuthContext = /*#__PURE__*/react.exports.createContext();
-	function useAuth() {
-	  return react.exports.useContext(AuthContext);
-	}
-
-	function _extends$1() {
-	  _extends$1 = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	      var source = arguments[i];
-
-	      for (var key in source) {
-	        if (Object.prototype.hasOwnProperty.call(source, key)) {
-	          target[key] = source[key];
-	        }
-	      }
-	    }
-
-	    return target;
-	  };
-
-	  return _extends$1.apply(this, arguments);
 	}
 
 	var axios$2 = {exports: {}};
@@ -33897,7 +33433,7 @@
 
 	function v$1(){return (v$1=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r]);}return e}).apply(this,arguments)}var g$2=function(e,t){for(var n=[e[0]],r=0,o=t.length;r<o;r+=1)n.push(t[r],e[r+1]);return n},S$2=function(t){return null!==t&&"object"==typeof t&&"[object Object]"===(t.toString?t.toString():Object.prototype.toString.call(t))&&!reactIs$3.exports.typeOf(t)},w$1=Object.freeze([]),E$2=Object.freeze({});function b$1(e){return "function"==typeof e}function _$3(e){return "string"==typeof e&&e||e.displayName||e.name||"Component"}function N$2(e){return e&&"string"==typeof e.styledComponentId}var A$2="undefined"!=typeof process&&(process.env.REACT_APP_SC_ATTR||process.env.SC_ATTR)||"data-styled",I$2="undefined"!=typeof window&&"HTMLElement"in window,P$2=Boolean("boolean"==typeof SC_DISABLE_SPEEDY?SC_DISABLE_SPEEDY:"undefined"!=typeof process&&void 0!==process.env.REACT_APP_SC_DISABLE_SPEEDY&&""!==process.env.REACT_APP_SC_DISABLE_SPEEDY?"false"!==process.env.REACT_APP_SC_DISABLE_SPEEDY&&process.env.REACT_APP_SC_DISABLE_SPEEDY:"undefined"!=typeof process&&void 0!==process.env.SC_DISABLE_SPEEDY&&""!==process.env.SC_DISABLE_SPEEDY?"false"!==process.env.SC_DISABLE_SPEEDY&&process.env.SC_DISABLE_SPEEDY:"production"!=="development"),R$2={1:"Cannot create styled-component for component: %s.\n\n",2:"Can't collect styles once you've consumed a `ServerStyleSheet`'s styles! `ServerStyleSheet` is a one off instance for each server-side render cycle.\n\n- Are you trying to reuse it across renders?\n- Are you accidentally calling collectStyles twice?\n\n",3:"Streaming SSR is only supported in a Node.js environment; Please do not try to call this method in the browser.\n\n",4:"The `StyleSheetManager` expects a valid target or sheet prop!\n\n- Does this error occur on the client and is your target falsy?\n- Does this error occur on the server and is the sheet falsy?\n\n",5:"The clone method cannot be used on the client!\n\n- Are you running in a client-like environment on the server?\n- Are you trying to run SSR on the client?\n\n",6:"Trying to insert a new style tag, but the given Node is unmounted!\n\n- Are you using a custom target that isn't mounted?\n- Does your document not have a valid head element?\n- Have you accidentally removed a style tag manually?\n\n",7:'ThemeProvider: Please return an object from your "theme" prop function, e.g.\n\n```js\ntheme={() => ({})}\n```\n\n',8:'ThemeProvider: Please make your "theme" prop an object.\n\n',9:"Missing document `<head>`\n\n",10:"Cannot find a StyleSheet instance. Usually this happens if there are multiple copies of styled-components loaded at once. Check out this issue for how to troubleshoot and fix the common cases where this situation can happen: https://github.com/styled-components/styled-components/issues/1941#issuecomment-417862021\n\n",11:"_This error was replaced with a dev-time warning, it will be deleted for v4 final._ [createGlobalStyle] received children which will not be rendered. Please use the component without passing children elements.\n\n",12:"It seems you are interpolating a keyframe declaration (%s) into an untagged string. This was supported in styled-components v3, but is not longer supported in v4 as keyframes are now injected on-demand. Please wrap your string in the css\\`\\` helper which ensures the styles are injected correctly. See https://www.styled-components.com/docs/api#css\n\n",13:"%s is not a styled component and cannot be referred to via component selector. See https://www.styled-components.com/docs/advanced#referring-to-other-components for more details.\n\n",14:'ThemeProvider: "theme" prop is required.\n\n',15:"A stylis plugin has been supplied that is not named. We need a name for each plugin to be able to prevent styling collisions between different stylis configurations within the same app. Before you pass your plugin to `<StyleSheetManager stylisPlugins={[]}>`, please make sure each plugin is uniquely-named, e.g.\n\n```js\nObject.defineProperty(importedPlugin, 'name', { value: 'some-unique-name' });\n```\n\n",16:"Reached the limit of how many styled components may be created at group %s.\nYou may only create up to 1,073,741,824 components. If you're creating components dynamically,\nas for instance in your render method then you may be running into this limitation.\n\n",17:"CSSStyleSheet could not be found on HTMLStyleElement.\nHas styled-components' style tag been unmounted or altered by another script?\n"};function D$2(){for(var e=arguments.length<=0?void 0:arguments[0],t=[],n=1,r=arguments.length;n<r;n+=1)t.push(n<0||arguments.length<=n?void 0:arguments[n]);return t.forEach((function(t){e=e.replace(/%[a-z]/,t);})),e}function j$2(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];throw new Error(D$2.apply(void 0,[R$2[e]].concat(n)).trim())}var T$2=function(){function e(e){this.groupSizes=new Uint32Array(512),this.length=512,this.tag=e;}var t=e.prototype;return t.indexOfGroup=function(e){for(var t=0,n=0;n<e;n++)t+=this.groupSizes[n];return t},t.insertRules=function(e,t){if(e>=this.groupSizes.length){for(var n=this.groupSizes,r=n.length,o=r;e>=o;)(o<<=1)<0&&j$2(16,""+e);this.groupSizes=new Uint32Array(o),this.groupSizes.set(n),this.length=o;for(var s=r;s<o;s++)this.groupSizes[s]=0;}for(var i=this.indexOfGroup(e+1),a=0,c=t.length;a<c;a++)this.tag.insertRule(i,t[a])&&(this.groupSizes[e]++,i++);},t.clearGroup=function(e){if(e<this.length){var t=this.groupSizes[e],n=this.indexOfGroup(e),r=n+t;this.groupSizes[e]=0;for(var o=n;o<r;o++)this.tag.deleteRule(n);}},t.getGroup=function(e){var t="";if(e>=this.length||0===this.groupSizes[e])return t;for(var n=this.groupSizes[e],r=this.indexOfGroup(e),o=r+n,s=r;s<o;s++)t+=this.tag.getRule(s)+"/*!sc*/\n";return t},e}(),x$2=new Map,k$2=new Map,V$2=1,B$2=function(e){if(x$2.has(e))return x$2.get(e);for(;k$2.has(V$2);)V$2++;var t=V$2++;return ((0|t)<0||t>1<<30)&&j$2(16,""+t),x$2.set(e,t),k$2.set(t,e),t},z$2=function(e){return k$2.get(e)},M$2=function(e,t){t>=V$2&&(V$2=t+1),x$2.set(e,t),k$2.set(t,e);},G$2="style["+A$2+'][data-styled-version="5.3.3"]',L$2=new RegExp("^"+A$2+'\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)'),F$2=function(e,t,n){for(var r,o=n.split(","),s=0,i=o.length;s<i;s++)(r=o[s])&&e.registerName(t,r);},Y$2=function(e,t){for(var n=(t.textContent||"").split("/*!sc*/\n"),r=[],o=0,s=n.length;o<s;o++){var i=n[o].trim();if(i){var a=i.match(L$2);if(a){var c=0|parseInt(a[1],10),u=a[2];0!==c&&(M$2(u,c),F$2(e,u,a[3]),e.getTag().insertRules(c,r)),r.length=0;}else r.push(i);}}},q$2=function(){return "undefined"!=typeof window&&void 0!==window.__webpack_nonce__?window.__webpack_nonce__:null},H$2=function(e){var t=document.head,n=e||t,r=document.createElement("style"),o=function(e){for(var t=e.childNodes,n=t.length;n>=0;n--){var r=t[n];if(r&&1===r.nodeType&&r.hasAttribute(A$2))return r}}(n),s=void 0!==o?o.nextSibling:null;r.setAttribute(A$2,"active"),r.setAttribute("data-styled-version","5.3.3");var i=q$2();return i&&r.setAttribute("nonce",i),n.insertBefore(r,s),r},$$1=function(){function e(e){var t=this.element=H$2(e);t.appendChild(document.createTextNode("")),this.sheet=function(e){if(e.sheet)return e.sheet;for(var t=document.styleSheets,n=0,r=t.length;n<r;n++){var o=t[n];if(o.ownerNode===e)return o}j$2(17);}(t),this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){try{return this.sheet.insertRule(t,e),this.length++,!0}catch(e){return !1}},t.deleteRule=function(e){this.sheet.deleteRule(e),this.length--;},t.getRule=function(e){var t=this.sheet.cssRules[e];return void 0!==t&&"string"==typeof t.cssText?t.cssText:""},e}(),W$2=function(){function e(e){var t=this.element=H$2(e);this.nodes=t.childNodes,this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){if(e<=this.length&&e>=0){var n=document.createTextNode(t),r=this.nodes[e];return this.element.insertBefore(n,r||null),this.length++,!0}return !1},t.deleteRule=function(e){this.element.removeChild(this.nodes[e]),this.length--;},t.getRule=function(e){return e<this.length?this.nodes[e].textContent:""},e}(),U$2=function(){function e(e){this.rules=[],this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){return e<=this.length&&(this.rules.splice(e,0,t),this.length++,!0)},t.deleteRule=function(e){this.rules.splice(e,1),this.length--;},t.getRule=function(e){return e<this.length?this.rules[e]:""},e}(),J$2=I$2,X$1={isServer:!I$2,useCSSOMInjection:!P$2},Z$1=function(){function e(e,t,n){void 0===e&&(e=E$2),void 0===t&&(t={}),this.options=v$1({},X$1,{},e),this.gs=t,this.names=new Map(n),this.server=!!e.isServer,!this.server&&I$2&&J$2&&(J$2=!1,function(e){for(var t=document.querySelectorAll(G$2),n=0,r=t.length;n<r;n++){var o=t[n];o&&"active"!==o.getAttribute(A$2)&&(Y$2(e,o),o.parentNode&&o.parentNode.removeChild(o));}}(this));}e.registerId=function(e){return B$2(e)};var t=e.prototype;return t.reconstructWithOptions=function(t,n){return void 0===n&&(n=!0),new e(v$1({},this.options,{},t),this.gs,n&&this.names||void 0)},t.allocateGSInstance=function(e){return this.gs[e]=(this.gs[e]||0)+1},t.getTag=function(){return this.tag||(this.tag=(n=(t=this.options).isServer,r=t.useCSSOMInjection,o=t.target,e=n?new U$2(o):r?new $$1(o):new W$2(o),new T$2(e)));var e,t,n,r,o;},t.hasNameForId=function(e,t){return this.names.has(e)&&this.names.get(e).has(t)},t.registerName=function(e,t){if(B$2(e),this.names.has(e))this.names.get(e).add(t);else {var n=new Set;n.add(t),this.names.set(e,n);}},t.insertRules=function(e,t,n){this.registerName(e,t),this.getTag().insertRules(B$2(e),n);},t.clearNames=function(e){this.names.has(e)&&this.names.get(e).clear();},t.clearRules=function(e){this.getTag().clearGroup(B$2(e)),this.clearNames(e);},t.clearTag=function(){this.tag=void 0;},t.toString=function(){return function(e){for(var t=e.getTag(),n=t.length,r="",o=0;o<n;o++){var s=z$2(o);if(void 0!==s){var i=e.names.get(s),a=t.getGroup(o);if(i&&a&&i.size){var c=A$2+".g"+o+'[id="'+s+'"]',u="";void 0!==i&&i.forEach((function(e){e.length>0&&(u+=e+",");})),r+=""+a+c+'{content:"'+u+'"}/*!sc*/\n';}}}return r}(this)},e}(),K$2=/(a)(d)/gi,Q$2=function(e){return String.fromCharCode(e+(e>25?39:97))};function ee$2(e){var t,n="";for(t=Math.abs(e);t>52;t=t/52|0)n=Q$2(t%52)+n;return (Q$2(t%52)+n).replace(K$2,"$1-$2")}var te$2=function(e,t){for(var n=t.length;n;)e=33*e^t.charCodeAt(--n);return e},ne$2=function(e){return te$2(5381,e)};var oe$2=ne$2("5.3.3"),se$2=function(){function e(e,t,n){this.rules=e,this.staticRulesId="",this.isStatic="production"==="development",this.componentId=t,this.baseHash=te$2(oe$2,t),this.baseStyle=n,Z$1.registerId(t);}return e.prototype.generateAndInjectStyles=function(e,t,n){var r=this.componentId,o=[];if(this.baseStyle&&o.push(this.baseStyle.generateAndInjectStyles(e,t,n)),this.isStatic&&!n.hash)if(this.staticRulesId&&t.hasNameForId(r,this.staticRulesId))o.push(this.staticRulesId);else {var s=Ne(this.rules,e,t,n).join(""),i=ee$2(te$2(this.baseHash,s)>>>0);if(!t.hasNameForId(r,i)){var a=n(s,"."+i,void 0,r);t.insertRules(r,i,a);}o.push(i),this.staticRulesId=i;}else {for(var c=this.rules.length,u=te$2(this.baseHash,n.hash),l="",d=0;d<c;d++){var h=this.rules[d];if("string"==typeof h)l+=h,(u=te$2(u,h+d));else if(h){var p=Ne(h,e,t,n),f=Array.isArray(p)?p.join(""):p;u=te$2(u,f+d),l+=f;}}if(l){var m=ee$2(u>>>0);if(!t.hasNameForId(r,m)){var y=n(l,"."+m,void 0,r);t.insertRules(r,m,y);}o.push(m);}}return o.join(" ")},e}(),ie$2=/^\s*\/\/.*$/gm,ae$2=[":","[",".","#"];function ce$1(e){var t,n,r,o,s=void 0===e?E$2:e,i=s.options,a=void 0===i?E$2:i,c=s.plugins,u=void 0===c?w$1:c,l=new stylis_min(a),d=[],h=function(e){function t(t){if(t)try{e(t+"}");}catch(e){}}return function(n,r,o,s,i,a,c,u,l,d){switch(n){case 1:if(0===l&&64===r.charCodeAt(0))return e(r+";"),"";break;case 2:if(0===u)return r+"/*|*/";break;case 3:switch(u){case 102:case 112:return e(o[0]+r),"";default:return r+(0===d?"/*|*/":"")}case-2:r.split("/*|*/}").forEach(t);}}}((function(e){d.push(e);})),f=function(e,r,s){return 0===r&&-1!==ae$2.indexOf(s[n.length])||s.match(o)?e:"."+t};function m(e,s,i,a){void 0===a&&(a="&");var c=e.replace(ie$2,""),u=s&&i?i+" "+s+" { "+c+" }":c;return t=a,n=s,r=new RegExp("\\"+n+"\\b","g"),o=new RegExp("(\\"+n+"\\b){2,}"),l(i||!s?"":s,u)}return l.use([].concat(u,[function(e,t,o){2===e&&o.length&&o[0].lastIndexOf(n)>0&&(o[0]=o[0].replace(r,f));},h,function(e){if(-2===e){var t=d;return d=[],t}}])),m.hash=u.length?u.reduce((function(e,t){return t.name||j$2(15),te$2(e,t.name)}),5381).toString():"",m}var ue$2=React$1.createContext();ue$2.Consumer;var de=React$1.createContext(),he$2=(de.Consumer,new Z$1),pe$1=ce$1();function fe$1(){return react.exports.useContext(ue$2)||he$2}function me(){return react.exports.useContext(de)||pe$1}var ve=function(){function e(e,t){var n=this;this.inject=function(e,t){void 0===t&&(t=pe$1);var r=n.name+t.hash;e.hasNameForId(n.id,r)||e.insertRules(n.id,r,t(n.rules,r,"@keyframes"));},this.toString=function(){return j$2(12,String(n.name))},this.name=e,this.id="sc-keyframes-"+e,this.rules=t;}return e.prototype.getName=function(e){return void 0===e&&(e=pe$1),this.name+e.hash},e}(),ge=/([A-Z])/,Se=/([A-Z])/g,we=/^ms-/,Ee=function(e){return "-"+e.toLowerCase()};function be(e){return ge.test(e)?e.replace(Se,Ee).replace(we,"-ms-"):e}var _e=function(e){return null==e||!1===e||""===e};function Ne(e,n,r,o){if(Array.isArray(e)){for(var s,i=[],a=0,c=e.length;a<c;a+=1)""!==(s=Ne(e[a],n,r,o))&&(Array.isArray(s)?i.push.apply(i,s):i.push(s));return i}if(_e(e))return "";if(N$2(e))return "."+e.styledComponentId;if(b$1(e)){if("function"!=typeof(l=e)||l.prototype&&l.prototype.isReactComponent||!n)return e;var u=e(n);return reactIs$3.exports.isElement(u)&&console.warn(_$3(e)+" is not a styled component and cannot be referred to via component selector. See https://www.styled-components.com/docs/advanced#referring-to-other-components for more details."),Ne(u,n,r,o)}var l;return e instanceof ve?r?(e.inject(r,o),e.getName(o)):e:S$2(e)?function e(t,n){var r,o,s=[];for(var i in t)t.hasOwnProperty(i)&&!_e(t[i])&&(Array.isArray(t[i])&&t[i].isCss||b$1(t[i])?s.push(be(i)+":",t[i],";"):S$2(t[i])?s.push.apply(s,e(t[i],i)):s.push(be(i)+": "+(r=i,null==(o=t[i])||"boolean"==typeof o||""===o?"":"number"!=typeof o||0===o||r in unitlessKeys?String(o).trim():o+"px")+";"));return n?[n+" {"].concat(s,["}"]):s}(e):e.toString()}var Ae=function(e){return Array.isArray(e)&&(e.isCss=!0),e};function Ce(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];return b$1(e)||S$2(e)?Ae(Ne(g$2(w$1,[e].concat(n)))):0===n.length&&1===e.length&&"string"==typeof e[0]?e:Ae(Ne(g$2(e,n)))}var Ie=/invalid hook call/i,Pe=new Set,Oe=function(e,t){{var n="The component "+e+(t?' with the id of "'+t+'"':"")+" has been created dynamically.\nYou may see this warning because you've called styled inside another component.\nTo resolve this only create new StyledComponents outside of any render method and function component.",r=console.error;try{var o=!0;console.error=function(e){if(Ie.test(e))o=!1,Pe.delete(n);else {for(var t=arguments.length,s=new Array(t>1?t-1:0),i=1;i<t;i++)s[i-1]=arguments[i];r.apply(void 0,[e].concat(s));}},react.exports.useRef(),o&&!Pe.has(n)&&(console.warn(n),Pe.add(n));}catch(e){Ie.test(e.message)&&Pe.delete(n);}finally{console.error=r;}}},Re=function(e,t,n){return void 0===n&&(n=E$2),e.theme!==n.theme&&e.theme||t||n.theme},De=/[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~-]+/g,je=/(^-|-$)/g;function Te(e){return e.replace(De,"-").replace(je,"")}var xe=function(e){return ee$2(ne$2(e)>>>0)};function ke(e){return "string"==typeof e&&(e.charAt(0)===e.charAt(0).toLowerCase())}var Ve=function(e){return "function"==typeof e||"object"==typeof e&&null!==e&&!Array.isArray(e)},Be=function(e){return "__proto__"!==e&&"constructor"!==e&&"prototype"!==e};function ze(e,t,n){var r=e[n];Ve(t)&&Ve(r)?Me(r,t):e[n]=t;}function Me(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];for(var o=0,s=n;o<s.length;o++){var i=s[o];if(Ve(i))for(var a in i)Be(a)&&ze(e,i[a],a);}return e}var Ge=React$1.createContext();Ge.Consumer;var Ye={};function qe(e,t,n){var o=N$2(e),i=!ke(e),a=t.attrs,c=void 0===a?w$1:a,d=t.componentId,h=void 0===d?function(e,t){var n="string"!=typeof e?"sc":Te(e);Ye[n]=(Ye[n]||0)+1;var r=n+"-"+xe("5.3.3"+n+Ye[n]);return t?t+"-"+r:r}(t.displayName,t.parentComponentId):d,p=t.displayName,f=void 0===p?function(e){return ke(e)?"styled."+e:"Styled("+_$3(e)+")"}(e):p,g=t.displayName&&t.componentId?Te(t.displayName)+"-"+t.componentId:t.componentId||h,S=o&&e.attrs?Array.prototype.concat(e.attrs,c).filter(Boolean):c,A=t.shouldForwardProp;o&&e.shouldForwardProp&&(A=t.shouldForwardProp?function(n,r,o){return e.shouldForwardProp(n,r,o)&&t.shouldForwardProp(n,r,o)}:e.shouldForwardProp);var C,I=new se$2(n,g,o?e.componentStyle:void 0),P=I.isStatic&&0===c.length,O=function(e,t){return function(e,t,n,r){var o=e.attrs,i=e.componentStyle,a=e.defaultProps,c=e.foldedComponentIds,d=e.shouldForwardProp,h=e.styledComponentId,p=e.target;react.exports.useDebugValue(h);var f=function(e,t,n){void 0===e&&(e=E$2);var r=v$1({},t,{theme:e}),o={};return n.forEach((function(e){var t,n,s,i=e;for(t in b$1(i)&&(i=i(r)),i)r[t]=o[t]="className"===t?(n=o[t],s=i[t],n&&s?n+" "+s:n||s):i[t];})),[r,o]}(Re(t,react.exports.useContext(Ge),a)||E$2,t,o),y=f[0],g=f[1],S=function(e,t,n,r){var o=fe$1(),s=me(),i=t?e.generateAndInjectStyles(E$2,o,s):e.generateAndInjectStyles(n,o,s);return react.exports.useDebugValue(i),!t&&r&&r(i),i}(i,r,y,e.warnTooManyClasses),w=n,_=g.$as||t.$as||g.as||t.as||p,N=ke(_),A=g!==t?v$1({},t,{},g):t,C={};for(var I in A)"$"!==I[0]&&"as"!==I&&("forwardedAs"===I?C.as=A[I]:(d?d(I,index,_):!N||index(I))&&(C[I]=A[I]));return t.style&&g.style!==t.style&&(C.style=v$1({},t.style,{},g.style)),C.className=Array.prototype.concat(c,h,S!==h?S:null,t.className,g.className).filter(Boolean).join(" "),C.ref=w,react.exports.createElement(_,C)}(C,e,t,P)};return O.displayName=f,(C=React$1.forwardRef(O)).attrs=S,C.componentStyle=I,C.displayName=f,C.shouldForwardProp=A,C.foldedComponentIds=o?Array.prototype.concat(e.foldedComponentIds,e.styledComponentId):w$1,C.styledComponentId=g,C.target=o?e.target:e,C.withComponent=function(e){var r=t.componentId,o=function(e,t){if(null==e)return {};var n,r,o={},s=Object.keys(e);for(r=0;r<s.length;r++)n=s[r],t.indexOf(n)>=0||(o[n]=e[n]);return o}(t,["componentId"]),s=r&&r+"-"+(ke(e)?e:Te(_$3(e)));return qe(e,v$1({},o,{attrs:S,componentId:s}),n)},Object.defineProperty(C,"defaultProps",{get:function(){return this._foldedDefaultProps},set:function(t){this._foldedDefaultProps=o?Me({},e.defaultProps,t):t;}}),(Oe(f,g),C.warnTooManyClasses=function(e,t){var n={},r=!1;return function(o){if(!r&&(n[o]=!0,Object.keys(n).length>=200)){var s=t?' with the id of "'+t+'"':"";console.warn("Over 200 classes were generated for component "+e+s+".\nConsider using the attrs method, together with a style object for frequently changed styles.\nExample:\n  const Component = styled.div.attrs(props => ({\n    style: {\n      background: props.background,\n    },\n  }))`width: 100%;`\n\n  <Component />"),r=!0,n={};}}}(f,g)),C.toString=function(){return "."+C.styledComponentId},i&&hoistNonReactStatics_cjs(C,e,{attrs:!0,componentStyle:!0,displayName:!0,foldedComponentIds:!0,shouldForwardProp:!0,styledComponentId:!0,target:!0,withComponent:!0}),C}var He=function(e){return function e(t,r,o){if(void 0===o&&(o=E$2),!reactIs$3.exports.isValidElementType(r))return j$2(1,String(r));var s=function(){return t(r,o,Ce.apply(void 0,arguments))};return s.withConfig=function(n){return e(t,r,v$1({},o,{},n))},s.attrs=function(n){return e(t,r,v$1({},o,{attrs:Array.prototype.concat(o.attrs,n).filter(Boolean)}))},s}(qe,e)};["a","abbr","address","area","article","aside","audio","b","base","bdi","bdo","big","blockquote","body","br","button","canvas","caption","cite","code","col","colgroup","data","datalist","dd","del","details","dfn","dialog","div","dl","dt","em","embed","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","iframe","img","input","ins","kbd","keygen","label","legend","li","link","main","map","mark","marquee","menu","menuitem","meta","meter","nav","noscript","object","ol","optgroup","option","output","p","param","picture","pre","progress","q","rp","rt","ruby","s","samp","script","section","select","small","source","span","strong","style","sub","summary","sup","table","tbody","td","textarea","tfoot","th","thead","time","title","tr","track","u","ul","var","video","wbr","circle","clipPath","defs","ellipse","foreignObject","g","image","line","linearGradient","marker","mask","path","pattern","polygon","polyline","radialGradient","rect","stop","svg","text","textPath","tspan"].forEach((function(e){He[e]=He(e);}));"undefined"!=typeof navigator&&"ReactNative"===navigator.product&&console.warn("It looks like you've imported 'styled-components' on React Native.\nPerhaps you're looking to import 'styled-components/native'?\nRead more about this at https://www.styled-components.com/docs/basics#react-native"),"undefined"!=typeof window&&(window["__styled-components-init__"]=window["__styled-components-init__"]||0,1===window["__styled-components-init__"]&&console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."),window["__styled-components-init__"]+=1);var styled$3 = He;
 
-	const Card$1 = styled$3.div`
+	styled$3.div`
   box-sizing: border-box;
   max-width: 410px;
   margin: 0 auto;
@@ -33906,18 +33442,18 @@
   flex-direction: column;
   align-items: center;
 `;
-	const Form = styled$3.div`
+	styled$3.div`
   display: flex;
   flex-direction: column;
   width: 100%;
 `;
-	const Input$2 = styled$3.input`
+	styled$3.input`
   padding: 1rem;
   border: 1px solid #999;
   margin-bottom: 1rem;
   font-size: 0.8rem;
 `;
-	const Button$2 = styled$3.button`
+	styled$3.button`
   cursor: pointer;
   background: linear-gradient(to bottom, #6371c7, #5563c1);
   border-color: #3f4eae;
@@ -33933,56 +33469,9 @@
   width: 50%;
   margin-bottom: 1rem;
 `;
-	const Error$1 = styled$3.div`
+	styled$3.div`
   background-color: red;
 `;
-
-	function Login(props) {
-	  //if (props.location.pathname == '')
-	  const [referer, setReferer] = react.exports.useState('/'); //var referer = '/cardcnasme';
-
-	  const [isLoggedIn, setLoggedIn] = react.exports.useState(false);
-	  const [isError, setIsError] = react.exports.useState(false);
-	  const [isLoading, setIsLoading] = react.exports.useState(false);
-	  const [userName, setUserName] = react.exports.useState("skillnet");
-	  const [password, setPassword] = react.exports.useState("swipeguide");
-	  const {
-	    setAuthTokens
-	  } = useAuth(); //const referer = props.location.state.referer || '/';
-
-	  let navigate = useNavigate();
-
-	  function postLogin() {
-	    //setIsLoading(false);
-	    var where = '/cardcbet';
-	    setReferer(where);
-	    setAuthTokens(password);
-	    setLoggedIn(true);
-	    return; //return <Redirect to={referer} />;
-	  }
-
-	  if (isLoggedIn) {
-	    navigate("/cardcbet"); //return <Redirect to={referer} />;
-	  }
-
-	  return /*#__PURE__*/React$1.createElement(Card$1, null, /*#__PURE__*/React$1.createElement(Form, null, /*#__PURE__*/React$1.createElement(Input$2, {
-	    type: "username",
-	    value: userName,
-	    onChange: e => {
-	      setUserName(e.target.value);
-	    },
-	    placeholder: "ID"
-	  }), /*#__PURE__*/React$1.createElement(Input$2, {
-	    type: "password",
-	    value: password,
-	    onChange: e => {
-	      setPassword(e.target.value);
-	    },
-	    placeholder: "password"
-	  }), /*#__PURE__*/React$1.createElement(Button$2, {
-	    onClick: postLogin
-	  }, "Sign In")), isError && /*#__PURE__*/React$1.createElement(Error$1, null, "The username or password provided were incorrect!"), isLoading && /*#__PURE__*/React$1.createElement("div", null, "Loading..."));
-	}
 
 	var Star = {};
 
@@ -38039,9 +37528,9 @@
 	  jsxRuntime.exports = reactJsxRuntime_development;
 	}
 
-	const _excluded$P = ["classes", "className", "invisible", "component", "components", "componentsProps", "theme"];
+	const _excluded$N = ["classes", "className", "invisible", "component", "components", "componentsProps", "theme"];
 
-	const useUtilityClasses$x = ownerState => {
+	const useUtilityClasses$v = ownerState => {
 	  const {
 	    classes,
 	    invisible
@@ -38064,14 +37553,14 @@
 	    /* eslint-disable react/prop-types */
 	    theme
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$P);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$N);
 
 	  const ownerState = _extends$3({}, props, {
 	    classes: classesProp,
 	    invisible
 	  });
 
-	  const classes = useUtilityClasses$x(ownerState);
+	  const classes = useUtilityClasses$v(ownerState);
 	  const Root = components.Root || component;
 	  const rootProps = componentsProps.root || {};
 	  return /*#__PURE__*/jsxRuntime.exports.jsx(Root, _extends$3({
@@ -38809,9 +38298,9 @@
 	}
 	generateUtilityClasses('MuiModal', ['root', 'hidden']);
 
-	const _excluded$O = ["BackdropComponent", "BackdropProps", "children", "classes", "className", "closeAfterTransition", "component", "components", "componentsProps", "container", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onKeyDown", "open", "theme", "onTransitionEnter", "onTransitionExited"];
+	const _excluded$M = ["BackdropComponent", "BackdropProps", "children", "classes", "className", "closeAfterTransition", "component", "components", "componentsProps", "container", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onKeyDown", "open", "theme", "onTransitionEnter", "onTransitionExited"];
 
-	const useUtilityClasses$w = ownerState => {
+	const useUtilityClasses$u = ownerState => {
 	  const {
 	    open,
 	    exited,
@@ -38881,7 +38370,7 @@
 	    onTransitionEnter,
 	    onTransitionExited
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$O);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$M);
 
 	  const [exited, setExited] = react.exports.useState(true);
 	  const modal = react.exports.useRef({});
@@ -38958,7 +38447,7 @@
 	    keepMounted
 	  });
 
-	  const classes = useUtilityClasses$w(ownerState);
+	  const classes = useUtilityClasses$u(ownerState);
 
 	  if (!keepMounted && !open && (!hasTransition || exited)) {
 	    return null;
@@ -41180,7 +40669,7 @@
 	  defaultModifiers: defaultModifiers
 	}); // eslint-disable-next-line import/no-unused-modules
 
-	const _excluded$N = ["anchorEl", "children", "direction", "disablePortal", "modifiers", "open", "placement", "popperOptions", "popperRef", "TransitionProps"],
+	const _excluded$L = ["anchorEl", "children", "direction", "disablePortal", "modifiers", "open", "placement", "popperOptions", "popperRef", "TransitionProps"],
 	      _excluded2$3 = ["anchorEl", "children", "container", "direction", "disablePortal", "keepMounted", "modifiers", "open", "placement", "popperOptions", "popperRef", "style", "transition"];
 
 	function flipPlacement(placement, direction) {
@@ -41226,7 +40715,7 @@
 	    popperRef: popperRefProp,
 	    TransitionProps
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$N);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$L);
 
 	  const tooltipRef = react.exports.useRef(null);
 	  const ownRef = useForkRef(tooltipRef, ref);
@@ -41529,7 +41018,7 @@
 	} ;
 	var PopperUnstyled$1 = PopperUnstyled;
 
-	const _excluded$M = ["onChange", "maxRows", "minRows", "style", "value"];
+	const _excluded$K = ["onChange", "maxRows", "minRows", "style", "value"];
 
 	function getStyleValue(computedStyle, property) {
 	  return parseInt(computedStyle[property], 10) || 0;
@@ -41558,7 +41047,7 @@
 	    style,
 	    value
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$M);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$K);
 
 	  const {
 	    current: isControlled
@@ -41744,7 +41233,7 @@
 	} ;
 	var TextareaAutosize$1 = TextareaAutosize;
 
-	var _extends = {exports: {}};
+	var _extends$1 = {exports: {}};
 
 	(function (module) {
 	function _extends() {
@@ -41765,7 +41254,7 @@
 	}
 
 	module.exports = _extends, module.exports.__esModule = true, module.exports["default"] = module.exports;
-	}(_extends));
+	}(_extends$1));
 
 	var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
 
@@ -44088,7 +43577,7 @@
 
 	styleFunctionSx.filterProps = ['sx'];
 
-	const _excluded$L = ["sx"];
+	const _excluded$J = ["sx"];
 
 	const splitProps = props => {
 	  const result = {
@@ -44109,7 +43598,7 @@
 	  const {
 	    sx: inSx
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$L);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$J);
 
 	  const {
 	    systemProps,
@@ -44138,7 +43627,7 @@
 	  });
 	}
 
-	const _excluded$K = ["values", "unit", "step"];
+	const _excluded$I = ["values", "unit", "step"];
 
 	function createBreakpoints(breakpoints) {
 	  const {
@@ -44159,7 +43648,7 @@
 	    unit = 'px',
 	    step = 5
 	  } = breakpoints,
-	        other = _objectWithoutPropertiesLoose(breakpoints, _excluded$K);
+	        other = _objectWithoutPropertiesLoose(breakpoints, _excluded$I);
 
 	  const keys = Object.keys(values);
 
@@ -44250,7 +43739,7 @@
 	  return spacing;
 	}
 
-	const _excluded$J = ["breakpoints", "palette", "spacing", "shape"];
+	const _excluded$H = ["breakpoints", "palette", "spacing", "shape"];
 
 	function createTheme$1(options = {}, ...args) {
 	  const {
@@ -44259,7 +43748,7 @@
 	    spacing: spacingInput,
 	    shape: shapeInput = {}
 	  } = options,
-	        other = _objectWithoutPropertiesLoose(options, _excluded$J);
+	        other = _objectWithoutPropertiesLoose(options, _excluded$H);
 
 	  const breakpoints = createBreakpoints(breakpointsInput);
 	  const spacing = createSpacing(spacingInput);
@@ -44312,7 +43801,7 @@
 	  return useTheme$2(defaultTheme);
 	}
 
-	const _excluded$I = ["variant"];
+	const _excluded$G = ["variant"];
 
 	function isEmpty$2(string) {
 	  return string.length === 0;
@@ -44328,7 +43817,7 @@
 	  const {
 	    variant
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$I);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$G);
 
 	  let classKey = variant || '';
 	  Object.keys(other).sort().forEach(key => {
@@ -44341,7 +43830,7 @@
 	  return classKey;
 	}
 
-	const _excluded$H = ["name", "slot", "skipVariantsResolver", "skipSx", "overridesResolver"],
+	const _excluded$F = ["name", "slot", "skipVariantsResolver", "skipSx", "overridesResolver"],
 	      _excluded2$2 = ["theme"],
 	      _excluded3 = ["theme"];
 
@@ -44422,7 +43911,7 @@
 	      skipSx: inputSkipSx,
 	      overridesResolver
 	    } = inputOptions,
-	          options = _objectWithoutPropertiesLoose(inputOptions, _excluded$H); // if skipVariantsResolver option is defined, take the value, otherwise, true for root and false for other slots.
+	          options = _objectWithoutPropertiesLoose(inputOptions, _excluded$F); // if skipVariantsResolver option is defined, take the value, otherwise, true for root and false for other slots.
 
 
 	    const skipVariantsResolver = inputSkipVariantsResolver !== undefined ? inputSkipVariantsResolver : componentSlot && componentSlot !== 'Root' || false;
@@ -44975,7 +44464,7 @@ The following color spaces are supported: srgb, display-p3, a98-rgb, prophoto-rg
 	};
 	var green$1 = green;
 
-	const _excluded$G = ["mode", "contrastThreshold", "tonalOffset"];
+	const _excluded$E = ["mode", "contrastThreshold", "tonalOffset"];
 	const light = {
 	  // The colors used to style the text.
 	  text: {
@@ -45159,7 +44648,7 @@ The following color spaces are supported: srgb, display-p3, a98-rgb, prophoto-rg
 	    contrastThreshold = 3,
 	    tonalOffset = 0.2
 	  } = palette,
-	        other = _objectWithoutPropertiesLoose(palette, _excluded$G);
+	        other = _objectWithoutPropertiesLoose(palette, _excluded$E);
 
 	  const primary = palette.primary || getDefaultPrimary(mode);
 	  const secondary = palette.secondary || getDefaultSecondary(mode);
@@ -45295,7 +44784,7 @@ const theme2 = createTheme({ palette: {
 	  return paletteOutput;
 	}
 
-	const _excluded$F = ["fontFamily", "fontSize", "fontWeightLight", "fontWeightRegular", "fontWeightMedium", "fontWeightBold", "htmlFontSize", "allVariants", "pxToRem"];
+	const _excluded$D = ["fontFamily", "fontSize", "fontWeightLight", "fontWeightRegular", "fontWeightMedium", "fontWeightBold", "htmlFontSize", "allVariants", "pxToRem"];
 
 	function round(value) {
 	  return Math.round(value * 1e5) / 1e5;
@@ -45328,7 +44817,7 @@ const theme2 = createTheme({ palette: {
 	    allVariants,
 	    pxToRem: pxToRem2
 	  } = _ref,
-	        other = _objectWithoutPropertiesLoose(_ref, _excluded$F);
+	        other = _objectWithoutPropertiesLoose(_ref, _excluded$D);
 
 	  {
 	    if (typeof fontSize !== 'number') {
@@ -45396,7 +44885,7 @@ const theme2 = createTheme({ palette: {
 	const shadows = ['none', createShadow(0, 2, 1, -1, 0, 1, 1, 0, 0, 1, 3, 0), createShadow(0, 3, 1, -2, 0, 2, 2, 0, 0, 1, 5, 0), createShadow(0, 3, 3, -2, 0, 3, 4, 0, 0, 1, 8, 0), createShadow(0, 2, 4, -1, 0, 4, 5, 0, 0, 1, 10, 0), createShadow(0, 3, 5, -1, 0, 5, 8, 0, 0, 1, 14, 0), createShadow(0, 3, 5, -1, 0, 6, 10, 0, 0, 1, 18, 0), createShadow(0, 4, 5, -2, 0, 7, 10, 1, 0, 2, 16, 1), createShadow(0, 5, 5, -3, 0, 8, 10, 1, 0, 3, 14, 2), createShadow(0, 5, 6, -3, 0, 9, 12, 1, 0, 3, 16, 2), createShadow(0, 6, 6, -3, 0, 10, 14, 1, 0, 4, 18, 3), createShadow(0, 6, 7, -4, 0, 11, 15, 1, 0, 4, 20, 3), createShadow(0, 7, 8, -4, 0, 12, 17, 2, 0, 5, 22, 4), createShadow(0, 7, 8, -4, 0, 13, 19, 2, 0, 5, 24, 4), createShadow(0, 7, 9, -4, 0, 14, 21, 2, 0, 5, 26, 4), createShadow(0, 8, 9, -5, 0, 15, 22, 2, 0, 6, 28, 5), createShadow(0, 8, 10, -5, 0, 16, 24, 2, 0, 6, 30, 5), createShadow(0, 8, 11, -5, 0, 17, 26, 2, 0, 6, 32, 5), createShadow(0, 9, 11, -5, 0, 18, 28, 2, 0, 7, 34, 6), createShadow(0, 9, 12, -6, 0, 19, 29, 2, 0, 7, 36, 6), createShadow(0, 10, 13, -6, 0, 20, 31, 3, 0, 8, 38, 7), createShadow(0, 10, 13, -6, 0, 21, 33, 3, 0, 8, 40, 7), createShadow(0, 10, 14, -6, 0, 22, 35, 3, 0, 8, 42, 7), createShadow(0, 11, 14, -7, 0, 23, 36, 3, 0, 9, 44, 8), createShadow(0, 11, 15, -7, 0, 24, 38, 3, 0, 9, 46, 8)];
 	var shadows$1 = shadows;
 
-	const _excluded$E = ["duration", "easing", "delay"];
+	const _excluded$C = ["duration", "easing", "delay"];
 	// Follow https://material.google.com/motion/duration-easing.html#duration-easing-natural-easing-curves
 	// to learn the context in which each easing should be used.
 	const easing = {
@@ -45451,7 +44940,7 @@ const theme2 = createTheme({ palette: {
 	      easing: easingOption = mergedEasing.easeInOut,
 	      delay = 0
 	    } = options,
-	          other = _objectWithoutPropertiesLoose(options, _excluded$E);
+	          other = _objectWithoutPropertiesLoose(options, _excluded$C);
 
 	    {
 	      const isString = value => typeof value === 'string'; // IE11 support, replace with Number.isNaN
@@ -45506,7 +44995,7 @@ const theme2 = createTheme({ palette: {
 	};
 	var zIndex$1 = zIndex;
 
-	const _excluded$D = ["breakpoints", "mixins", "spacing", "palette", "transitions", "typography", "shape"];
+	const _excluded$B = ["breakpoints", "mixins", "spacing", "palette", "transitions", "typography", "shape"];
 
 	function createTheme(options = {}, ...args) {
 	  const {
@@ -45515,7 +45004,7 @@ const theme2 = createTheme({ palette: {
 	    transitions: transitionsInput = {},
 	    typography: typographyInput = {}
 	  } = options,
-	        other = _objectWithoutPropertiesLoose(options, _excluded$D);
+	        other = _objectWithoutPropertiesLoose(options, _excluded$B);
 
 	  const palette = createPalette(paletteInput);
 	  const systemTheme = createTheme$1(options);
@@ -45595,9 +45084,9 @@ const theme2 = createTheme({ palette: {
 	}
 	generateUtilityClasses('MuiSvgIcon', ['root', 'colorPrimary', 'colorSecondary', 'colorAction', 'colorError', 'colorDisabled', 'fontSizeInherit', 'fontSizeSmall', 'fontSizeMedium', 'fontSizeLarge']);
 
-	const _excluded$C = ["children", "className", "color", "component", "fontSize", "htmlColor", "inheritViewBox", "titleAccess", "viewBox"];
+	const _excluded$A = ["children", "className", "color", "component", "fontSize", "htmlColor", "inheritViewBox", "titleAccess", "viewBox"];
 
-	const useUtilityClasses$v = ownerState => {
+	const useUtilityClasses$t = ownerState => {
 	  const {
 	    color,
 	    fontSize,
@@ -45665,7 +45154,7 @@ const theme2 = createTheme({ palette: {
 	    titleAccess,
 	    viewBox = '0 0 24 24'
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$C);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$A);
 
 	  const ownerState = _extends$3({}, props, {
 	    color,
@@ -45681,7 +45170,7 @@ const theme2 = createTheme({ palette: {
 	    more.viewBox = viewBox;
 	  }
 
-	  const classes = useUtilityClasses$v(ownerState);
+	  const classes = useUtilityClasses$t(ownerState);
 	  return /*#__PURE__*/jsxRuntime.exports.jsxs(SvgIconRoot, _extends$3({
 	    as: component,
 	    className: clsx(classes.root, className),
@@ -45845,22 +45334,22 @@ const theme2 = createTheme({ palette: {
 	var _utils = require$$0;
 	}(createSvgIcon$1));
 
-	var _interopRequireDefault$5 = interopRequireDefault.exports;
+	var _interopRequireDefault$7 = interopRequireDefault.exports;
 
 	Object.defineProperty(Star, "__esModule", {
 	  value: true
 	});
-	var default_1$4 = Star.default = void 0;
+	var default_1$6 = Star.default = void 0;
 
-	var _createSvgIcon$4 = _interopRequireDefault$5(createSvgIcon$1);
+	var _createSvgIcon$6 = _interopRequireDefault$7(createSvgIcon$1);
 
-	var _jsxRuntime$4 = jsxRuntime.exports;
+	var _jsxRuntime$6 = jsxRuntime.exports;
 
-	var _default$5 = (0, _createSvgIcon$4.default)( /*#__PURE__*/(0, _jsxRuntime$4.jsx)("path", {
+	var _default$7 = (0, _createSvgIcon$6.default)( /*#__PURE__*/(0, _jsxRuntime$6.jsx)("path", {
 	  d: "M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
 	}), 'Star');
 
-	default_1$4 = Star.default = _default$5;
+	default_1$6 = Star.default = _default$7;
 
 	function useTheme() {
 	  const theme = useTheme$1(defaultTheme$1);
@@ -46871,7 +46360,7 @@ const theme2 = createTheme({ palette: {
 	}
 	generateUtilityClasses('MuiPaper', ['root', 'rounded', 'outlined', 'elevation', 'elevation0', 'elevation1', 'elevation2', 'elevation3', 'elevation4', 'elevation5', 'elevation6', 'elevation7', 'elevation8', 'elevation9', 'elevation10', 'elevation11', 'elevation12', 'elevation13', 'elevation14', 'elevation15', 'elevation16', 'elevation17', 'elevation18', 'elevation19', 'elevation20', 'elevation21', 'elevation22', 'elevation23', 'elevation24']);
 
-	const _excluded$B = ["className", "component", "elevation", "square", "variant"];
+	const _excluded$z = ["className", "component", "elevation", "square", "variant"];
 
 	const getOverlayAlpha = elevation => {
 	  let alphaValue;
@@ -46885,7 +46374,7 @@ const theme2 = createTheme({ palette: {
 	  return (alphaValue / 100).toFixed(2);
 	};
 
-	const useUtilityClasses$u = ownerState => {
+	const useUtilityClasses$s = ownerState => {
 	  const {
 	    square,
 	    elevation,
@@ -46936,7 +46425,7 @@ const theme2 = createTheme({ palette: {
 	    square = false,
 	    variant = 'elevation'
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$B);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$z);
 
 	  const ownerState = _extends$3({}, props, {
 	    component,
@@ -46945,7 +46434,7 @@ const theme2 = createTheme({ palette: {
 	    variant
 	  });
 
-	  const classes = useUtilityClasses$u(ownerState);
+	  const classes = useUtilityClasses$s(ownerState);
 
 	  {
 	    // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -47124,7 +46613,7 @@ const theme2 = createTheme({ palette: {
 	const touchRippleClasses = generateUtilityClasses('MuiTouchRipple', ['root', 'ripple', 'rippleVisible', 'ripplePulsate', 'child', 'childLeaving', 'childPulsate']);
 	var touchRippleClasses$1 = touchRippleClasses;
 
-	const _excluded$A = ["center", "classes", "className"];
+	const _excluded$y = ["center", "classes", "className"];
 
 	let _$1 = t => t,
 	    _t,
@@ -47255,7 +46744,7 @@ const theme2 = createTheme({ palette: {
 	    classes = {},
 	    className
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$A);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$y);
 
 	  const [ripples, setRipples] = react.exports.useState([]);
 	  const nextKey = react.exports.useRef(0);
@@ -47463,9 +46952,9 @@ const theme2 = createTheme({ palette: {
 	const buttonBaseClasses = generateUtilityClasses('MuiButtonBase', ['root', 'disabled', 'focusVisible']);
 	var buttonBaseClasses$1 = buttonBaseClasses;
 
-	const _excluded$z = ["action", "centerRipple", "children", "className", "component", "disabled", "disableRipple", "disableTouchRipple", "focusRipple", "focusVisibleClassName", "LinkComponent", "onBlur", "onClick", "onContextMenu", "onDragLeave", "onFocus", "onFocusVisible", "onKeyDown", "onKeyUp", "onMouseDown", "onMouseLeave", "onMouseUp", "onTouchEnd", "onTouchMove", "onTouchStart", "tabIndex", "TouchRippleProps", "type"];
+	const _excluded$x = ["action", "centerRipple", "children", "className", "component", "disabled", "disableRipple", "disableTouchRipple", "focusRipple", "focusVisibleClassName", "LinkComponent", "onBlur", "onClick", "onContextMenu", "onDragLeave", "onFocus", "onFocusVisible", "onKeyDown", "onKeyUp", "onMouseDown", "onMouseLeave", "onMouseUp", "onTouchEnd", "onTouchMove", "onTouchStart", "tabIndex", "TouchRippleProps", "type"];
 
-	const useUtilityClasses$t = ownerState => {
+	const useUtilityClasses$r = ownerState => {
 	  const {
 	    disabled,
 	    focusVisible,
@@ -47569,7 +47058,7 @@ const theme2 = createTheme({ palette: {
 	    TouchRippleProps,
 	    type
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$z);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$x);
 
 	  const buttonRef = react.exports.useRef(null);
 	  const rippleRef = react.exports.useRef(null);
@@ -47765,7 +47254,7 @@ const theme2 = createTheme({ palette: {
 	    focusVisible
 	  });
 
-	  const classes = useUtilityClasses$t(ownerState);
+	  const classes = useUtilityClasses$r(ownerState);
 	  return /*#__PURE__*/jsxRuntime.exports.jsxs(ButtonBaseRoot, _extends$3({
 	    as: ComponentProp,
 	    className: clsx(classes.root, className),
@@ -47988,9 +47477,9 @@ const theme2 = createTheme({ palette: {
 	const iconButtonClasses = generateUtilityClasses('MuiIconButton', ['root', 'disabled', 'colorInherit', 'colorPrimary', 'colorSecondary', 'edgeStart', 'edgeEnd', 'sizeSmall', 'sizeMedium', 'sizeLarge']);
 	var iconButtonClasses$1 = iconButtonClasses;
 
-	const _excluded$y = ["edge", "children", "className", "color", "disabled", "disableFocusRipple", "size"];
+	const _excluded$w = ["edge", "children", "className", "color", "disabled", "disableFocusRipple", "size"];
 
-	const useUtilityClasses$s = ownerState => {
+	const useUtilityClasses$q = ownerState => {
 	  const {
 	    classes,
 	    disabled,
@@ -48087,7 +47576,7 @@ const theme2 = createTheme({ palette: {
 	    disableFocusRipple = false,
 	    size = 'medium'
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$y);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$w);
 
 	  const ownerState = _extends$3({}, props, {
 	    edge,
@@ -48097,7 +47586,7 @@ const theme2 = createTheme({ palette: {
 	    size
 	  });
 
-	  const classes = useUtilityClasses$s(ownerState);
+	  const classes = useUtilityClasses$q(ownerState);
 	  return /*#__PURE__*/jsxRuntime.exports.jsx(IconButtonRoot, _extends$3({
 	    className: clsx(classes.root, className),
 	    centerRipple: true,
@@ -48203,9 +47692,9 @@ const theme2 = createTheme({ palette: {
 	}
 	generateUtilityClasses('MuiTypography', ['root', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2', 'body1', 'body2', 'inherit', 'button', 'caption', 'overline', 'alignLeft', 'alignRight', 'alignCenter', 'alignJustify', 'noWrap', 'gutterBottom', 'paragraph']);
 
-	const _excluded$x = ["align", "className", "component", "gutterBottom", "noWrap", "paragraph", "variant", "variantMapping"];
+	const _excluded$v = ["align", "className", "component", "gutterBottom", "noWrap", "paragraph", "variant", "variantMapping"];
 
-	const useUtilityClasses$r = ownerState => {
+	const useUtilityClasses$p = ownerState => {
 	  const {
 	    align,
 	    gutterBottom,
@@ -48291,7 +47780,7 @@ const theme2 = createTheme({ palette: {
 	    variant = 'body1',
 	    variantMapping = defaultVariantMapping
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$x);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$v);
 
 	  const ownerState = _extends$3({}, props, {
 	    align,
@@ -48306,7 +47795,7 @@ const theme2 = createTheme({ palette: {
 	  });
 
 	  const Component = component || (paragraph ? 'p' : variantMapping[variant] || defaultVariantMapping[variant]) || 'span';
-	  const classes = useUtilityClasses$r(ownerState);
+	  const classes = useUtilityClasses$p(ownerState);
 	  return /*#__PURE__*/jsxRuntime.exports.jsx(TypographyRoot, _extends$3({
 	    as: Component,
 	    ref: ref,
@@ -48539,9 +48028,9 @@ const theme2 = createTheme({ palette: {
 	}
 	generateUtilityClasses('MuiListSubheader', ['root', 'colorPrimary', 'colorInherit', 'gutters', 'inset', 'sticky']);
 
-	const _excluded$w = ["className", "color", "component", "disableGutters", "disableSticky", "inset"];
+	const _excluded$u = ["className", "color", "component", "disableGutters", "disableSticky", "inset"];
 
-	const useUtilityClasses$q = ownerState => {
+	const useUtilityClasses$o = ownerState => {
 	  const {
 	    classes,
 	    color,
@@ -48604,7 +48093,7 @@ const theme2 = createTheme({ palette: {
 	    disableSticky = false,
 	    inset = false
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$w);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$u);
 
 	  const ownerState = _extends$3({}, props, {
 	    color,
@@ -48614,7 +48103,7 @@ const theme2 = createTheme({ palette: {
 	    inset
 	  });
 
-	  const classes = useUtilityClasses$q(ownerState);
+	  const classes = useUtilityClasses$o(ownerState);
 	  return /*#__PURE__*/jsxRuntime.exports.jsx(ListSubheaderRoot, _extends$3({
 	    as: component,
 	    className: clsx(classes.root, className),
@@ -48692,9 +48181,9 @@ const theme2 = createTheme({ palette: {
 	const chipClasses = generateUtilityClasses('MuiChip', ['root', 'sizeSmall', 'sizeMedium', 'colorPrimary', 'colorSecondary', 'disabled', 'clickable', 'clickableColorPrimary', 'clickableColorSecondary', 'deletable', 'deletableColorPrimary', 'deletableColorSecondary', 'outlined', 'filled', 'outlinedPrimary', 'outlinedSecondary', 'avatar', 'avatarSmall', 'avatarMedium', 'avatarColorPrimary', 'avatarColorSecondary', 'icon', 'iconSmall', 'iconMedium', 'iconColorPrimary', 'iconColorSecondary', 'label', 'labelSmall', 'labelMedium', 'deleteIcon', 'deleteIconSmall', 'deleteIconMedium', 'deleteIconColorPrimary', 'deleteIconColorSecondary', 'deleteIconOutlinedColorPrimary', 'deleteIconOutlinedColorSecondary', 'focusVisible']);
 	var chipClasses$1 = chipClasses;
 
-	const _excluded$v = ["avatar", "className", "clickable", "color", "component", "deleteIcon", "disabled", "icon", "label", "onClick", "onDelete", "onKeyDown", "onKeyUp", "size", "variant"];
+	const _excluded$t = ["avatar", "className", "clickable", "color", "component", "deleteIcon", "disabled", "icon", "label", "onClick", "onDelete", "onKeyDown", "onKeyUp", "size", "variant"];
 
-	const useUtilityClasses$p = ownerState => {
+	const useUtilityClasses$n = ownerState => {
 	  const {
 	    classes,
 	    disabled,
@@ -48971,7 +48460,7 @@ const theme2 = createTheme({ palette: {
 	    size = 'medium',
 	    variant = 'filled'
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$v);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$t);
 
 	  const chipRef = react.exports.useRef(null);
 	  const handleRef = useForkRef(chipRef, ref);
@@ -49027,7 +48516,7 @@ const theme2 = createTheme({ palette: {
 	    variant
 	  });
 
-	  const classes = useUtilityClasses$p(ownerState);
+	  const classes = useUtilityClasses$n(ownerState);
 	  const moreProps = component === ButtonBase$1 ? _extends$3({
 	    component: ComponentProp || 'div',
 	    focusVisibleClassName: classes.focusVisible
@@ -49240,9 +48729,9 @@ const theme2 = createTheme({ palette: {
 
 	var _ClearIcon, _ArrowDropDownIcon;
 
-	const _excluded$u = ["autoComplete", "autoHighlight", "autoSelect", "blurOnSelect", "ChipProps", "className", "clearIcon", "clearOnBlur", "clearOnEscape", "clearText", "closeText", "componentsProps", "defaultValue", "disableClearable", "disableCloseOnSelect", "disabled", "disabledItemsFocusable", "disableListWrap", "disablePortal", "filterOptions", "filterSelectedOptions", "forcePopupIcon", "freeSolo", "fullWidth", "getLimitTagsText", "getOptionDisabled", "getOptionLabel", "isOptionEqualToValue", "groupBy", "handleHomeEndKeys", "id", "includeInputInList", "inputValue", "limitTags", "ListboxComponent", "ListboxProps", "loading", "loadingText", "multiple", "noOptionsText", "onChange", "onClose", "onHighlightChange", "onInputChange", "onOpen", "open", "openOnFocus", "openText", "options", "PaperComponent", "PopperComponent", "popupIcon", "renderGroup", "renderInput", "renderOption", "renderTags", "selectOnFocus", "size", "value"];
+	const _excluded$s = ["autoComplete", "autoHighlight", "autoSelect", "blurOnSelect", "ChipProps", "className", "clearIcon", "clearOnBlur", "clearOnEscape", "clearText", "closeText", "componentsProps", "defaultValue", "disableClearable", "disableCloseOnSelect", "disabled", "disabledItemsFocusable", "disableListWrap", "disablePortal", "filterOptions", "filterSelectedOptions", "forcePopupIcon", "freeSolo", "fullWidth", "getLimitTagsText", "getOptionDisabled", "getOptionLabel", "isOptionEqualToValue", "groupBy", "handleHomeEndKeys", "id", "includeInputInList", "inputValue", "limitTags", "ListboxComponent", "ListboxProps", "loading", "loadingText", "multiple", "noOptionsText", "onChange", "onClose", "onHighlightChange", "onInputChange", "onOpen", "open", "openOnFocus", "openText", "options", "PaperComponent", "PopperComponent", "popupIcon", "renderGroup", "renderInput", "renderOption", "renderTags", "selectOnFocus", "size", "value"];
 
-	const useUtilityClasses$o = ownerState => {
+	const useUtilityClasses$m = ownerState => {
 	  const {
 	    classes,
 	    disablePortal,
@@ -49624,7 +49113,7 @@ const theme2 = createTheme({ palette: {
 	    selectOnFocus = !props.freeSolo,
 	    size = 'medium'
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$u);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$s);
 	  /* eslint-enable @typescript-eslint/no-unused-vars */
 
 
@@ -49664,7 +49153,7 @@ const theme2 = createTheme({ palette: {
 	    size
 	  });
 
-	  const classes = useUtilityClasses$o(ownerState);
+	  const classes = useUtilityClasses$m(ownerState);
 	  let startAdornment;
 
 	  if (multiple && value.length > 0) {
@@ -50277,7 +49766,7 @@ const theme2 = createTheme({ palette: {
 	} ;
 	var Autocomplete$1 = Autocomplete;
 
-	const _excluded$t = ["addEndListener", "appear", "children", "easing", "in", "onEnter", "onEntered", "onEntering", "onExit", "onExited", "onExiting", "style", "timeout", "TransitionComponent"];
+	const _excluded$r = ["addEndListener", "appear", "children", "easing", "in", "onEnter", "onEntered", "onEntering", "onExit", "onExited", "onExiting", "style", "timeout", "TransitionComponent"];
 	const styles$1 = {
 	  entering: {
 	    opacity: 1
@@ -50313,7 +49802,7 @@ const theme2 = createTheme({ palette: {
 	    // eslint-disable-next-line react/prop-types
 	    TransitionComponent = Transition$1
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$t);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$r);
 
 	  const theme = useTheme();
 	  const nodeRef = react.exports.useRef(null);
@@ -50492,7 +49981,7 @@ const theme2 = createTheme({ palette: {
 	} ;
 	var Fade$1 = Fade;
 
-	const _excluded$s = ["children", "components", "componentsProps", "className", "invisible", "open", "transitionDuration", "TransitionComponent"];
+	const _excluded$q = ["children", "components", "componentsProps", "className", "invisible", "open", "transitionDuration", "TransitionComponent"];
 
 	const extendUtilityClasses$1 = ownerState => {
 	  const {
@@ -50545,7 +50034,7 @@ const theme2 = createTheme({ palette: {
 	    // eslint-disable-next-line react/prop-types
 	    TransitionComponent = Fade$1
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$s);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$q);
 
 	  const ownerState = _extends$3({}, props, {
 	    invisible
@@ -50657,9 +50146,9 @@ const theme2 = createTheme({ palette: {
 
 	var ButtonGroupContext$1 = ButtonGroupContext;
 
-	const _excluded$r = ["children", "color", "component", "className", "disabled", "disableElevation", "disableFocusRipple", "endIcon", "focusVisibleClassName", "fullWidth", "size", "startIcon", "type", "variant"];
+	const _excluded$p = ["children", "color", "component", "className", "disabled", "disableElevation", "disableFocusRipple", "endIcon", "focusVisibleClassName", "fullWidth", "size", "startIcon", "type", "variant"];
 
-	const useUtilityClasses$n = ownerState => {
+	const useUtilityClasses$l = ownerState => {
 	  const {
 	    color,
 	    disableElevation,
@@ -50882,7 +50371,7 @@ const theme2 = createTheme({ palette: {
 	    type,
 	    variant = 'text'
 	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$r);
+	        other = _objectWithoutPropertiesLoose(props, _excluded$p);
 
 	  const ownerState = _extends$3({}, props, {
 	    color,
@@ -50896,7 +50385,7 @@ const theme2 = createTheme({ palette: {
 	    variant
 	  });
 
-	  const classes = useUtilityClasses$n(ownerState);
+	  const classes = useUtilityClasses$l(ownerState);
 
 	  const startIcon = startIconProp && /*#__PURE__*/jsxRuntime.exports.jsx(ButtonStartIcon, {
 	    className: classes.startIcon,
@@ -51059,542 +50548,6 @@ const theme2 = createTheme({ palette: {
 	function useFormControl() {
 	  return react.exports.useContext(FormControlContext$1);
 	}
-
-	function getSwitchBaseUtilityClass(slot) {
-	  return generateUtilityClass('PrivateSwitchBase', slot);
-	}
-	generateUtilityClasses('PrivateSwitchBase', ['root', 'checked', 'disabled', 'input', 'edgeStart', 'edgeEnd']);
-
-	const _excluded$q = ["autoFocus", "checked", "checkedIcon", "className", "defaultChecked", "disabled", "disableFocusRipple", "edge", "icon", "id", "inputProps", "inputRef", "name", "onBlur", "onChange", "onFocus", "readOnly", "required", "tabIndex", "type", "value"];
-
-	const useUtilityClasses$m = ownerState => {
-	  const {
-	    classes,
-	    checked,
-	    disabled,
-	    edge
-	  } = ownerState;
-	  const slots = {
-	    root: ['root', checked && 'checked', disabled && 'disabled', edge && `edge${capitalize(edge)}`],
-	    input: ['input']
-	  };
-	  return composeClasses(slots, getSwitchBaseUtilityClass, classes);
-	};
-
-	const SwitchBaseRoot = styled$1(ButtonBase$1, {
-	  skipSx: true
-	})(({
-	  ownerState
-	}) => _extends$3({
-	  padding: 9,
-	  borderRadius: '50%'
-	}, ownerState.edge === 'start' && {
-	  marginLeft: ownerState.size === 'small' ? -3 : -12
-	}, ownerState.edge === 'end' && {
-	  marginRight: ownerState.size === 'small' ? -3 : -12
-	}));
-	const SwitchBaseInput = styled$1('input', {
-	  skipSx: true
-	})({
-	  cursor: 'inherit',
-	  position: 'absolute',
-	  opacity: 0,
-	  width: '100%',
-	  height: '100%',
-	  top: 0,
-	  left: 0,
-	  margin: 0,
-	  padding: 0,
-	  zIndex: 1
-	});
-	/**
-	 * @ignore - internal component.
-	 */
-
-	const SwitchBase = /*#__PURE__*/react.exports.forwardRef(function SwitchBase(props, ref) {
-	  const {
-	    autoFocus,
-	    checked: checkedProp,
-	    checkedIcon,
-	    className,
-	    defaultChecked,
-	    disabled: disabledProp,
-	    disableFocusRipple = false,
-	    edge = false,
-	    icon,
-	    id,
-	    inputProps,
-	    inputRef,
-	    name,
-	    onBlur,
-	    onChange,
-	    onFocus,
-	    readOnly,
-	    required,
-	    tabIndex,
-	    type,
-	    value
-	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$q);
-
-	  const [checked, setCheckedState] = useControlled({
-	    controlled: checkedProp,
-	    default: Boolean(defaultChecked),
-	    name: 'SwitchBase',
-	    state: 'checked'
-	  });
-	  const muiFormControl = useFormControl();
-
-	  const handleFocus = event => {
-	    if (onFocus) {
-	      onFocus(event);
-	    }
-
-	    if (muiFormControl && muiFormControl.onFocus) {
-	      muiFormControl.onFocus(event);
-	    }
-	  };
-
-	  const handleBlur = event => {
-	    if (onBlur) {
-	      onBlur(event);
-	    }
-
-	    if (muiFormControl && muiFormControl.onBlur) {
-	      muiFormControl.onBlur(event);
-	    }
-	  };
-
-	  const handleInputChange = event => {
-	    // Workaround for https://github.com/facebook/react/issues/9023
-	    if (event.nativeEvent.defaultPrevented) {
-	      return;
-	    }
-
-	    const newChecked = event.target.checked;
-	    setCheckedState(newChecked);
-
-	    if (onChange) {
-	      // TODO v6: remove the second argument.
-	      onChange(event, newChecked);
-	    }
-	  };
-
-	  let disabled = disabledProp;
-
-	  if (muiFormControl) {
-	    if (typeof disabled === 'undefined') {
-	      disabled = muiFormControl.disabled;
-	    }
-	  }
-
-	  const hasLabelFor = type === 'checkbox' || type === 'radio';
-
-	  const ownerState = _extends$3({}, props, {
-	    checked,
-	    disabled,
-	    disableFocusRipple,
-	    edge
-	  });
-
-	  const classes = useUtilityClasses$m(ownerState);
-	  return /*#__PURE__*/jsxRuntime.exports.jsxs(SwitchBaseRoot, _extends$3({
-	    component: "span",
-	    className: clsx(classes.root, className),
-	    centerRipple: true,
-	    focusRipple: !disableFocusRipple,
-	    disabled: disabled,
-	    tabIndex: null,
-	    role: undefined,
-	    onFocus: handleFocus,
-	    onBlur: handleBlur,
-	    ownerState: ownerState,
-	    ref: ref
-	  }, other, {
-	    children: [/*#__PURE__*/jsxRuntime.exports.jsx(SwitchBaseInput, _extends$3({
-	      autoFocus: autoFocus,
-	      checked: checkedProp,
-	      defaultChecked: defaultChecked,
-	      className: classes.input,
-	      disabled: disabled,
-	      id: hasLabelFor && id,
-	      name: name,
-	      onChange: handleInputChange,
-	      readOnly: readOnly,
-	      ref: inputRef,
-	      required: required,
-	      ownerState: ownerState,
-	      tabIndex: tabIndex,
-	      type: type
-	    }, type === 'checkbox' && value === undefined ? {} : {
-	      value
-	    }, inputProps)), checked ? checkedIcon : icon]
-	  }));
-	}); // NB: If changed, please update Checkbox, Switch and Radio
-	// so that the API documentation is updated.
-
-	SwitchBase.propTypes = {
-	  /**
-	   * If `true`, the `input` element is focused during the first mount.
-	   */
-	  autoFocus: PropTypes.bool,
-
-	  /**
-	   * If `true`, the component is checked.
-	   */
-	  checked: PropTypes.bool,
-
-	  /**
-	   * The icon to display when the component is checked.
-	   */
-	  checkedIcon: PropTypes.node.isRequired,
-
-	  /**
-	   * Override or extend the styles applied to the component.
-	   * See [CSS API](#css) below for more details.
-	   */
-	  classes: PropTypes.object,
-
-	  /**
-	   * @ignore
-	   */
-	  className: PropTypes.string,
-
-	  /**
-	   * @ignore
-	   */
-	  defaultChecked: PropTypes.bool,
-
-	  /**
-	   * If `true`, the component is disabled.
-	   */
-	  disabled: PropTypes.bool,
-
-	  /**
-	   * If `true`, the  keyboard focus ripple is disabled.
-	   * @default false
-	   */
-	  disableFocusRipple: PropTypes.bool,
-
-	  /**
-	   * If given, uses a negative margin to counteract the padding on one
-	   * side (this is often helpful for aligning the left or right
-	   * side of the icon with content above or below, without ruining the border
-	   * size and shape).
-	   * @default false
-	   */
-	  edge: PropTypes.oneOf(['end', 'start', false]),
-
-	  /**
-	   * The icon to display when the component is unchecked.
-	   */
-	  icon: PropTypes.node.isRequired,
-
-	  /**
-	   * The id of the `input` element.
-	   */
-	  id: PropTypes.string,
-
-	  /**
-	   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
-	   */
-	  inputProps: PropTypes.object,
-
-	  /**
-	   * Pass a ref to the `input` element.
-	   */
-	  inputRef: refType$1,
-
-	  /*
-	   * @ignore
-	   */
-	  name: PropTypes.string,
-
-	  /**
-	   * @ignore
-	   */
-	  onBlur: PropTypes.func,
-
-	  /**
-	   * Callback fired when the state is changed.
-	   *
-	   * @param {object} event The event source of the callback.
-	   * You can pull out the new checked state by accessing `event.target.checked` (boolean).
-	   */
-	  onChange: PropTypes.func,
-
-	  /**
-	   * @ignore
-	   */
-	  onFocus: PropTypes.func,
-
-	  /**
-	   * It prevents the user from changing the value of the field
-	   * (not from interacting with the field).
-	   */
-	  readOnly: PropTypes.bool,
-
-	  /**
-	   * If `true`, the `input` element is required.
-	   */
-	  required: PropTypes.bool,
-
-	  /**
-	   * The system prop that allows defining system overrides as well as additional CSS styles.
-	   */
-	  sx: PropTypes.object,
-
-	  /**
-	   * @ignore
-	   */
-	  tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-
-	  /**
-	   * The input component prop `type`.
-	   */
-	  type: PropTypes.string.isRequired,
-
-	  /**
-	   * The value of the component.
-	   */
-	  value: PropTypes.any
-	} ;
-	var SwitchBase$1 = SwitchBase;
-
-	var CheckBoxOutlineBlankIcon = createSvgIcon( /*#__PURE__*/jsxRuntime.exports.jsx("path", {
-	  d: "M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-	}), 'CheckBoxOutlineBlank');
-
-	var CheckBoxIcon = createSvgIcon( /*#__PURE__*/jsxRuntime.exports.jsx("path", {
-	  d: "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-	}), 'CheckBox');
-
-	var IndeterminateCheckBoxIcon = createSvgIcon( /*#__PURE__*/jsxRuntime.exports.jsx("path", {
-	  d: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"
-	}), 'IndeterminateCheckBox');
-
-	function getCheckboxUtilityClass(slot) {
-	  return generateUtilityClass('MuiCheckbox', slot);
-	}
-	const checkboxClasses = generateUtilityClasses('MuiCheckbox', ['root', 'checked', 'disabled', 'indeterminate', 'colorPrimary', 'colorSecondary']);
-	var checkboxClasses$1 = checkboxClasses;
-
-	const _excluded$p = ["checkedIcon", "color", "icon", "indeterminate", "indeterminateIcon", "inputProps", "size"];
-
-	const useUtilityClasses$l = ownerState => {
-	  const {
-	    classes,
-	    indeterminate,
-	    color
-	  } = ownerState;
-	  const slots = {
-	    root: ['root', indeterminate && 'indeterminate', `color${capitalize(color)}`]
-	  };
-	  const composedClasses = composeClasses(slots, getCheckboxUtilityClass, classes);
-	  return _extends$3({}, classes, composedClasses);
-	};
-
-	const CheckboxRoot = styled$1(SwitchBase$1, {
-	  shouldForwardProp: prop => rootShouldForwardProp(prop) || prop === 'classes',
-	  name: 'MuiCheckbox',
-	  slot: 'Root',
-	  overridesResolver: (props, styles) => {
-	    const {
-	      ownerState
-	    } = props;
-	    return [styles.root, ownerState.indeterminate && styles.indeterminate, ownerState.color !== 'default' && styles[`color${capitalize(ownerState.color)}`]];
-	  }
-	})(({
-	  theme,
-	  ownerState
-	}) => _extends$3({
-	  color: theme.palette.text.secondary
-	}, !ownerState.disableRipple && {
-	  '&:hover': {
-	    backgroundColor: alpha(ownerState.color === 'default' ? theme.palette.action.active : theme.palette[ownerState.color].main, theme.palette.action.hoverOpacity),
-	    // Reset on touch devices, it doesn't add specificity
-	    '@media (hover: none)': {
-	      backgroundColor: 'transparent'
-	    }
-	  }
-	}, ownerState.color !== 'default' && {
-	  [`&.${checkboxClasses$1.checked}, &.${checkboxClasses$1.indeterminate}`]: {
-	    color: theme.palette[ownerState.color].main
-	  },
-	  [`&.${checkboxClasses$1.disabled}`]: {
-	    color: theme.palette.action.disabled
-	  }
-	}));
-
-	const defaultCheckedIcon = /*#__PURE__*/jsxRuntime.exports.jsx(CheckBoxIcon, {});
-
-	const defaultIcon = /*#__PURE__*/jsxRuntime.exports.jsx(CheckBoxOutlineBlankIcon, {});
-
-	const defaultIndeterminateIcon = /*#__PURE__*/jsxRuntime.exports.jsx(IndeterminateCheckBoxIcon, {});
-
-	const Checkbox = /*#__PURE__*/react.exports.forwardRef(function Checkbox(inProps, ref) {
-	  var _icon$props$fontSize, _indeterminateIcon$pr;
-
-	  const props = useThemeProps({
-	    props: inProps,
-	    name: 'MuiCheckbox'
-	  });
-
-	  const {
-	    checkedIcon = defaultCheckedIcon,
-	    color = 'primary',
-	    icon: iconProp = defaultIcon,
-	    indeterminate = false,
-	    indeterminateIcon: indeterminateIconProp = defaultIndeterminateIcon,
-	    inputProps,
-	    size = 'medium'
-	  } = props,
-	        other = _objectWithoutPropertiesLoose(props, _excluded$p);
-
-	  const icon = indeterminate ? indeterminateIconProp : iconProp;
-	  const indeterminateIcon = indeterminate ? indeterminateIconProp : checkedIcon;
-
-	  const ownerState = _extends$3({}, props, {
-	    color,
-	    indeterminate,
-	    size
-	  });
-
-	  const classes = useUtilityClasses$l(ownerState);
-	  return /*#__PURE__*/jsxRuntime.exports.jsx(CheckboxRoot, _extends$3({
-	    type: "checkbox",
-	    inputProps: _extends$3({
-	      'data-indeterminate': indeterminate
-	    }, inputProps),
-	    icon: /*#__PURE__*/react.exports.cloneElement(icon, {
-	      fontSize: (_icon$props$fontSize = icon.props.fontSize) != null ? _icon$props$fontSize : size
-	    }),
-	    checkedIcon: /*#__PURE__*/react.exports.cloneElement(indeterminateIcon, {
-	      fontSize: (_indeterminateIcon$pr = indeterminateIcon.props.fontSize) != null ? _indeterminateIcon$pr : size
-	    }),
-	    ownerState: ownerState,
-	    ref: ref
-	  }, other, {
-	    classes: classes
-	  }));
-	});
-	Checkbox.propTypes
-	/* remove-proptypes */
-	= {
-	  // ----------------------------- Warning --------------------------------
-	  // | These PropTypes are generated from the TypeScript type definitions |
-	  // |     To update them edit the d.ts file and run "yarn proptypes"     |
-	  // ----------------------------------------------------------------------
-
-	  /**
-	   * If `true`, the component is checked.
-	   */
-	  checked: PropTypes.bool,
-
-	  /**
-	   * The icon to display when the component is checked.
-	   * @default <CheckBoxIcon />
-	   */
-	  checkedIcon: PropTypes.node,
-
-	  /**
-	   * Override or extend the styles applied to the component.
-	   */
-	  classes: PropTypes.object,
-
-	  /**
-	   * The color of the component. It supports those theme colors that make sense for this component.
-	   * @default 'primary'
-	   */
-	  color: PropTypes
-	  /* @typescript-to-proptypes-ignore */
-	  .oneOfType([PropTypes.oneOf(['default', 'primary', 'secondary', 'error', 'info', 'success', 'warning']), PropTypes.string]),
-
-	  /**
-	   * The default checked state. Use when the component is not controlled.
-	   */
-	  defaultChecked: PropTypes.bool,
-
-	  /**
-	   * If `true`, the component is disabled.
-	   */
-	  disabled: PropTypes.bool,
-
-	  /**
-	   * If `true`, the ripple effect is disabled.
-	   */
-	  disableRipple: PropTypes.bool,
-
-	  /**
-	   * The icon to display when the component is unchecked.
-	   * @default <CheckBoxOutlineBlankIcon />
-	   */
-	  icon: PropTypes.node,
-
-	  /**
-	   * The id of the `input` element.
-	   */
-	  id: PropTypes.string,
-
-	  /**
-	   * If `true`, the component appears indeterminate.
-	   * This does not set the native input element to indeterminate due
-	   * to inconsistent behavior across browsers.
-	   * However, we set a `data-indeterminate` attribute on the `input`.
-	   * @default false
-	   */
-	  indeterminate: PropTypes.bool,
-
-	  /**
-	   * The icon to display when the component is indeterminate.
-	   * @default <IndeterminateCheckBoxIcon />
-	   */
-	  indeterminateIcon: PropTypes.node,
-
-	  /**
-	   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
-	   */
-	  inputProps: PropTypes.object,
-
-	  /**
-	   * Pass a ref to the `input` element.
-	   */
-	  inputRef: refType$1,
-
-	  /**
-	   * Callback fired when the state is changed.
-	   *
-	   * @param {React.ChangeEvent<HTMLInputElement>} event The event source of the callback.
-	   * You can pull out the new checked state by accessing `event.target.checked` (boolean).
-	   */
-	  onChange: PropTypes.func,
-
-	  /**
-	   * If `true`, the `input` element is required.
-	   */
-	  required: PropTypes.bool,
-
-	  /**
-	   * The size of the component.
-	   * `small` is equivalent to the dense checkbox styling.
-	   * @default 'medium'
-	   */
-	  size: PropTypes
-	  /* @typescript-to-proptypes-ignore */
-	  .oneOfType([PropTypes.oneOf(['medium', 'small']), PropTypes.string]),
-
-	  /**
-	   * The system prop that allows defining system overrides as well as additional CSS styles.
-	   */
-	  sx: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.func, PropTypes.object, PropTypes.bool])), PropTypes.func, PropTypes.object]),
-
-	  /**
-	   * The value of the component. The DOM API casts this to a string.
-	   * The browser uses "on" as the default value.
-	   */
-	  value: PropTypes.any
-	} ;
-	var Checkbox$1 = Checkbox;
 
 	function GlobalStyles(props) {
 	  return /*#__PURE__*/jsxRuntime.exports.jsx(GlobalStyles$1, _extends$3({}, props, {
@@ -59127,11 +58080,11 @@ const theme2 = createTheme({ palette: {
 	// can handle unprefixed `transform`, but not unprefixed `user-select`
 
 
-	var _default$4 = (getPrefix()
+	var _default$6 = (getPrefix()
 	/*: string*/
 	);
 
-	getPrefix$1.default = _default$4;
+	getPrefix$1.default = _default$6;
 
 	function _typeof$1(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$1 = function _typeof(obj) { return typeof obj; }; } else { _typeof$1 = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$1(obj); }
 
@@ -59718,9 +58671,9 @@ const theme2 = createTheme({ palette: {
 
 	var React = _interopRequireWildcard(react.exports);
 
-	var _propTypes = _interopRequireDefault$4(propTypes.exports);
+	var _propTypes = _interopRequireDefault$6(propTypes.exports);
 
-	var _reactDom = _interopRequireDefault$4(reactDom.exports);
+	var _reactDom = _interopRequireDefault$6(reactDom.exports);
 
 	var _domFns = domFns;
 
@@ -59728,9 +58681,9 @@ const theme2 = createTheme({ palette: {
 
 	var _shims = shims;
 
-	var _log = _interopRequireDefault$4(log$1);
+	var _log = _interopRequireDefault$6(log$1);
 
-	function _interopRequireDefault$4(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault$6(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -61016,7 +59969,7 @@ const theme2 = createTheme({ palette: {
 	      display: 'flex',
 	      alignItems: 'flex-start'
 	    }
-	  }, /*#__PURE__*/React$1.createElement(default_1$4, {
+	  }, /*#__PURE__*/React$1.createElement(default_1$6, {
 	    style: {
 	      color: color,
 	      display: display
@@ -61146,23 +60099,58 @@ const theme2 = createTheme({ palette: {
 	  }, ratinglabel, ": ", user.Rating)));
 	};
 
-	//http://skillnetpartnerpositionsapi.azurewebsites.net//api/PartnerPositions?partnerid=395
-	//https://skillnetusersapi.azurewebsites.net/api/users
-
 	const CardWidget = props => {
-	  //title:Card Widget//title:
-	  //x:30//x:
-	  //y:30//y:
-	  //width:1000//width:
-	  //height:700//height:
-	  //const { PartnerID, PartnerName, PersonID, GroupID} = props.Partner;
-	  const cardRef = react.exports.useRef(null); //const [originalusers, setOriginalUsers] = useState(null)
-
-	  const [users, setUsers] = react.exports.useState(null); //const [filteredpositions, setFilteredpositions] = useState([])
-	  //const [filteredlocations, setFilteredlocations] = useState([])
-	  //var originalusers
-
+	  const {
+	    Partner
+	  } = props;
+	  const {
+	    PersonID,
+	    GroupID
+	  } = Partner;
 	  const [waiting, setWaiting] = react.exports.useState(false);
+	  const [users, setUsers] = react.exports.useState(null); //const cardRef = useRef(null);
+
+	  const SendIt = (type, payload) => {
+	    window.dispatchEvent(new CustomEvent('mjg', {
+	      detail: {
+	        type: type,
+	        payload: payload
+	      }
+	    }));
+	  };
+
+	  async function doData2(filters) {
+	    setWaiting(true);
+
+	    try {
+	      var blankString = '';
+	      var url = 'https://skillnetusersapi.azurewebsites.net/api/CardReportUsersNew?' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString;
+	      var axiosParams = {
+	        method: 'post',
+	        url: url,
+	        auth: {
+	          username: 'skillnet',
+	          password: 'demo'
+	        }
+	      };
+
+	      if (filters.length !== 0) {
+	        axiosParams.data = filters;
+	      } //console.log(url)
+
+
+	      const response = await axios(axiosParams); //console.log('filtered users', response)
+
+	      setUsers(response.data);
+	      SendIt('fromcardwidget', {
+	        number: response.data.length
+	      });
+	      setWaiting(false);
+	    } catch (err) {
+	      console.error(err);
+	    }
+	  }
+
 	  const onMessage = react.exports.useCallback(e => {
 	    if (!e.detail) {
 	      return;
@@ -61172,21 +60160,16 @@ const theme2 = createTheme({ palette: {
 	    var payload = e.detail.payload;
 
 	    switch (type) {
-	      // case 'fromcard':
-	      //   onChange(payload.filters)
-	      //   break;
-	      case 'fromcard2':
-	        onChange2(payload.filters);
-	        break;
+	      case 'fromcardfilters':
+	        setUsers([]); //console.log('fromcardfilters')
+	        //console.log(payload.filters)
 
-	      case 'fromcardwaiting':
-	        //console.log('here')
-	        setWaiting(true);
-	        setUsers([]);
+	        doData2(payload.filters);
 	        break;
 
 	      case 'fromcardfilteredusers':
-	        //console.log(payload.users)
+	        //old one
+	        setWaiting(true);
 	        var toShow = [];
 
 	        if (props.SMEOnly === true) {
@@ -61200,204 +60183,20 @@ const theme2 = createTheme({ palette: {
 	          setUsers(toShow);
 	        } else {
 	          setUsers(payload.users);
-	        }
+	        } //setWaiting(false)
 
-	        setWaiting(false);
+
 	        break;
 	    }
 	  }, []);
-
-	  const filterArray = (array, filters) => {
-	    const filterKeys = Object.keys(filters);
-	    return array.filter(item => {
-	      // validates all filter criteria
-	      return filterKeys.every(key => {
-	        console.log(key); // ignores non-function predicates
-
-	        if (typeof filters[key] !== 'function') return true;
-	        return filters[key](item[key]);
-	      });
-	    });
-	  };
-
-	  const SendIt = (type, payload) => {
-	    window.dispatchEvent(new CustomEvent('mjg', {
-	      detail: {
-	        type: type,
-	        payload: payload
-	      }
-	    }));
-	  };
-
-	  const onChange2 = filters => {
-	    console.log(filters);
-	    console.log(filters.Skills);
-	    const filteredusers = filterArray(cardRef.current.originalusers, filters);
-	    setUsers(filteredusers);
-	    console.log(filteredusers);
-	    SendIt('filteredusers', filteredusers);
-	  }; // const onChange = (filterdata) => {
-	  //   //https://gist.github.com/jherax/f11d669ba286f21b7a2dcff69621eb72
-	  //   // const filters = {}
-	  //   // if (filterdata.filteredpositions.length > 0) {
-	  //   //   filters.JobName = JobName => filterdata.filteredpositions.includes(JobName)
-	  //   // }
-	  //   // if (filterdata.filteredlocations.length > 0) {
-	  //   //   filters.Location = Location => filterdata.filteredlocations.includes(Location)
-	  //   // }
-	  //   // if (filterdata.filteredmanagers.length > 0) {
-	  //   //   filters.DirectManagerID = DirectManagerID => filterdata.filteredmanagers.includes(DirectManagerID)
-	  //   // }
-	  //   // if (filterdata.filteredfitpercent !== '') {
-	  //   //   filters.ManagerRating = ManagerRating => (ManagerRating >= filterdata.filteredfitpercent) ? true : false
-	  //   // }
-	  //   // if (filterdata.filteredsubjectmatterexperts.length > 0) {
-	  //   //   filters.sme = sme => filterdata.filteredsubjectmatterexperts.includes(sme)
-	  //   // }
-	  //   // const filtered = filterArray(cardRef.current.originalusers, filters);
-	  //   //setUsers(filtered)
-	  //   setUsers(filterdata.filteredusers)
-	  //   // SendIt('fromcardwidget', {
-	  //   //   filteredusers: filtered,
-	  //   //   filteredskills: filterdata.filteredskills,
-	  //   //   filteredpositions: filterdata.filteredpositions,
-	  //   //   filteredlocations: filterdata.filteredlocations,
-	  //   //   filteredmanagers: filterdata.filteredmanagers,
-	  //   //   filteredfitpercent: filterdata.filteredfitpercent,
-	  //   //   filteredsubjectmatterexperts: filterdata.filteredsubjectmatterexperts,
-	  //   // })
-	  // }
-
-
 	  react.exports.useEffect(() => {
-	    //console.log('useEffect CardWidget')
-	    cardRef.current; // const urlParams = new URLSearchParams(window.location.search);
-	    // const partnerid = parseInt(urlParams.get('partnerid'));
-	    // const partnername = urlParams.get('partnername');
-	    // console.log('partnerid',partnerid)
-	    // console.log('partnerid',Number.isInteger(partnerid))
-	    // if (Number.isInteger(partnerid)) {
-	    //   PartnerID = Number.isInteger(partnerid)
-	    //   PartnerName = partnername
-	    // }
-	    //var url = 'https://skillnetusersapi.azurewebsites.net/api/users?partnerid=' + PartnerID
-	    // //SendIt('fromcardwaiting', {})
-	    // setWaiting(true)
-	    // setUsers([])
-	    // var ratingsourcesstring = ''
-	    // var jobidsstring = ''
-	    // var locationidsstring = ''
-	    // var manageridsstring = ''
-	    // var percentidsstring = ''
-	    // var skillidsstring = ''
-	    // var url = 'https://skillnetusersapi.azurewebsites.net/api/cardreportusers?' +
-	    // 'personid=' + PersonID + '&' +
-	    // 'groupid=' + GroupID + '&' +
-	    // 'ratingsources=' + ratingsourcesstring + '&' +
-	    // 'jobids=' + jobidsstring  + '&' +
-	    // 'partnerlocationids=' + locationidsstring + '&' +
-	    // 'managerids=' + manageridsstring + '&' +
-	    // 'percentages=' + percentidsstring + '&' +
-	    // 'skillids=' + skillidsstring
-	    // //Users
-	    // axios
-	    // .get(url, {
-	    //   auth: {username: 'skillnet',password: 'demo'}
-	    // })
-	    // .then((response) => {
-	    //   //console.log('users with Test',response.data)
-	    //   var Users = response.data.filter(user => {
-	    //     if (user.BLastName !== 'Test') {
-	    //       return user
-	    //     }
-	    //   })
-	    //   var Users2 = Users.map(function (user) {
-	    //     var f = user.BFirstName.charAt(0)
-	    //     switch (f) {
-	    //       case 'A':
-	    //         user.sme = 'Gold'
-	    //         break;
-	    //       case 'B':
-	    //         user.sme = 'Silver'
-	    //         break;
-	    //       case 'C':
-	    //         user.sme = 'Bronze'
-	    //         break;
-	    //       default:
-	    //         user.sme = ''
-	    //         break;
-	    //     }
-	    //     return user
-	    //   });
-	    //   console.log('users',Users2)
-	    //   setUsers(Users2)
-	    //   card.originalusers = Users2
-	    //   console.log(card.originalusers.length)
-	    //   setWaiting(false)
-	    // })
-	    // .catch((error) => {
-	    //   console.log(error)
-	    // })
-	    // card.addEventListener('mjg', onMessage)
-	    // return () => {
-	    //   card.removeEventListener('mjg', onMessage)
-	    // }
-
 	    window.addEventListener('mjg', onMessage);
 	    return function cleanup() {
 	      window.removeEventListener('mjg', onMessage);
 	    };
-	  }, [onMessage]); // const onMessage2 = (e) => {
-	  //   if (!e.detail) {return}
-	  //   var type = e.detail.type
-	  //   var payload = e.detail.payload
-	  //   switch (type) {
-	  //     case 'fromcard':
-	  //       onChange(payload.filters)
-	  //       break;
-	  //   }
-	  // }
-	  // const filterIt = (name, filtersSelected, start) => {
-	  //   if (filtersSelected.length === 0) {
-	  //     return start
-	  //   }
-	  //   var filteredResult = start.filter(obj => {
-	  //     var found = false;
-	  //       for (var i = 0; i < filtersSelected.length; i++) {
-	  //         if (obj[name] === filtersSelected[i]) {
-	  //           found = true;
-	  //           break;
-	  //         }
-	  //       }
-	  //       return found
-	  //   })
-	  //   return filteredResult
-	  // };
-	  // const filterIt2 = (name, filtersSelected, start) => {
-	  //   if (filtersSelected.length === 0) {
-	  //     return start
-	  //   }
-	  //   var filteredResult = start.filter(obj => {
-	  //     var found = false;
-	  //       //for (var i = 0; i < filtersSelected.length; i++) {
-	  //         //console.log(obj[name])
-	  //         //console.log(filtersSelected)
-	  //         if (obj[name] >= filtersSelected) {
-	  //           //console.log('found')
-	  //           found = true;
-	  //           //break;
-	  //         }
-	  //         else {
-	  //           found = false;
-	  //         }
-	  //       //}
-	  //       return found
-	  //   })
-	  //   return filteredResult
-	  // };
+	  }, [onMessage]); //    <div ref={cardRef} style={{display:'flex',flex:props.flex,flexWrap:'wrap',flexDirection:'row',overflow:'auto',alignContent:'flex-start'}} xstyle={{flex:'auto',flexWrap:'wrap',flexDirection:'row',justifyContent:'space-between',display:'flex',overflow:'auto'}}>
 
 	  return /*#__PURE__*/React$1.createElement("div", {
-	    ref: cardRef,
 	    style: {
 	      display: 'flex',
 	      flex: props.flex,
@@ -61405,14 +60204,6 @@ const theme2 = createTheme({ palette: {
 	      flexDirection: 'row',
 	      overflow: 'auto',
 	      alignContent: 'flex-start'
-	    },
-	    xstyle: {
-	      flex: 'auto',
-	      flexWrap: 'wrap',
-	      flexDirection: 'row',
-	      justifyContent: 'space-between',
-	      display: 'flex',
-	      overflow: 'auto'
 	    }
 	  }, waiting === true && /*#__PURE__*/React$1.createElement("div", {
 	    style: {
@@ -61428,45 +60219,6 @@ const theme2 = createTheme({ palette: {
 	    });
 	  }));
 	};
-	// <Horizontal style={{display:'flex',flex:'2',maxHeight:'100px'}}>
-	//   <div style={{height:'60px',padding:'10px'}}>filters here...</div>
-	// </Horizontal>
-	// <Splitter/>
-	// {/*
-	// <Horizontal>
-	// <div style={{display:'flex',flex:'auto',flexWrap:'wrap',flexDirection:'row',justifyContent:'space-between', overflow:'auto'}}>
-	// {users !== null &&
-	//   users.map((user) => {
-	//     //var pic = `url(${user.Avatar})`
-	//     console.log(user)
-	//     return (
-	//       <div key={user.PersonID} style={{display:'flex',flexDirection:'column',margin:'10px 10px 10px 10px',padding:'10px',width:'250px',height:'100px',border:'1px solid lightgray',boxShadow: '0 10px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)'}}>
-	//         <div style={{display:'flex',flexDirection:'row',alignContent:'flex-end',justifyContent:'space-between'}}>
-	//           {/* <div className="imgAll imgBig" style={{height:'70px',width:'70px',backgroundImage: 'url(./fonts/5.jpg)'}}></div> */}
-	//           <div className="imgAll imgBig" style={{height:'70px',width:'70px',backgroundImage: `url(${user.Avatar})`}}></div>
-	//           <div style={{display:'flex',flexDirection:'column',alignContent:'flex-end'}}>
-	//             <div style={{fontSize:'11px',fontWeight:'bold',marginTop:'1px',textAlign:'right'}}>{user.BFirstName} {user.BLastName}</div>
-	//             <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.JobName}</div>
-	//             <div style={{fontSize:'11px',marginTop:'10px',textAlign:'right'}}></div>
-	//             <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>CNA</div>
-	//             <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.Location}</div>
-	//           </div>
-	//         </div>
-	//         <div style={{marginTop:'10px',display:'flex',flexDirection:'row',justifyContent:'flex-start'}}>
-	//           <div style={{fontSize:'11px'}}>{user.Email}</div>
-	//         </div>
-	//         <div style={{display:'flex',flexDirection:'row',justifyContent:'flex-end'}}>
-	//           <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>Profile</div>
-	//         </div>
-	//       </div>
-	//     )
-	//   })
-	// }
-	// </div>
-	// </Horizontal>
-	// </Vertical> */}
-	// )
-	//          renderer: v => <strong>{Number(parseFloat(v).toFixed(2)).toLocaleString('en')}</strong>},
 
 	const InfoWindow = props => {
 	  const {
@@ -61550,6 +60302,24 @@ const theme2 = createTheme({ palette: {
 	  onClick: PropTypes.func,
 	  text: PropTypes.string.isRequired
 	};
+
+	function _extends() {
+	  _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	      var source = arguments[i];
+
+	      for (var key in source) {
+	        if (Object.prototype.hasOwnProperty.call(source, key)) {
+	          target[key] = source[key];
+	        }
+	      }
+	    }
+
+	    return target;
+	  };
+
+	  return _extends.apply(this, arguments);
+	}
 
 	var eventemitter3 = {exports: {}};
 
@@ -62526,7 +61296,7 @@ const theme2 = createTheme({ palette: {
 	const GoogleMap = ({
 	  children,
 	  ...props
-	}) => /*#__PURE__*/React$1.createElement(Wrapper, null, /*#__PURE__*/React$1.createElement(he, _extends$1({
+	}) => /*#__PURE__*/React$1.createElement(Wrapper, null, /*#__PURE__*/React$1.createElement(he, _extends({
 	  bootstrapURLKeys: {
 	    key: 'AIzaSyDv9gi5-vgfA99lixssMPEKrcTHrQLNKDw'
 	  }
@@ -62540,178 +61310,91 @@ const theme2 = createTheme({ palette: {
 	};
 
 	const MapWidget = props => {
+	  // const { Partner } = props
+	  // const { PartnerID } = Partner;
+	  const {
+	    Partner
+	  } = props;
+	  const {
+	    PartnerID,
+	    PersonID,
+	    GroupID
+	  } = Partner;
+	  const [waiting, setWaiting] = react.exports.useState(false);
 	  const [filteredlocations, setFilteredlocations] = react.exports.useState(null);
-	  var originallocations = null;
-	  const [currid, setCurrId] = react.exports.useState(null); // const onChange = (filterdata) => {
-	  //   setFilteredlocations(filterdata.filteredusers)
-	  //     //setFilteredlocations([])
-	  //   return
-	  //   console.log('MapWidget.onChange',payload)
-	  //   if (filterdata.filteredpositions.length === 0 &&
-	  //       filterdata.filteredskills.length === 0 &&
-	  //       filterdata.filteredlocations.length === 0 &&
-	  //       filterdata.filteredmanagers.length === 0 &&
-	  //       filterdata.filteredsubjectmatterexperts.length === 0) {
-	  //     setFilteredlocations(originallocations)
-	  //     //setFilteredlocations([])
-	  //   }
-	  //   else {
-	  //     console.log('filteredsers',filteredsers)
-	  //     var thelocations = []
-	  //     payload.filteredusers.map(user => {
-	  //       var userlocation = user.Location
-	  //       //console.log(userlocation)
-	  //       if (userlocation !== undefined)
-	  //         if (userlocation !== '') {
-	  //           thelocations.push(userlocation)
-	  //       }
-	  //       //return
-	  //     })
-	  //     //console.log(m)
-	  //     //console.log(thelocations)
-	  //     function findObjectByKey(array, key, value) {
-	  //       for (var i = 0; i < array.length; i++) {
-	  //         if (array[i][key] === value) {
-	  //           return array[i];
-	  //         }
-	  //       }
-	  //       return null;
-	  //     }
-	  //     var hist = {};
-	  //     thelocations.map( function (a) {
-	  //       //console.log(a)
-	  //       if (a in hist) hist[a] ++; else hist[a] = 1;
-	  //     } );
-	  //     //console.log(hist);
-	  //     //console.log(originallocations)
-	  //     var finallocations = []
-	  //     for (const [key, value] of Object.entries(hist)) {
-	  //       //console.log(`${key}: ${value}`);
-	  //       var result = findObjectByKey(originallocations, 'LocationName', key);
-	  //       if (result !== null) {
-	  //         result.num = value
-	  //         //console.log(result)
-	  //         finallocations.push(result)
-	  //       }
-	  //       else {
-	  //         finallocations.push([])
-	  //       }
-	  //     }
-	  //     //console.log('finallocations',finallocations)
-	  //     setFilteredlocations(finallocations)
-	  //   }
-	  // };
+	  const [currid, setCurrId] = react.exports.useState(null);
 
-	  react.exports.useEffect(() => {
-	    axios.get('https://skillnetpartnerlocationsapi.azurewebsites.net//api/PartnerLocations?partnerid=' + props.PartnerID, {
-	      auth: {
-	        username: 'skillnet',
-	        password: 'demo'
-	      }
-	    }).then(response => {
+	  async function doData2(filters) {
+	    setWaiting(true);
+
+	    try {
+	      //var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?' + 
+	      //'partnerid=' + PartnerID;
+	      // var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 
+	      // 'partnerid=' + PartnerID;
+	      var blankString = '';
+	      var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 'partnerid=' + PartnerID + '&' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString; //console.log(url)
+
+	      var axiosParams = {
+	        method: 'post',
+	        url: url,
+	        auth: {
+	          username: 'skillnet',
+	          password: 'demo'
+	        },
+	        data: filters
+	      }; // if (filters.length !== 0) {
+	      //   axiosParams.data = filters
+	      // }
+	      //console.log(axiosParams)
+
+	      const response = await axios(axiosParams); //console.log(response.data)
+
 	      var arrayLocations = response.data.map(item => {
 	        return {
+	          num: item.Users.length,
 	          PartnerLocationID: item.PartnerLocationID,
 	          LocationName: item.LocationName,
 	          Latitude: item.Latitude,
-	          Longitude: item.Longitude
+	          Longitude: item.Longitude,
+	          Users: item.Users
 	        };
 	      }); //console.log('locations',arrayLocations)
-	      //originallocations = arrayLocations
 
-	      setFilteredlocations(arrayLocations); //setLocations(arrayLocations)
-	      //setFilteredlocations(arrayLocations)
-	    });
+	      setFilteredlocations(arrayLocations);
+	      setWaiting(false);
+	    } catch (err) {
+	      console.error(err);
+	    }
+	  }
 
-	    const onChange2 = filteredusers => {
-	      //console.log(filteredusers)
-	      var thelocations = [];
-	      filteredusers.map(user => {
-	        var userlocation = user.Location; //console.log(userlocation)
+	  const onMessage = e => {
+	    if (!e.detail) {
+	      return;
+	    }
 
-	        if (userlocation !== undefined) if (userlocation !== '') {
-	          thelocations.push(userlocation);
-	        }
-	        return null;
-	      });
+	    var type = e.detail.type;
+	    var payload = e.detail.payload;
 
-	      function findObjectByKey(array, key, value) {
-	        if (array == null) return null;
+	    switch (type) {
+	      case 'fromcardfilters':
+	        setFilteredlocations([]); //console.log('fromcardfilters')
+	        //console.log(payload.filters)
 
-	        for (var i = 0; i < array.length; i++) {
-	          if (array[i][key] === value) {
-	            return array[i];
-	          }
-	        }
+	        doData2(payload.filters);
+	        break;
+	    }
+	  };
 
-	        return null;
-	      }
-
-	      var hist = {};
-	      thelocations.map(function (a) {
-	        //console.log(a)
-	        if (a in hist) hist[a]++;else hist[a] = 1;
-	        return null;
-	      }); //console.log(hist);
-	      //console.log(thelocations)
-
-	      var finallocations = [];
-
-	      for (const [key, value] of Object.entries(hist)) {
-	        //console.log(`${key}: ${value}`);
-	        var result = findObjectByKey(originallocations, 'LocationName', key);
-
-	        if (result !== null) {
-	          result.num = value; //console.log(result)
-
-	          finallocations.push(result);
-	        }
-	      } //mjgmjg
-	      //console.log(finallocations)
-	      //console.log(finallocations.length)
-
-
-	      for (var i = 0; i < finallocations.length; i++) {
-	        const users = filteredusers.filter((user, i) => user.Location === finallocations[i].LocationName);
-	        finallocations[i].users = users;
-	      } //console.log('finallocations',finallocations)
-
-
-	      setFilteredlocations(finallocations);
-	    };
-
-	    const onMessage = e => {
-	      if (!e.detail) {
-	        return;
-	      }
-
-	      var type = e.detail.type;
-	      var payload = e.detail.payload;
-
-	      switch (type) {
-	        // case 'fromcard':
-	        //   onChange(payload.filters)
-	        //   break;
-	        case 'filteredusers':
-	          //console.log(payload)
-	          onChange2(payload);
-	          break;
-
-	        case 'fromcardfilteredusers':
-	          //console.log('in map')
-	          //console.log(payload.users)
-	          onChange2(payload.users); //setUsers(payload.users)
-	          //setWaiting(false)
-
-	          break;
-	      }
-	    };
-
+	  react.exports.useEffect(() => {
+	    doData2([]);
+	  }, []);
+	  react.exports.useEffect(() => {
 	    window.addEventListener('mjg', onMessage);
 	    return function cleanup() {
 	      window.removeEventListener('mjg', onMessage);
 	    };
-	  }, [props.PartnerID]);
+	  }, [onMessage]);
 	  const defaultProps = {
 	    center: {
 	      lat: 39.099728,
@@ -62786,7 +61469,12 @@ const theme2 = createTheme({ palette: {
 	      display: 'flex',
 	      overflow: 'auto'
 	    }
-	  }, /*#__PURE__*/React$1.createElement(GoogleMap, {
+	  }, waiting === true && /*#__PURE__*/React$1.createElement("div", {
+	    style: {
+	      padding: '30px',
+	      fontSize: '48px'
+	    }
+	  }, "Loading..."), waiting === false && /*#__PURE__*/React$1.createElement(GoogleMap, {
 	    onChange: _onBoundsChange,
 	    onChildClick: _onChildClick,
 	    onChildMouseEnter: _onChildMouseEnter,
@@ -62801,16 +61489,19 @@ const theme2 = createTheme({ palette: {
 	      map,
 	      maps
 	    }) => handleApiLoaded()
-	  }, filteredlocations !== null && filteredlocations.map((location, index) => /*#__PURE__*/React$1.createElement(Marker, {
-	    num: location.num,
-	    key: index,
-	    show: location.PartnerLocationID === currid,
-	    id: location.PartnerLocationID,
-	    text: location.LocationName,
-	    lat: location.Latitude,
-	    lng: location.Longitude,
-	    users: location.users
-	  }))));
+	  }, filteredlocations !== null && filteredlocations.map((location, index) => {
+	    //console.log(index)
+	    return /*#__PURE__*/React$1.createElement(Marker, {
+	      num: location.num,
+	      key: index,
+	      show: location.PartnerLocationID === currid,
+	      id: location.PartnerLocationID,
+	      text: location.LocationName,
+	      lat: location.Latitude,
+	      lng: location.Longitude,
+	      users: location.Users
+	    });
+	  })));
 	};
 
 	const Horizontal = props => /*#__PURE__*/React$1.createElement("div", {
@@ -64338,10 +63029,16 @@ const theme2 = createTheme({ palette: {
 	    super(props);
 	    var nodes;
 
-	    if (this.props.Partner.PartnerID === 395) {
-	      nodes = nodesCNA;
+	    if (props.nodes === undefined) {
+	      if (this.props.Partner.PartnerID === 395) {
+	        nodes = nodesCNA;
+	      } else {
+	        nodes = nodesGMI;
+	      } //console.log('skills')
+	      //console.log(nodes)
+
 	    } else {
-	      nodes = nodesGMI;
+	      nodes = props.nodes;
 	    }
 
 	    this.state = {
@@ -64358,14 +63055,14 @@ const theme2 = createTheme({ palette: {
 	      nodes: this.state.nodes,
 	      checked: this.state.checked,
 	      expanded: this.state.expanded,
-	      onCheck: checked => {
-	        this.props.onCheck(checked);
-	        this.setState({
-	          checked
-	        });
-	      },
-	      onCheck2: checked => {
+	      noCascade: true,
+	      checkModel: "leaf",
+	      showExpandAll: true,
+	      onlyLeafCheckboxes: true,
+	      onCheck: (checked, a) => {
 	        console.log(checked);
+	        console.log(a);
+	        this.props.onCheck(checked);
 	        this.setState({
 	          checked
 	        });
@@ -64378,922 +63075,43 @@ const theme2 = createTheme({ palette: {
 
 	}
 
-	//import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-	//import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-	//const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-	//const checkedIcon = <CheckBoxIcon fontSize="small" />;
+	var ArrowDropDown = {};
 
-	const DropDown$1 = props => {
-	  //const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-	  //const checkedIcon = <CheckBoxIcon fontSize="small" />;
-	  const {
-	    who,
-	    onChanged,
-	    options,
-	    name,
-	    multiple
-	  } = props; //console.log(options)
-	  //console.log(name)
-	  // {multiple === true &&
-	  //   renderOption={(options, { selected }) => (
-	  //     <React.Fragment>
-	  //       <Checkbox
-	  //         icon={icon}
-	  //         checkedIcon={checkedIcon}
-	  //         style={{ marginRight: 8 }}
-	  //         checked={selected}
-	  //       />
-	  //       {options[name]}
-	  //     </React.Fragment>
-	  //   }
-	  //   )}
+	var _interopRequireDefault$5 = interopRequireDefault.exports;
 
-	  return /*#__PURE__*/React$1.createElement(Autocomplete$1 //ref={refSegments}
-	  , {
-	    onChange: onChanged,
-	    style: {
-	      width: '100%',
-	      marginTop: '20px'
-	    },
-	    multiple: multiple,
-	    disableCloseOnSelect: true,
-	    options: options,
-	    getOptionLabel: options => typeof options === 'string' ? options : options[name] //defaultValue={[]}
-	    ,
-	    renderOption: multiple === true ? (options, {
-	      selected
-	    }) => /*#__PURE__*/React$1.createElement(React$1.Fragment, null, /*#__PURE__*/React$1.createElement(Checkbox$1 //icon={icon}
-	    //checkedIcon={checkedIcon}
-	    , {
-	      style: {
-	        marginRight: 8
-	      },
-	      checked: selected
-	    }), options[name]) : undefined,
-	    renderInput: params => /*#__PURE__*/React$1.createElement(TextField$1, _extends$1({}, params, {
-	      variant: "standard",
-	      label: who,
-	      placeholder: ""
-	    }))
-	  });
-	};
+	Object.defineProperty(ArrowDropDown, "__esModule", {
+	  value: true
+	});
+	var default_1$5 = ArrowDropDown.default = void 0;
 
-	const CardWidgetProperties = props => {
-	  const {
-	    SMEOnly,
-	    showlob,
-	    Partner
-	  } = props;
-	  const {
-	    PartnerID,
-	    PartnerName,
-	    PersonID,
-	    GroupID
-	  } = Partner; //title:Card Report//title:
-	  //x:30//x:
-	  //y:30//y:
-	  //width:1000//width:
-	  //height:700//height:
+	var _createSvgIcon$5 = _interopRequireDefault$5(createSvgIcon$1);
 
-	  const [numberofusersdisplayed, setNumberofusersdisplayed] = react.exports.useState(null);
-	  const [buttonlabel, setButtonLabel] = react.exports.useState('Loading...');
-	  const [checkboxdisplay, setCheckboxdisplay] = react.exports.useState('none');
-	  const [arrowclass, setArrowclass] = react.exports.useState('');
-	  const [treedata, setTreeData] = react.exports.useState(null);
-	  const [leaders, setLeaders] = react.exports.useState(null);
-	  const [smes, setSmes] = react.exports.useState(null);
-	  const [lobs, setLobs] = react.exports.useState(null);
-	  const [positions, setPositions] = react.exports.useState(null);
-	  const [locations, setLocations] = react.exports.useState(null);
-	  const [managers, setManagers] = react.exports.useState(null);
-	  const [percents, setPercents] = react.exports.useState(null);
-	  const [competencygroups, setCompetencyGroups] = react.exports.useState(null); //const [subjectmatterexperts, setSubjectmatterexperts] = useState(null)
-	  //const [filteredsubjectmatterexperts, setFilteredsubjectmatterexperts] = useState([])
+	var _jsxRuntime$5 = jsxRuntime.exports;
 
-	  const [segments, setSegments] = react.exports.useState(null);
-	  const [functions, setFunctions] = react.exports.useState(null);
-	  const [subfunctions, setSubfunctions] = react.exports.useState(null);
-	  const [ratingsourcesstring, setRatingsourcesString] = react.exports.useState('');
-	  const [leaderidsstring, setLeaderidsString] = react.exports.useState('');
-	  const [smeidsstring, setSmeidsString] = react.exports.useState('');
-	  const [lobidsstring, setLobidsString] = react.exports.useState('');
-	  const [jobidsstring, setJobidsString] = react.exports.useState('');
-	  const [locationidsstring, setLocationidsString] = react.exports.useState('');
-	  const [manageridsstring, setManageridsString] = react.exports.useState('');
-	  const [percentidsstring, setPercentidsString] = react.exports.useState('');
-	  const [segmentidsstring, setSegmentidsString] = react.exports.useState('');
-	  const [functionidsstring, setFunctionidsString] = react.exports.useState('');
-	  const [subfunctionidsstring, setSubfunctionidsString] = react.exports.useState('');
-	  const [skillidsstring, setSkillidsString] = react.exports.useState('');
+	var _default$5 = (0, _createSvgIcon$5.default)( /*#__PURE__*/(0, _jsxRuntime$5.jsx)("path", {
+	  d: "m7 10 5 5 5-5z"
+	}), 'ArrowDropDown');
 
-	  const filterChanged = (checked, who) => {
-	    //console.log(checked,who)
-	    var suffix = '';
-	    var idVal = '';
+	default_1$5 = ArrowDropDown.default = _default$5;
 
-	    switch (who) {
-	      case 'leaders':
-	        suffix = '';
-	        idVal = 'LeaderID';
-	        break;
+	var ArrowDropUp = {};
 
-	      case 'smes':
-	        suffix = '';
-	        idVal = 'SmeID';
-	        break;
+	var _interopRequireDefault$4 = interopRequireDefault.exports;
 
-	      case 'lobs':
-	        //console.log('here')
-	        suffix = '';
-	        idVal = 'LobID';
-	        break;
+	Object.defineProperty(ArrowDropUp, "__esModule", {
+	  value: true
+	});
+	var default_1$4 = ArrowDropUp.default = void 0;
 
-	      case 'positions':
-	        suffix = ':0';
-	        idVal = 'JobID';
-	        break;
+	var _createSvgIcon$4 = _interopRequireDefault$4(createSvgIcon$1);
 
-	      case 'locations':
-	        suffix = '';
-	        idVal = 'LocationID';
-	        break;
+	var _jsxRuntime$4 = jsxRuntime.exports;
 
-	      case 'managers':
-	        suffix = '';
-	        idVal = 'ManagerID';
-	        break;
+	var _default$4 = (0, _createSvgIcon$4.default)( /*#__PURE__*/(0, _jsxRuntime$4.jsx)("path", {
+	  d: "m7 14 5-5 5 5z"
+	}), 'ArrowDropUp');
 
-	      case 'percents':
-	        suffix = '';
-	        idVal = 'PercentID';
-	        break;
-
-	      case 'segments':
-	        suffix = '';
-	        idVal = 'SegmentID';
-	        break;
-
-	      case 'functions':
-	        suffix = '';
-	        idVal = 'FunctionID';
-	        break;
-
-	      case 'subfunctions':
-	        suffix = '';
-	        idVal = 'SubfunctionID';
-	        break;
-
-	      case 'skills':
-	        suffix = ':0';
-	        idVal = '';
-	        break;
-
-	      default:
-	        suffix = '';
-	    }
-
-	    var checkedString = ''; //console.log(Array.isArray(checked))
-
-	    if (Array.isArray(checked)) {
-	      checked.forEach(check => {
-	        //console.log(check)
-	        if (idVal === '') {
-	          checkedString = checkedString + check + suffix + ',';
-	        } else {
-	          checkedString = checkedString + check[idVal] + suffix + ',';
-	        }
-	      });
-	    } else {
-	      if (checked !== null) {
-	        checkedString = checked[idVal] + suffix + ',';
-	      } else {
-	        checkedString = '';
-	      }
-	    } //console.log(checkedString)
-
-
-	    var finalString = checkedString.slice(0, -1);
-
-	    switch (who) {
-	      case 'leaders':
-	        setLeaderidsString(finalString);
-	        break;
-
-	      case 'smes':
-	        setSmeidsString(finalString);
-	        break;
-
-	      case 'lobs':
-	        //console.log(finalString)
-	        setLobidsString(finalString);
-	        break;
-
-	      case 'positions':
-	        setJobidsString(finalString);
-	        break;
-
-	      case 'locations':
-	        setLocationidsString(finalString);
-	        break;
-
-	      case 'managers':
-	        setManageridsString(finalString);
-	        break;
-
-	      case 'percents':
-	        setPercentidsString(finalString);
-	        break;
-
-	      case 'segments':
-	        setSegmentidsString(finalString);
-	        break;
-
-	      case 'functions':
-	        setFunctionidsString(finalString);
-	        break;
-
-	      case 'subfunctions':
-	        setSubfunctionidsString(finalString);
-	        break;
-
-	      case 'skills':
-	        setSkillidsString(finalString);
-	        break;
-	    }
-
-	    setButtonLabel('Click to Apply All Filters');
-	  }; // const skillsChanged = (checked) => {
-	  //   console.log('skillsChanged',checked)
-	  //   var checkedString = ''
-	  //   checked.forEach(check => {
-	  //     checkedString = checkedString + check + ':0,'
-	  //   })
-	  //   //setFilteredSkills(checked)
-	  //   setSkillidsString(checkedString)
-	  //   setButtonLabel('Apply All Filters')
-	  // };
-	  // const skillsChanged = (event, value, reason) => {
-	  //   var filtersSkills = value.map(skill => {
-	  //     return skill.SkillName
-	  //   })
-	  //   console.log('skillsChanged',filtersSkills)
-	  //   setFilteredSkills(filtersSkills)
-	  //   setButtonLabel('Apply All Filters')
-	  // };
-	  //const [filteredsegments, setFilteredSegments] = useState([])
-	  //const refSegments = useRef(null);
-	  // const segmentsChanged = (event, value, reason) => {
-	  //   var filtersSegments = value.map(segment => {
-	  //     return segment.SegmentName
-	  //   })
-	  //   console.log('segmentsChanged',filtersSegments)
-	  //   setFilteredSegments(filtersSegments)
-	  //   setButtonLabel('Apply All Filters')
-	  // };
-	  //const [filteredfunctions, setFilteredFunctions] = useState([])
-	  //const refSegments = useRef(null);
-	  // const functionsChanged = (event, value, reason) => {
-	  //   var filtersFunctions = value.map(funct => {
-	  //     return funct.FunctionName
-	  //   })
-	  //   console.log('functionsChanged',filtersFunctions)
-	  //   setFilteredFunctions(filtersFunctions)
-	  //   setButtonLabel('Apply All Filters')
-	  // };
-	  // const [filteredsubfunctions, setFilteredSubfunctions] = useState([])
-	  // //const refSegments = useRef(null);
-	  // const subfunctionsChanged = (event, value, reason) => {
-	  //   var filtersSubfunctions = value.map(subfunct => {
-	  //     return subfunct.SubfunctionName
-	  //   })
-	  //   console.log('subfunctionsChanged',filtersSubfunctions)
-	  //   setFilteredSubfunctions(filtersSubfunctions)
-	  //   setButtonLabel('Apply All Filters')
-	  // };
-	  // const refApplyButton = useRef(null);
-	  // const refPositions = useRef(null);
-	  // const refLocations = useRef(null);
-	  // const refManagers = useRef(null);
-	  // const refSkills = useRef(null);
-	  // const refFitpercents = useRef(null);
-	  // const refSubjectmatterexperts = useRef(null);
-	  //var PartnerID = 395;  var PartnerName = 'CNA'; var PersonID = 275399;
-	  //var PartnerID = 426;  var PartnerName = 'General Mills'; var PersonID = 277356;
-
-
-	  react.exports.useEffect(() => {
-	    //console.log('useEffect CardWidgetProperties')
-	    setRatingsourcesString(props.Partner.ratingsources); //onApplyClick()
-
-	    if (showlob === true) {
-	      //Lobs
-	      //console.log('LOB')
-	      axios.get('https://skillnetusersapi.azurewebsites.net/api/lob?partnerid=' + PartnerID, {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
-	      }).then(response => {
-	        //console.log('lobs',response.data)
-	        var arrayLobs = response.data.map(item => {
-	          return {
-	            LobID: item.CustomAttributeValueID,
-	            LobName: item.CustomAttributeValue
-	          };
-	        }); //console.log('lobs',arrayLobs)
-
-	        setLobs(arrayLobs);
-	      }).catch(error => {
-	        console.log(error);
-	      });
-	    }
-
-	    if (SMEOnly === true) {
-	      //Leaders
-	      axios.get('https://skillnetusersapi.azurewebsites.net/api/Leaders?partnerid=' + PartnerID, {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
-	      }).then(response => {
-	        //console.log('leaders',response.data)
-	        var arrayLeaders = response.data.map(item => {
-	          return {
-	            LeaderID: item.CustomAttributeValueID,
-	            LeaderName: item.CustomAttributeValue
-	          };
-	        }); //console.log('leaders',arrayLeaders)
-
-	        setLeaders(arrayLeaders);
-	      }).catch(error => {
-	        console.log(error);
-	      }); //Smes
-
-	      axios.get('https://skillnetusersapi.azurewebsites.net/api/SMEs?partnerid=' + PartnerID, {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
-	      }).then(response => {
-	        //console.log('smes',response.data)
-	        var arraySmes = response.data.map(item => {
-	          return {
-	            SmeID: item.CustomAttributeValueID,
-	            SmeName: item.CustomAttributeValue
-	          };
-	        }); //console.log('smes',arraySmes)
-
-	        setSmes(arraySmes);
-	      }).catch(error => {
-	        console.log(error);
-	      });
-	    }
-
-	    if (SMEOnly === false) {
-	      //Positions
-	      axios.get('https://skillnetusersapi.azurewebsites.net/api/PartnerPositions?partnerid=' + PartnerID, {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
-	      }).then(response => {
-	        var arrayPositions = response.data.map(item => {
-	          //mjg
-	          if (item.JobID === undefined) {
-	            return {
-	              JobID: item.position_id,
-	              JobName: item.position_name
-	            };
-	          } else {
-	            return {
-	              JobID: item.JobID,
-	              JobName: item.JobName
-	            };
-	          }
-	        }); //console.log('positions',arrayPositions)
-
-	        setPositions(arrayPositions);
-	      }).catch(error => {
-	        console.log(error);
-	      }); //Locations
-
-	      axios.get('https://skillnetusersapi.azurewebsites.net//api/PartnerLocations?partnerid=' + PartnerID, {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
-	      }).then(response => {
-	        var arrayLocations = response.data.map(item => {
-	          return {
-	            LocationID: item.PartnerLocationID,
-	            LocationName: item.LocationName
-	          };
-	        }); //console.log('locations',arrayLocations)
-
-	        setLocations(arrayLocations);
-	      }).catch(error => {
-	        console.log(error);
-	      }); //Managers
-
-	      axios.get('https://skillnetusersapi.azurewebsites.net/api/managers?personid=' + PersonID, {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
-	      }).then(response => {
-	        var arrayManagers = response.data.map(item => {
-	          return {
-	            ManagerID: item.ManagerID,
-	            ManagerName: item.ManagerName //+ ' (' + item.ManagerID + ')'
-
-	          };
-	        }); //console.log('managers',arrayManagers)
-
-	        setManagers(arrayManagers);
-	      }).catch(error => {
-	        console.log(error);
-	      }); //FitPercents
-
-	      var arrayPercents = [{
-	        PercentName: '40% and above',
-	        PercentID: 40
-	      }, {
-	        PercentName: '45% and above',
-	        PercentID: 45
-	      }, {
-	        PercentName: '50% and above',
-	        PercentID: 50
-	      }, {
-	        PercentName: '55% and above',
-	        PercentID: 55
-	      }, {
-	        PercentName: '60% and above',
-	        PercentID: 60
-	      }, {
-	        PercentName: '65% and above',
-	        PercentID: 65
-	      }, {
-	        PercentName: '70% and above',
-	        PercentID: 70
-	      }, {
-	        PercentName: '75% and above',
-	        PercentID: 75
-	      }, {
-	        PercentName: '80% and above',
-	        PercentID: 80
-	      }, {
-	        PercentName: '85% and above',
-	        PercentID: 85
-	      }, {
-	        PercentName: '90% and above',
-	        PercentID: 90
-	      }, {
-	        PercentName: '95% and above',
-	        PercentID: 95
-	      }];
-	      setPercents(arrayPercents); // if (PartnerName === 'CNA') {
-	      //   var arraySubjectmatterexperts = [
-	      //     { Name:'Gold',   value: 'Gold' },
-	      //     { Name:'Silver', value: 'Silver' },
-	      //     { Name:'Bronze', value: 'Bronze' },
-	      //   ]
-	      //   setSubjectmatterexperts(arraySubjectmatterexperts)
-	      // }
-
-	      if (PartnerName === 'General Mills') {
-	        //Segments
-	        axios.get('https://skillnetusersapi.azurewebsites.net/api/segments/', {
-	          auth: {
-	            username: 'skillnet',
-	            password: 'demo'
-	          }
-	        }).then(response => {
-	          console.log(response.data);
-	          var arraySegments = response.data.map(item => {
-	            return {
-	              SegmentID: item.CustomAttributeValueID,
-	              SegmentName: item.CustomAttributeValue
-	            };
-	          });
-	          console.log('segments', arraySegments);
-	          setSegments(arraySegments);
-	        }).catch(error => {
-	          console.log(error);
-	        }); //Functions
-
-	        axios.get('https://skillnetusersapi.azurewebsites.net/api/functions/', {
-	          auth: {
-	            username: 'skillnet',
-	            password: 'demo'
-	          }
-	        }).then(response => {
-	          var arrayFunctions = response.data.map(item => {
-	            return {
-	              FunctionID: item.CustomAttributeValueID,
-	              FunctionName: item.CustomAttributeValue
-	            };
-	          });
-	          console.log('functions', arrayFunctions);
-	          setFunctions(arrayFunctions);
-	        }).catch(error => {
-	          console.log(error);
-	        }); //Subfunctions
-
-	        axios.get('https://skillnetusersapi.azurewebsites.net/api/subfunctions/', {
-	          auth: {
-	            username: 'skillnet',
-	            password: 'demo'
-	          }
-	        }).then(response => {
-	          var arraySubfunctions = response.data.map(item => {
-	            return {
-	              SubfunctionID: item.CustomAttributeValueID,
-	              SubfunctionName: item.CustomAttributeValue
-	            };
-	          });
-	          console.log('functions', arraySubfunctions);
-	          setSubfunctions(arraySubfunctions);
-	        }).catch(error => {
-	          console.log(error);
-	        });
-	      } //CompetencyGroups
-
-
-	      axios.get('https://skillnetusersapi.azurewebsites.net/api/competencygroup?partnerid=' + PartnerID, {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
-	      }).then(response => {
-	        //console.log('CompetencyGroups-raw',response.data)
-	        var arrayCompetencyGroups = response.data.map(item => {
-	          return {
-	            CompetencyGroupID: item.CompetencyGroupID,
-	            CompetencyGroupName: item.CompetencyGroupName,
-	            CompetencyGroupIcon: item.CompetencyGroupIcon,
-	            CompetencyGroupDisplayOrder: item.CompetencyGroupDisplayOrder
-	          };
-	        });
-
-	        function compare(a, b) {
-	          const bandA = a.CompetencyGroupDisplayOrder;
-	          const bandB = b.CompetencyGroupDisplayOrder;
-	          let comparison = 0;
-
-	          if (bandA > bandB) {
-	            comparison = 1;
-	          } else if (bandA < bandB) {
-	            comparison = -1;
-	          }
-
-	          return comparison;
-	        }
-
-	        arrayCompetencyGroups.sort(compare); //console.log('CompetencyGroups',arrayCompetencyGroups)
-
-	        setCompetencyGroups(arrayCompetencyGroups);
-	      }).catch(error => {
-	        console.log(error);
-	      }); //Competencies and Skills
-
-	      var arrayCompetencies = [];
-	      axios.get('https://skillnetusersapi.azurewebsites.net/api/skills?personid=' + PersonID, {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
-	      }).then(response => {
-	        //console.log('competencies-raw',response.data)
-	        arrayCompetencies = response.data.map(item => {
-	          return {
-	            CompetencyID: item.SkillID,
-	            CompetencyName: item.SkillName,
-	            CompetencyGroupID: item.GroupID
-	          };
-	        }); //console.log('competencies',arrayCompetencies)
-	        //setCompetencies(arrayCompetencies)
-
-	        var f = 'https://skillnetusersapi.azurewebsites.net/api/skills?groupid=' + GroupID + '&parentskillid=';
-	        var arrayAxios = [];
-	        arrayCompetencies.forEach(competency => {
-	          arrayAxios.push(axios.get(f + competency.CompetencyID, {
-	            auth: {
-	              username: 'skillnet',
-	              password: 'demo'
-	            }
-	          }));
-	        });
-	        Promise.all(arrayAxios).then(function (results) {
-	          var tree = [];
-	          arrayCompetencies.forEach((competency, index) => {
-	            var children = [];
-	            results[index].data.forEach(result => {
-	              var c;
-
-	              if (result.SkillID == null) {
-	                var c = {
-	                  id: 'result.SkillID.toString()',
-	                  name: 'result.SkillName'
-	                };
-	              } else {
-	                c = {
-	                  id: result.SkillID.toString(),
-	                  name: result.SkillName
-	                };
-	              } //   })
-
-
-	              children.push(c);
-	            });
-	            var o = {
-	              id: competency.CompetencyID.toString(),
-	              name: competency.CompetencyName,
-	              children: children
-	            };
-	            tree.push(o);
-	          }); //console.log(tree)
-	          //console.log(JSON.stringify(tree))
-
-	          var data = {
-	            id: 'root',
-	            name: 'Skills',
-	            children: tree
-	          };
-	          setTreeData(data);
-	        });
-	      }).catch(error => {
-	        console.log(error);
-	      });
-	    } //    .get('https://skillnetusersapi.azurewebsites.net/api/skills?groupid=33931&personid=' + PersonID, {
-	    //  .get('https://skillnetusersapi.azurewebsites.net/api/skills?groupid=33931&parentskillid=39806', {
-	    //Skills
-	    // axios
-	    // .get('https://skillnetusersapi.azurewebsites.net/api/skills?groupid=' + GroupID + '&parentskillid=39851', {
-	    //   auth: {username: 'skillnet',password: 'demo'}
-	    // })
-	    // .then((response) => {
-	    //   console.log('skills-raw',response.data)
-	    //   var arraySkills = response.data.map(item => {
-	    //     return {
-	    //       SkillID: item.SkillID,
-	    //       SkillName: item.SkillName,
-	    //       ParentSkillID: item.ParentSkillID,
-	    //     }
-	    //   })
-	    //   console.log('skills',arraySkills)
-	    //   setSkills(arraySkills)
-	    // })
-	    // .catch((error) => {
-	    //   console.log('skills=error')
-	    //   console.log(error)
-	    // })
-	    // axios
-	    // .get('https://skillnetusersapi.azurewebsites.net/api/skills?personid=' + PersonID, {
-	    //   auth: {username: 'skillnet',password: 'demo'}
-	    // })
-	    // .then((response) => {
-	    //   console.log('skills2',response.data)
-	    //   setSkills(response.data)
-	    // })
-	    // .catch((error) => {
-	    //   console.log(error)
-	    // })
-	    //    http://skillnetusersapi.azurewebsites.net//api/skills?groupid=33931
-
-	  }, [PartnerID, PartnerName]);
-
-	  const SendIt = (type, payload) => {
-	    window.dispatchEvent(new CustomEvent('mjg', {
-	      detail: {
-	        type: type,
-	        payload: payload
-	      }
-	    }));
-	  };
-
-	  const onApplyClick = event => {
-	    if (buttonlabel === 'No Filters Selected') {
-	      return;
-	    }
-
-	    SendIt('fromcardwaiting', {});
-	    var url = 'https://skillnetusersapi.azurewebsites.net/api/cardreportusers?' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'lobids=' + lobidsstring + '&' + 'leaderids=' + leaderidsstring + '&' + 'smeids=' + smeidsstring + '&' + 'ratingsources=' + ratingsourcesstring + '&' + 'segmentids=' + segmentidsstring + '&' + 'functionids=' + functionidsstring + '&' + 'subfunctionids=' + subfunctionidsstring + '&' + 'jobids=' + jobidsstring + '&' + 'partnerlocationids=' + locationidsstring + '&' + 'managerids=' + manageridsstring + '&' + 'percentages=' + percentidsstring + '&' + 'skillids=' + skillidsstring; //console.log('url',url)
-
-	    axios.get(url, {
-	      auth: {
-	        username: 'skillnet',
-	        password: 'demo'
-	      }
-	    }).then(response => {
-	      //console.log('filtered users', response)
-	      setNumberofusersdisplayed(response.data.length); //console.log('dummy data here')
-	      //console.log(response.data)
-
-	      SendIt('fromcardfilteredusers', {
-	        users: response.data
-	      });
-	      setButtonLabel('Apply All Filters');
-	    }).catch(error => {
-	      console.log(error);
-	    });
-	    return; // const filters = {}
-	    // if (filteredpositions.length > 0) {
-	    //   filters.JobName = JobName => filteredpositions.includes(JobName)
-	    // }
-	    // if (filteredlocations.length > 0) {
-	    //   filters.Location = Location => filteredlocations.includes(Location)
-	    // }
-	    // if (filteredmanagers.length > 0) {
-	    //   filters.DirectManagerID = DirectManagerID => filteredmanagers.includes(DirectManagerID)
-	    // }
-	    // if (filteredfitpercent !== '') {
-	    //   if (PartnerName === 'General Mills') {
-	    //     filters.SelfRating = SelfRating => (SelfRating >= filteredfitpercent) ? true : false
-	    //   }
-	    //   else {
-	    //     filters.ManagerRating = ManagerRating => (ManagerRating >= filteredfitpercent) ? true : false
-	    //   }
-	    // }
-	    // if (filteredsubjectmatterexperts.length > 0) {
-	    //   filters.sme = sme => filteredsubjectmatterexperts.includes(sme)
-	    // }
-	    // if (filteredsegments.length > 0) {
-	    //   filters.Segment = Segment => filteredsegments.includes(Segment)
-	    // }
-	    // if (filteredfunctions.length > 0) {
-	    //   filters.Function = Function => filteredfunctions.includes(Function)
-	    // }
-	    // if (filteredsubfunctions.length > 0) {
-	    //   filters.SubFunction = SubFunction => filteredsubfunctions.includes(SubFunction)
-	    // }
-	    // if (filteredskills.length > 0) {
-	    //   filters.Skills = filteredskills
-	    //   //filters.Skills = skill => filteredskills.includes(skill)
-	    // }
-	    // console.log('filters',filters)
-	    // SendIt('fromcard2', {filters: filters})
-	    // setButtonLabel('Filters Are Applied')
-	  }; // const positionsChanged = (event, value, reason) => {
-
-	  const changeIt = () => {
-	    if (checkboxdisplay === 'none') {
-	      setCheckboxdisplay('block');
-	      setArrowclass('MuiAutocomplete-popupIndicatorOpen');
-	    } else {
-	      setCheckboxdisplay('none');
-	      setArrowclass('');
-	    }
-	  }; //console.log(positions)
-	  //console.log(leaders)
-	  //    <div style={{width:propertywidth,padding:'10px'}}>
-
-
-	  return /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      width: '100%',
-	      padding: '10px'
-	    }
-	  }, /*#__PURE__*/React$1.createElement(Button$1 // ref={refApplyButton}
-	  , {
-	    style: {
-	      width: '100%'
-	    },
-	    variant: "contained",
-	    onClick: onApplyClick
-	  }, buttonlabel), SMEOnly !== true && numberofusersdisplayed !== null && /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      marginTop: '40px'
-	    }
-	  }, "Number of Users Displayed: ", numberofusersdisplayed), smes !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "Technical SME",
-	    onChanged: (event, checked) => filterChanged(checked, 'smes'),
-	    options: smes,
-	    name: "SmeName"
-	  }), leaders !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "R.C. Home Office Leader",
-	    onChanged: (event, checked) => filterChanged(checked, 'leaders'),
-	    options: leaders,
-	    name: "LeaderName"
-	  }), lobs !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "LOBs",
-	    onChanged: (event, checked) => filterChanged(checked, 'lobs'),
-	    options: lobs,
-	    name: "LobName"
-	  }), positions !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "Positions",
-	    onChanged: (event, checked) => filterChanged(checked, 'positions'),
-	    options: positions,
-	    name: "JobName"
-	  }), locations !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "Locations",
-	    onChanged: (event, checked) => filterChanged(checked, 'locations'),
-	    options: locations,
-	    name: "LocationName"
-	  }), managers !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "Managers",
-	    onChanged: (event, checked) => filterChanged(checked, 'managers'),
-	    options: managers,
-	    name: "ManagerName"
-	  }), percents !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: false,
-	    who: "Fit Percent",
-	    onChanged: (event, checked) => filterChanged(checked, 'percents'),
-	    options: percents,
-	    name: "PercentName"
-	  }), segments !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "Segments",
-	    onChanged: (event, checked) => filterChanged(checked, 'segments'),
-	    options: segments,
-	    name: "SegmentName"
-	  }), functions !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "Functions",
-	    onChanged: (event, checked) => filterChanged(checked, 'functions'),
-	    options: functions,
-	    name: "FunctionName"
-	  }), subfunctions !== null && /*#__PURE__*/React$1.createElement(DropDown$1, {
-	    multiple: true,
-	    who: "Sub Functions",
-	    onChanged: (event, checked) => filterChanged(checked, 'subfunctions'),
-	    options: subfunctions,
-	    name: "SubfunctionName"
-	  }), SMEOnly === false && /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      marginTop: '20px',
-	      padding: '0',
-	      border: '0px solid gray'
-	    }
-	  }, /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      width: '100%',
-	      marginTop: '20px'
-	    },
-	    className: "MuiInputBase-root MuiInput-root MuiInput-underline MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedEnd"
-	  }, /*#__PURE__*/React$1.createElement("input", {
-	    "aria-invalid": "false",
-	    placeholder: "",
-	    type: "text",
-	    style: {
-	      fontWeight: '400',
-	      color: 'rgba(0, 0, 0, 0.87)'
-	    },
-	    className: "MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd",
-	    "aria-autocomplete": "list",
-	    defaultValue: "Skills",
-	    id: "mui-44339"
-	  }), /*#__PURE__*/React$1.createElement("div", {
-	    className: "MuiAutocomplete-endAdornment"
-	  }, /*#__PURE__*/React$1.createElement("button", {
-	    className: "MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator",
-	    tabIndex: "-1",
-	    type: "button",
-	    "aria-label": "Clear",
-	    title: "Clear"
-	  }, /*#__PURE__*/React$1.createElement("span", {
-	    className: "MuiIconButton-label"
-	  }, /*#__PURE__*/React$1.createElement("svg", {
-	    className: "MuiSvgIcon-root MuiSvgIcon-fontSizeSmall",
-	    focusable: "false",
-	    viewBox: "0 0 24 24",
-	    "aria-hidden": "true"
-	  }, /*#__PURE__*/React$1.createElement("path", {
-	    d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-	  }))), /*#__PURE__*/React$1.createElement("span", {
-	    className: "MuiTouchRipple-root"
-	  })), /*#__PURE__*/React$1.createElement("button", {
-	    className: `MuiButtonBase-root MuiIconButton-root MuiAutocomplete-popupIndicator ${arrowclass}`,
-	    tabIndex: "-1",
-	    type: "button",
-	    "aria-label": "Open",
-	    title: "Open",
-	    onClick: changeIt
-	  }, /*#__PURE__*/React$1.createElement("span", {
-	    className: "MuiIconButton-label"
-	  }, /*#__PURE__*/React$1.createElement("svg", {
-	    className: "MuiSvgIcon-root",
-	    focusable: "false",
-	    viewBox: "0 0 24 24",
-	    "aria-hidden": "true"
-	  }, /*#__PURE__*/React$1.createElement("path", {
-	    d: "M7 10l5 5 5-5z"
-	  }))), /*#__PURE__*/React$1.createElement("span", {
-	    className: "MuiTouchRipple-root"
-	  })))), /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      display: checkboxdisplay
-	    }
-	  }, /*#__PURE__*/React$1.createElement(CheckboxWidget, {
-	    Partner: Partner,
-	    onCheck: checked => filterChanged(checked, 'skills')
-	  }))));
-	}; // function random(length) {
+	default_1$4 = ArrowDropUp.default = _default$4;
 
 	const DropDown = props => {
 	  const {
@@ -65301,14 +63119,14 @@ const theme2 = createTheme({ palette: {
 	    attributename,
 	    onChanged,
 	    options,
-	    name,
-	    multiple
+	    name
 	  } = props;
 	  return /*#__PURE__*/React$1.createElement(Autocomplete$1, {
 	    style: {
 	      width: '100%',
 	      marginTop: '20px'
 	    },
+	    multiple: true,
 	    onChange: (event, checked, reason) => {
 	      var currentFilters = {
 	        attributeid,
@@ -65323,116 +63141,21 @@ const theme2 = createTheme({ palette: {
 
 	      onChanged(event, checked, reason, currentFilters);
 	    },
-	    multiple: true,
 	    id: "tags-filled",
-	    options: options.map(option => option.value),
-	    renderTags: (value, getTagProps) => value.map((option, index) => /*#__PURE__*/React$1.createElement(Chip$1, _extends$1({
+	    options: options.map(option => option[name]),
+	    renderTags: (value, getTagProps) => value.map((option, index) => /*#__PURE__*/React$1.createElement(Chip$1, _extends({
 	      variant: "outlined",
 	      label: option
 	    }, getTagProps({
 	      index
 	    })))),
-	    renderInput: params => /*#__PURE__*/React$1.createElement(TextField$1, _extends$1({}, params, {
+	    renderInput: params => /*#__PURE__*/React$1.createElement(TextField$1, _extends({}, params, {
 	      variant: "standard",
 	      label: attributename,
 	      placeholder: ""
 	    }))
 	  });
-	}; // const DropDown2 = (props) => {
-	//   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-	//   const checkedIcon = <CheckBoxIcon fontSize="small" />;
-	//   const { who, onChanged, options, name, multiple} = props;
-	//   console.log(props)
-	//   console.log(options)
-	//   var c = -1
-	//   return (
-	//     <Autocomplete
-	//       //ref={refSegments}
-	//       id="tags-outlined"
-	//       //name={who}
-	//       //onChange={onChanged}
-	//       //style={{width:'100%',marginTop:'20px'}}
-	//       multiple
-	//       //disableCloseOnSelect={true}
-	//       //options={options}
-	//       options={options.map((option) => option.value)}
-	//       //defaultValue={[]}
-	//       defaultValue={[options[0].value]}
-	//       //autoSelect={true}
-	//       //getOptionLabel={options => typeof options === 'string' ? options : options[name]}
-	//       //getOptionLabel={options => typeof options === 'string' ? options : options[name]}
-	//       //getOptionLabel={(option) => option.value}
-	//       renderTags={(value, getTagProps) => {
-	//        // console.log(getTagProps)
-	//         console.log(value)
-	//         value.map((option, index) => {
-	//           console.log(option)
-	//           return (<div>hi</div>)
-	//           //return (<Chip variant="outlined" label={'option.value'} {...getTagProps({ index })} />)
-	//         })
-	//       }}
-	//       // renderOption={multiple === true ?
-	//       //   (options, { selected }) => (
-	//       //     <div key={options[name]}>
-	//       //     {console.log(options)}
-	//       //     {console.log(options.key)}
-	//       //       <Checkbox
-	//       //         icon={icon}
-	//       //         name={who}
-	//       //         checkedIcon={checkedIcon}
-	//       //         style={{ marginRight: 8 }}
-	//       //         checked={selected}
-	//       //       />
-	//       //       {options.key}
-	//       //     </div>
-	//       //   ) : undefined}
-	//         // options.map((option,i)=>{
-	//         //   console.log(option.value)
-	//         //   return (
-	//         //       <Checkbox
-	//         //         icon={icon}
-	//         //         name={who}
-	//         //       />
-	//         //   )
-	//         // })
-	//         // (options, { selected }) => {
-	//         //   console.log(options)
-	//         //   console.log(selected)
-	//         //   //console.log(options[name])
-	//         //   //console.log(who)
-	//         //   c++
-	//         //   console.log(options)
-	//         //   //console.log(options[c])
-	//         //   //console.log(options.key)
-	//         //   return (
-	//         //     <div key={options.key}>
-	//         //       <Checkbox
-	//         //         icon={icon}
-	//         //         name={who}
-	//         //         checkedIcon={checkedIcon}
-	//         //         style={{ marginRight: 8 }}
-	//         //         checked={selected}
-	//         //       />
-	//         //       {options.key}
-	//         //     </div>
-	//         //   )
-	//         // } 
-	//         // : undefined}
-	//       renderInput={(params) => { 
-	//         var t = 'Select from the ' + who + ' list'
-	//         console.log(params)
-	//         return (
-	//         <TextField
-	//           {...params}
-	//           //variant="filled"
-	//           label={who}
-	//           //placeholder={t}
-	//         />
-	//       )}}
-	//     />
-	//   )
-	// }
-
+	};
 
 	const CardWidgetProperties2 = props => {
 	  const {
@@ -65440,86 +63163,18 @@ const theme2 = createTheme({ palette: {
 	  } = props;
 	  const {
 	    PartnerID,
-	    PartnerName,
-	    PersonID,
-	    GroupID
+	    largerButton
 	  } = Partner;
 	  const [dropdowns, setDropdowns] = react.exports.useState(null);
+	  const [skills, setSkills] = react.exports.useState(null);
 	  const [filters, setFilters] = react.exports.useState([]);
 	  const [numberofusersdisplayed, setNumberofusersdisplayed] = react.exports.useState(null);
 	  const [buttonlabel, setButtonLabel] = react.exports.useState('Loading...');
-	  react.exports.useEffect(() => {
-	    async function doData() {
-	      try {
-	        const resp = await axios.get('https://skillnetusersapi.azurewebsites.net//api/customattributes?partnerid=' + PartnerID);
-	        var d = [];
-	        var attributes = resp.data; //console.log(attributes)
+	  const [checkboxdisplay, setCheckboxdisplay] = react.exports.useState('none'); //const [checkboxtext, setCheckboxText] = useState('Show Skills')
 
-	        for (let i = 0; i < attributes.length; i++) {
-	          var attributename = attributes[i].CustomAttributeName;
-	          var attributeid = attributes[i].CustomAttributeID;
-	          var CustomAttributeValues = attributes[i].clsCustomAttributeValues;
-	          var values = [];
-
-	          for (let j = 0; j < CustomAttributeValues.length; j++) {
-	            var id = CustomAttributeValues[j].CustomAttributeValueID;
-	            var value = CustomAttributeValues[j].CustomAttributeValue;
-	            values.push({
-	              id: id,
-	              value: value,
-	              attributeid: attributeid,
-	              attributename: attributename
-	            });
-	          }
-
-	          d.push( /*#__PURE__*/React$1.createElement(DropDown, {
-	            multiple: true,
-	            key: i,
-	            name: "value",
-	            attributeid: attributeid,
-	            attributename: attributename,
-	            who: attributename,
-	            options: values,
-	            onChanged: (event, checked, reason, currentFilters) => {
-	              filterChanged(currentFilters);
-	            }
-	          }));
-	        }
-
-	        setDropdowns(d);
-	        onApplyClick();
-	      } catch (err) {
-	        console.error(err);
-	      }
-	    }
-
-	    doData();
-	  }, [PartnerID]);
-
-	  const filterChanged = currentFilters => {
-	    var objIndex = filters.findIndex(obj => obj.attributeid === currentFilters.attributeid);
-
-	    if (objIndex !== -1) {
-	      //found it
-	      console.log(currentFilters.values.length);
-
-	      if (currentFilters.values.length !== 0) {
-	        filters[objIndex] = currentFilters; //replace
-	      } else {
-	        filters.splice(objIndex, 1); //remove
-	      }
-	    } else {
-	      //did not find it
-	      //console.log(currentFilters.values.length)
-	      if (currentFilters.values.length !== 0) {
-	        filters.push(currentFilters); //add
-	      }
-	    }
-
-	    setFilters(filters);
-	    console.log(JSON.stringify(filters, null, 2));
-	    setButtonLabel('Click to Apply All Filters');
-	  };
+	  const [filterbuttontext, setFilterButtonText] = react.exports.useState('Make Filter Panel Larger');
+	  const [propertywidth, setPropertyWidth] = react.exports.useState('400px');
+	  const [skillschecked, setSkillsChecked] = react.exports.useState(0);
 
 	  const SendIt = (type, payload) => {
 	    window.dispatchEvent(new CustomEvent('mjg', {
@@ -65530,60 +63185,232 @@ const theme2 = createTheme({ palette: {
 	    }));
 	  };
 
-	  const onApplyClick = event => {
-	    if (buttonlabel === 'No Filters Selected') {
+	  const onMessage = e => {
+	    if (!e.detail) {
 	      return;
 	    }
 
-	    SendIt('fromcardwaiting', {});
-	    console.log('filters to send');
-	    console.log(filters);
-	    var blankString = '';
-	    var url = 'https://skillnetusersapi.azurewebsites.net/api/CardReportUsersNew?' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString; //console.log('url',url)
+	    var type = e.detail.type;
+	    var payload = e.detail.payload;
 
-	    var axiosParams = {
-	      method: 'post',
-	      url: url,
-	      headers: {
-	        auth: {
-	          username: 'skillnet',
-	          password: 'demo'
-	        }
+	    switch (type) {
+	      case 'fromcardwidget':
+	        setNumberofusersdisplayed(payload.number);
+	        setButtonLabel('Apply All Filters');
+	        break;
+	    }
+	  };
+
+	  react.exports.useEffect(() => {
+	    window.addEventListener('mjg', onMessage);
+	    return function cleanup() {
+	      window.removeEventListener('mjg', onMessage);
+	    };
+	  }, []);
+	  react.exports.useEffect(() => {
+	    async function doDataSkills() {
+	      try {
+	        const response = await axios.get('https://skillnetusersapi.azurewebsites.net/api/PortalSkills?partnerid=' + PartnerID);
+	        var d = JSON.parse(response.data);
+	        var uniqueD = d.filter((value, index, self) => index === self.findIndex(t => t.value === value.value));
+	        setSkills(uniqueD);
+	      } catch (err) {
+	        console.error(err);
 	      }
-	    }; //console.log(filters.length)
+	    }
 
-	    if (filters.length !== 0) {
-	      axiosParams.data = filters;
-	    } //console.log(axiosParams)
+	    if (PartnerID !== 395) {
+	      //CNA
+	      doDataSkills();
+	    }
+	  }, []);
+	  react.exports.useEffect(() => {
+	    async function doData() {
+	      try {
+	        const resp = await axios.get('https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID);
+	        var d = [];
+	        var attributes = resp.data;
+
+	        for (let i = 0; i < attributes.length; i++) {
+	          var attributename = attributes[i].CustomAttributeName;
+	          var doIt = true;
+
+	          if (PartnerID === 395) {
+	            //CNA
+	            switch (attributename) {
+	              case 'SMEs':
+	                attributename = 'Technical SME';
+	                break;
+
+	              case 'Leaders':
+	                attributename = 'R.C. Home Office Leader';
+	                break;
+
+	              default:
+	                doIt = false;
+	            }
+	          }
+
+	          if (doIt === true) {
+	            var attributeid = attributes[i].CustomAttributeID;
+	            var CustomAttributeValues = attributes[i].clsCustomAttributeValues;
+	            var values = [];
+
+	            for (let j = 0; j < CustomAttributeValues.length; j++) {
+	              var id = CustomAttributeValues[j].CustomAttributeValueID;
+	              var value = CustomAttributeValues[j].CustomAttributeValue;
+	              values.push({
+	                id: id,
+	                value: value,
+	                attributeid: attributeid,
+	                attributename: attributename
+	              });
+	            }
+
+	            d.push( /*#__PURE__*/React$1.createElement(DropDown, {
+	              multiple: true,
+	              key: i,
+	              name: "value",
+	              attributeid: attributeid,
+	              attributename: attributename,
+	              who: attributename,
+	              options: values,
+	              onChanged: (event, checked, reason, currentFilters) => {
+	                filterChanged(currentFilters);
+	              }
+	            }));
+	          }
+	        }
+
+	        setDropdowns(d);
+	        onApplyClick();
+	      } catch (err) {
+	        console.error(err);
+	      }
+	    }
+
+	    doData();
+	  }, []);
+
+	  const filterSkillsChanged = (checked, name, a, b, c, d) => {
+	    try {
+	      console.log(checked.length);
+	      setSkillsChecked(checked.length);
+	      var skillsAttributeID = '444';
+	      var objIndex = filters.findIndex(obj => obj.attributeid === skillsAttributeID);
+
+	      if (objIndex !== -1) {
+	        //found it
+	        filters[objIndex].values = [];
+
+	        for (let i = 0; i < checked.length; i++) {
+	          var v = {
+	            id: checked[i],
+	            value: 'value',
+	            attributeid: '444',
+	            attributename: 'skills'
+	          };
+	          filters[objIndex].values.push(v);
+	        }
+
+	        if (checked.length === 0) {
+	          filters.splice(objIndex, 1);
+	        }
+	      } else {
+	        var skillAttribute = {
+	          attributeid: '444',
+	          attributename: 'skills',
+	          values: []
+	        };
+
+	        for (let i = 0; i < checked.length; i++) {
+	          var v2 = {
+	            id: checked[i],
+	            value: 'value',
+	            attributeid: '444',
+	            attributename: 'skills'
+	          };
+	          skillAttribute.values.push(v2);
+	        }
+
+	        filters.push(skillAttribute);
+	      }
+	    } catch (e) {
+	      console.log(e);
+	    }
+	  };
+
+	  const filterChanged = currentFilters => {
+	    var objIndex = filters.findIndex(obj => obj.attributeid === currentFilters.attributeid);
+
+	    if (objIndex !== -1) {
+	      //found it
+	      if (currentFilters.values.length !== 0) {
+	        filters[objIndex] = currentFilters; //replace
+	      } else {
+	        filters.splice(objIndex, 1); //remove
+	      }
+	    } else {
+	      //did not find it
+	      if (currentFilters.values.length !== 0) {
+	        filters.push(currentFilters); //add
+	      }
+	    }
+
+	    setFilters(filters); //console.log(JSON.stringify(filters,null,2))
+
+	    setButtonLabel('Click to Apply All Filters');
+	  };
+
+	  const onApplyClick = event => {
+	    if (buttonlabel === 'No Filters Selected') {
+	      return;
+	    } //console.log('filters to send')
+	    //console.log(filters)
 
 
-	    axios(axiosParams).then(response => {
-	      //console.log('filtered users', response)
-	      setNumberofusersdisplayed(response.data.length);
-	      SendIt('fromcardfilteredusers', {
-	        users: response.data
-	      });
-	      setButtonLabel('Apply All Filters');
-	    }).catch(error => {
-	      console.log(error);
+	    SendIt('fromcardfilters', {
+	      filters: filters
 	    });
+	  };
+
+	  const onFilterButtonClick = event => {
+	    if (filterbuttontext === 'Make Filter Panel Larger') {
+	      setFilterButtonText('Make Filter Panel Smaller');
+	      setPropertyWidth('550px');
+	    } else {
+	      setFilterButtonText('Make Filter Panel Larger');
+	      setPropertyWidth('400px');
+	    }
+	  };
+
+	  const changeIt = () => {
+	    if (checkboxdisplay === 'none') {
+	      setCheckboxdisplay('block'); //setCheckboxText('Hide Skills')
+	    } else {
+	      setCheckboxdisplay('none'); //setCheckboxText('Show Skills')
+	    }
 	  };
 
 	  return /*#__PURE__*/React$1.createElement("div", {
 	    style: {
-	      width: '100%',
+	      width: propertywidth,
 	      padding: '10px'
 	    }
-	  }, /*#__PURE__*/React$1.createElement(Button$1 // ref={refApplyButton}
-	  , {
+	  }, /*#__PURE__*/React$1.createElement(Button$1, {
 	    style: {
 	      width: '100%'
 	    },
 	    variant: "contained",
 	    onClick: onApplyClick
-	  }, buttonlabel), /*#__PURE__*/React$1.createElement("div", {
+	  }, buttonlabel), largerButton === true && /*#__PURE__*/React$1.createElement("button", {
+	    onClick: onFilterButtonClick,
 	    style: {
-	      marginTop: '40px',
+	      margin: '10px 0 0 0'
+	    }
+	  }, filterbuttontext), /*#__PURE__*/React$1.createElement("div", {
+	    style: {
+	      marginTop: '20px',
 	      height: '20px'
 	    }
 	  }, numberofusersdisplayed !== null && /*#__PURE__*/React$1.createElement("div", null, "Number of Users Displayed: ", numberofusersdisplayed)), /*#__PURE__*/React$1.createElement("div", {
@@ -65591,69 +63418,35 @@ const theme2 = createTheme({ palette: {
 	      display: 'flex',
 	      flexDirection: 'column'
 	    }
-	  }, dropdowns && dropdowns));
+	  }, skills !== null && /*#__PURE__*/React$1.createElement(React$1.Fragment, null, /*#__PURE__*/React$1.createElement("div", {
+	    style: {
+	      borderBottom: '1px solid black',
+	      margin: '20px 0 0 0',
+	      padding: '0 0 6px 0',
+	      width: '100%',
+	      display: 'flex',
+	      flexDirection: 'row',
+	      justifyContent: 'space-between'
+	    }
+	  }, /*#__PURE__*/React$1.createElement("div", {
+	    style: {
+	      fontWeight: '100'
+	    }
+	  }, "Skills (", skillschecked, " selected)"), checkboxdisplay === 'none' && /*#__PURE__*/React$1.createElement(default_1$5, {
+	    onClick: changeIt
+	  }), checkboxdisplay === 'block' && /*#__PURE__*/React$1.createElement(default_1$4, {
+	    onClick: changeIt
+	  })), /*#__PURE__*/React$1.createElement("div", {
+	    style: {
+	      margin: '10px 0 0 0',
+	      display: checkboxdisplay
+	    }
+	  }, /*#__PURE__*/React$1.createElement(CheckboxWidget, {
+	    nodes: skills,
+	    Partner: Partner,
+	    onCheck: (checked, a, b, c, d) => filterSkillsChanged(checked)
+	  }))), dropdowns && dropdowns));
 	};
-	//   {
-	//     "attributeid": 147,
-	//     "attributename": "Region",
-	//     "values": [
-	//       {
-	//         "id": 1829,
-	//         "value": "North",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       },
-	//       {
-	//         "id": 1830,
-	//         "value": "South",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       },
-	//       {
-	//         "id": 1831,
-	//         "value": "East",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       },
-	//       {
-	//         "id": 1832,
-	//         "value": "West",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       },
-	//       {
-	//         "id": 1833,
-	//         "value": "Northeast",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       },
-	//       {
-	//         "id": 1834,
-	//         "value": "Northwest",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       },
-	//       {
-	//         "id": 1835,
-	//         "value": "Southeast",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       },
-	//       {
-	//         "id": 1836,
-	//         "value": "Southwest",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       },
-	//       {
-	//         "id": 1837,
-	//         "value": "Midwest",
-	//         "attributeid": 147,
-	//         "attributename": "Region"
-	//       }
-	//     ]
-	//   }
-	// ]
 
 	var Tv = {};
 
@@ -65743,7 +63536,6 @@ const theme2 = createTheme({ palette: {
 	  } = props.Partner; //const [addWidgetOpen, setAddWidgetOpen] = useState(false);
 
 	  const [filterdisplay, setFilterDisplay] = react.exports.useState('block');
-	  const [propertywidth] = react.exports.useState('375px');
 	  const [cardflex, setCardflex] = react.exports.useState(1);
 	  const [mapflex, setMapflex] = react.exports.useState(0);
 	  const [alignment, setAlignment] = React$1.useState('Card');
@@ -65788,7 +63580,7 @@ const theme2 = createTheme({ palette: {
 	  }, /*#__PURE__*/React$1.createElement("div", {
 	    style: {
 	      overflow: 'hidden',
-	      height: '75px',
+	      height: '50px',
 	      display: 'flex',
 	      justifyContent: 'space-between',
 	      flexDirection: 'row',
@@ -65799,22 +63591,20 @@ const theme2 = createTheme({ palette: {
 	    }
 	  }, /*#__PURE__*/React$1.createElement("div", {
 	    style: {
-	      padding: '5px 0 0 20px',
+	      padding: '5px 0 0 10px',
 	      fontSize: '12px'
 	    }
-	  }, /*#__PURE__*/React$1.createElement("img", {
-	    src: '../images/logo.png',
-	    alt: "SKILLNET",
+	  }, /*#__PURE__*/React$1.createElement("div", {
 	    style: {
-	      width: '90px'
+	      margin: '10px 0 0 0',
+	      fontSize: '18px'
 	    }
-	  }), /*#__PURE__*/React$1.createElement("span", null, /*#__PURE__*/React$1.createElement("i", null, reportName)), /*#__PURE__*/React$1.createElement("div", {
+	  }, reportName, " ", /*#__PURE__*/React$1.createElement("span", {
 	    style: {
-	      margin: '0 0 0 100px',
-	      width: '90px',
+	      margin: '0 0 0 0',
 	      fontSize: '10px'
 	    }
-	  }, "v2022-01-05-a")), /*#__PURE__*/React$1.createElement("div", {
+	  }, "v2022-01-28-a"))), /*#__PURE__*/React$1.createElement("div", {
 	    style: {
 	      padding: '5px 0 0 0',
 	      fontSize: '12px'
@@ -65822,14 +63612,13 @@ const theme2 = createTheme({ palette: {
 	  }, /*#__PURE__*/React$1.createElement("img", {
 	    src: image,
 	    style: {
-	      marginTop: '10px',
-	      height: '50px',
+	      height: '40px',
 	      color: 'black'
 	    },
 	    alt: PartnerName
 	  })), /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement(ToggleButtonGroup$1, {
 	    style: {
-	      padding: '15px 0 0 0',
+	      padding: '1px 0 0 0',
 	      border: 'none',
 	      marginRight: '20px'
 	    },
@@ -65876,16 +63665,15 @@ const theme2 = createTheme({ palette: {
 	    SMEOnly: SMEOnly
 	  }), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(MapWidget, {
 	    flex: mapflex,
+	    Partner: props.Partner,
 	    PartnerID: PartnerID,
 	    PartnerName: PartnerName,
 	    PersonID: PersonID
 	  })), /*#__PURE__*/React$1.createElement(Splitter, null), PartnerID !== 409 && /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
-	      display: filterdisplay,
-	      width: propertywidth
+	      display: filterdisplay
 	    }
-	  }, /*#__PURE__*/React$1.createElement(CardWidgetProperties, {
-	    propertywidth: propertywidth,
+	  }, /*#__PURE__*/React$1.createElement(CardWidgetProperties2, {
 	    Partner: props.Partner,
 	    PartnerID: PartnerID,
 	    PartnerName: PartnerName,
@@ -65894,11 +63682,9 @@ const theme2 = createTheme({ palette: {
 	    showlob: showlob
 	  })), PartnerID === 409 && /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
-	      display: filterdisplay,
-	      width: propertywidth
+	      display: filterdisplay
 	    }
 	  }, /*#__PURE__*/React$1.createElement(CardWidgetProperties2, {
-	    propertywidth: propertywidth,
 	    Partner: props.Partner,
 	    PartnerID: PartnerID,
 	    PartnerName: PartnerName,
@@ -65907,102 +63693,6 @@ const theme2 = createTheme({ palette: {
 	    showlob: showlob
 	  })));
 	};
-
-	var PartnerCNA = {
-	  PartnerID: 395,
-	  PartnerShort: 'CNA',
-	  PartnerName: 'CNA',
-	  PersonID: 275399,
-	  GroupID: 33582,
-	  showratings: false,
-	  ratingsources: '4',
-	  //ManagerRating
-	  SMEOnly: true,
-	  showlob: false,
-	  reportName: 'Risk Control Skills Report',
-	  image: './images/CNA.png'
-	};
-	var PartnerGMIsb = {
-	  PartnerID: 434,
-	  PartnerShort: 'GMIsb',
-	  PartnerName: 'General Mills',
-	  PersonID: 281326,
-	  GroupID: 33931,
-	  showratings: true,
-	  ratingsources: '1000',
-	  //SelfRating
-	  SMEOnly: false,
-	  showlob: false,
-	  reportName: 'Card Report',
-	  image: './images/GMI.png'
-	};
-	var PartnerCBET = {
-	  PartnerID: 409,
-	  PartnerShort: 'CBET',
-	  PartnerName: 'College of Biomedical Equipment Technology',
-	  PersonID: 284348,
-	  GroupID: 33660,
-	  showratings: true,
-	  ratingsources: '1000',
-	  //SelfRating
-	  SMEOnly: false,
-	  showlob: false,
-	  reportName: 'Card Report',
-	  image: './images/BIO.png'
-	};
-
-	function App() {
-	  const [authTokens, setAuthTokens] = react.exports.useState(''); //const history = useHistory();
-
-	  const setTokens = data => {
-	    localStorage.setItem("tokens", JSON.stringify(data));
-	    setAuthTokens(data);
-	  };
-
-	  return /*#__PURE__*/React$1.createElement(AuthContext.Provider, {
-	    value: {
-	      authTokens,
-	      setAuthTokens: setTokens
-	    }
-	  }, /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      flex: '1',
-	      border: '0px solid green',
-	      background: 'whitesmoke',
-	      overflow: 'hidden',
-	      width: '100%',
-	      height: '100%'
-	    }
-	  }, /*#__PURE__*/React$1.createElement(Routes, null, /*#__PURE__*/React$1.createElement(Route, {
-	    path: "/",
-	    element: /*#__PURE__*/React$1.createElement(Login, {
-	      replace: true,
-	      to: "/login"
-	    })
-	  }), /*#__PURE__*/React$1.createElement(Route, {
-	    path: "/login",
-	    element: /*#__PURE__*/React$1.createElement(Login, null)
-	  }), /*#__PURE__*/React$1.createElement(Route, {
-	    path: "/login",
-	    default: true,
-	    component: Login
-	  }), /*#__PURE__*/React$1.createElement(Route, {
-	    path: "/cardcna",
-	    element: /*#__PURE__*/React$1.createElement(CardReport, {
-	      Partner: PartnerCNA
-	    })
-	  }), /*#__PURE__*/React$1.createElement(Route, {
-	    path: "/cardgmi",
-	    element: /*#__PURE__*/React$1.createElement(CardReport, {
-	      Partner: PartnerGMIsb
-	    })
-	  }), /*#__PURE__*/React$1.createElement(Route, {
-	    path: "/cardcbet",
-	    element: /*#__PURE__*/React$1.createElement(CardReport, {
-	      Partner: PartnerCBET
-	    })
-	  }))));
-	}
 
 	var reactComponentSymbol = Symbol.for("r2wc.reactComponent");
 	var renderSymbol = Symbol.for("r2wc.reactRender");
@@ -66120,12 +63810,18 @@ const theme2 = createTheme({ palette: {
 		return WebComponent;
 	}
 
-	const Index = () => /*#__PURE__*/React$1.createElement(React$1.StrictMode, null, /*#__PURE__*/React$1.createElement(HashRouter, null, /*#__PURE__*/React$1.createElement(App, null)));
+	const Index = props => {
+	  var Partner = JSON.parse(sessionStorage.getItem('Partner'));
+	  return /*#__PURE__*/React$1.createElement(React$1.StrictMode, null, /*#__PURE__*/React$1.createElement(HashRouter, null, /*#__PURE__*/React$1.createElement(CardReport, {
+	    Partner: Partner
+	  })));
+	};
 
 	customElements.define('card-report', reactToWebComponent(Index, React$1, ReactDOM)); // ReactDOM.render(
 	//   <React.StrictMode>
 	//     <HashRouter>
-	//        <App />
+	//        {/* <App /> */}
+	//        <CardReport Partner={Partner}/>
 	//     </HashRouter> 
 	//   </React.StrictMode>,
 	//   document.getElementById('root')

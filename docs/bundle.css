@@ -1,29 +1,3 @@
-.topview {
-  color: white;
-  font-size: $font-size;
-  background-color: darken($base-color, 30%);
-}
-
-.imgAll {
-  display: inline-block;
-  background-repeat: no-repeat;
-  background-size: 104%;
-  background-position: 50%;
-  border-radius: 50%;
-  -webkit-box-shadow: 0px 8px 10px -6px black;
-  -moz-box-shadow: 0px 8px 10px -6px black;
-  box-shadow: 0px 8px 10px -6px black;
-}
-
-.imgSmall {
-  width: 35px;
-  height: 35px;
-}
-
-.imgBig {
-  width: 100px;
-  height: 100px;
-}
 .add-widgets-dialog .add-widgets-cell {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -78,6 +52,32 @@
      max-width: 750px !important; 
 }
 [data-flex-splitter-horizontal],[data-flex-splitter-vertical]{display:flex;height:100%}[data-flex-splitter-horizontal]>*,[data-flex-splitter-vertical]>*{flex:none;overflow:auto;box-sizing:border-box}[data-flex-splitter-horizontal]>[role=separator],[data-flex-splitter-vertical]>[role=separator]{touch-action:none;display:flex;align-items:center;justify-content:center;overflow:visible;background-color:rgba(160,160,160,.15);z-index:100}[data-flex-splitter-horizontal]>[role=separator]:hover,[data-flex-splitter-vertical]>[role=separator]:hover{background-color:rgba(160,160,160,.45)}[data-flex-splitter-horizontal]>[role=separator]::before,[data-flex-splitter-vertical]>[role=separator]::before{content:"";box-sizing:border-box;border:4px rgba(160,160,160,.8)}[data-flex-splitter-horizontal]>[role=separator]{cursor:ew-resize;width:4px}[data-flex-splitter-horizontal]>[role=separator]::before{width:8px;margin:-2px;height:24px;border-style:double}[data-flex-splitter-vertical]{flex-direction:column}[data-flex-splitter-vertical]>[role=separator]{cursor:ns-resize;height:4px}[data-flex-splitter-vertical]>[role=separator]::before{width:24px;height:8px;margin:-2px;border-style:double}
+.topview {
+  color: white;
+  font-size: $font-size;
+  background-color: darken($base-color, 30%);
+}
+
+.imgAll {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 104%;
+  background-position: 50%;
+  border-radius: 50%;
+  -webkit-box-shadow: 0px 8px 10px -6px black;
+  -moz-box-shadow: 0px 8px 10px -6px black;
+  box-shadow: 0px 8px 10px -6px black;
+}
+
+.imgSmall {
+  width: 35px;
+  height: 35px;
+}
+
+.imgBig {
+  width: 100px;
+  height: 100px;
+}
 .react-checkbox-tree {
   display: -webkit-box;
   display: -ms-flexbox;

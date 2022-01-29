@@ -38,9 +38,9 @@ const MapWidget = (props) => {
       // if (filters.length !== 0) {
       //   axiosParams.data = filters
       // }
-      console.log(axiosParams)
+      //console.log(axiosParams)
       const response = await axios(axiosParams)
-      console.log(response.data)
+      //console.log(response.data)
       var arrayLocations = response.data.map(item => {
         return {
           num: item.Users.length,
@@ -51,7 +51,7 @@ const MapWidget = (props) => {
           Users: item.Users
         }
       })
-      console.log('locations',arrayLocations)
+      //console.log('locations',arrayLocations)
       setFilteredlocations(arrayLocations)
       setWaiting(false)
     } catch (err) {
@@ -116,8 +116,8 @@ const MapWidget = (props) => {
   }
 
   const _onChildMouseEnter = (key, childProps) => {
-    console.log('_onChildMouseEnter')
-    console.log(childProps)
+    //console.log('_onChildMouseEnter')
+    //console.log(childProps)
     setCurrId(childProps.id)
     // const markerId = childProps.marker.get('id');
     // console.log(markerId)

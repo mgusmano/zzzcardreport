@@ -43,11 +43,16 @@ const CardReport = (props) => {
       const response = await axios(axiosParams)
       console.log('response', response)
       console.log('response.data', response.data)
-      //setPartner(JSON.parse(response.data))
-      setPartner(response.data)
-      //etUsers(response.data)
-      //SendIt('fromcardwidget', {number: response.data.length})
-      setWaiting(false)
+      if (typeof response.data !== 'object') {
+        setError('data returned is not an object')
+      }
+      else {
+        //setPartner(JSON.parse(response.data))
+        setPartner(response.data)
+        //etUsers(response.data)
+        //SendIt('fromcardwidget', {number: response.data.length})
+        setWaiting(false)
+      }
     } catch (err) {
       console.error(err.toString());
       setError(err.toString())
@@ -103,7 +108,7 @@ const CardReport = (props) => {
               <div 
                 style={{margin:'10px 0 0 0',fontSize:'18px'}}>
                 {partner.reportName} 
-                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-d</span>
+                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-e</span>
               </div>
           </div>
 

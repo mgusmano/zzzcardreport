@@ -41,6 +41,7 @@ const CardReport = (props) => {
       }
       console.log(url)
       const response = await axios(axiosParams)
+      console.log('response', response)
       console.log('response.data', response.data)
       //setPartner(JSON.parse(response.data))
       setPartner(response.data)
@@ -102,7 +103,7 @@ const CardReport = (props) => {
               <div 
                 style={{margin:'10px 0 0 0',fontSize:'18px'}}>
                 {partner.reportName} 
-                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-c</span>
+                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-d</span>
               </div>
           </div>
 

@@ -39,8 +39,9 @@ const CardReport = (props) => {
         url: url,
         auth: {username: 'skillnet',password: 'demo'}
       }
+      console.log(url)
       const response = await axios(axiosParams)
-      //console.log('response.data', response.data)
+      console.log('response.data', response.data)
       //setPartner(JSON.parse(response.data))
       setPartner(response.data)
       //etUsers(response.data)
@@ -98,7 +99,11 @@ const CardReport = (props) => {
 
           <div style={{padding:'5px 0 0 10px',fontSize:'12px'}}>
               {/* <img src={'../images/logo.png'} alt="SKILLNET" style={{width:'90px'}} /> */}
-              <div style={{margin:'10px 0 0 0',fontSize:'18px'}}>{partner.reportName} <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-b</span></div>
+              <div 
+                style={{margin:'10px 0 0 0',fontSize:'18px'}}>
+                {partner.reportName} 
+                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-c</span>
+              </div>
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>

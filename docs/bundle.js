@@ -59435,6 +59435,7 @@ const theme2 = createTheme({ palette: {
 	  const {
 	    Partner
 	  } = props;
+	  console.log(Partner);
 	  const {
 	    PersonID,
 	    GroupID
@@ -59468,9 +59469,9 @@ const theme2 = createTheme({ palette: {
 
 	      if (filters.length !== 0) {
 	        axiosParams.data = filters;
-	      } //console.log(url)
+	      }
 
-
+	      console.log(url);
 	      const response = await axios(axiosParams); //console.log('filtered users', response)
 
 	      setUsers(response.data);
@@ -61270,6 +61271,7 @@ const theme2 = createTheme({ palette: {
 	};
 
 	const MapWidget = props => {
+	  //console.log(props)
 	  // const { Partner } = props
 	  // const { PartnerID } = Partner;
 	  const {
@@ -61279,7 +61281,9 @@ const theme2 = createTheme({ palette: {
 	    PartnerID,
 	    PersonID,
 	    GroupID
-	  } = Partner;
+	  } = Partner; //console.log(PartnerID)
+	  //console.log(Partner)
+
 	  const [waiting, setWaiting] = react.exports.useState(false);
 	  const [filteredlocations, setFilteredlocations] = react.exports.useState(null);
 	  const [currid, setCurrId] = react.exports.useState(null);
@@ -61293,8 +61297,8 @@ const theme2 = createTheme({ palette: {
 	      // var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 
 	      // 'partnerid=' + PartnerID;
 	      var blankString = '';
-	      var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 'partnerid=' + PartnerID + '&' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString; //console.log(url)
-
+	      var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 'partnerid=' + PartnerID + '&' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString;
+	      console.log(url);
 	      var axiosParams = {
 	        method: 'post',
 	        url: url,
@@ -63178,8 +63182,7 @@ const theme2 = createTheme({ palette: {
 	      } catch (err) {
 	        console.error(err);
 	      }
-	    } //if (PartnerID !== 395) { //CNA
-
+	    }
 
 	    if (showskills === true) {
 	      doDataSkills();
@@ -63486,20 +63489,49 @@ const theme2 = createTheme({ palette: {
 	default_1 = Menu.default = _default;
 
 	const CardReport = props => {
+	  //console.log(props)
 	  const {
-	    PartnerID,
-	    PartnerName,
-	    PersonID,
-	    SMEOnly,
-	    showlob,
-	    reportName,
-	    image
-	  } = props.Partner; //const [addWidgetOpen, setAddWidgetOpen] = useState(false);
+	    PartnerID
+	  } = props; //console.log
+	  //const { PartnerID, PartnerName, reportName, image } = Partner;
+	  //const [addWidgetOpen, setAddWidgetOpen] = useState(false);
 
 	  const [filterdisplay, setFilterDisplay] = react.exports.useState('block');
 	  const [cardflex, setCardflex] = react.exports.useState(1);
 	  const [mapflex, setMapflex] = react.exports.useState(0);
 	  const [alignment, setAlignment] = React$1.useState('Card');
+	  const [waiting, setWaiting] = react.exports.useState(false);
+	  const [partner, setPartner] = react.exports.useState(null);
+
+	  async function getPartner(PartnerID) {
+	    setWaiting(true);
+
+	    try {
+	      //var blankString = ''
+	      var url = 'data/' + PartnerID + '.json';
+	      var axiosParams = {
+	        method: 'get',
+	        url: url,
+	        auth: {
+	          username: 'skillnet',
+	          password: 'demo'
+	        }
+	      };
+	      const response = await axios(axiosParams); //console.log('response.data', response.data)
+	      //setPartner(JSON.parse(response.data))
+
+	      setPartner(response.data); //etUsers(response.data)
+	      //SendIt('fromcardwidget', {number: response.data.length})
+
+	      setWaiting(false);
+	    } catch (err) {
+	      console.error(err);
+	    }
+	  }
+
+	  react.exports.useEffect(() => {
+	    getPartner(PartnerID);
+	  }, []);
 
 	  const handleAlignment = (event, newAlignment) => {
 	    setAlignment(newAlignment);
@@ -63531,9 +63563,10 @@ const theme2 = createTheme({ palette: {
 	    } else {
 	      setFilterDisplay('block');
 	    }
-	  };
+	  }; //console.log(partner)
 
-	  return /*#__PURE__*/React$1.createElement(Horizontal, null, /*#__PURE__*/React$1.createElement(Vertical, {
+
+	  return /*#__PURE__*/React$1.createElement(React$1.Fragment, null, partner !== null && /*#__PURE__*/React$1.createElement(Horizontal, null, /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      flex: '1',
 	      overflow: 'hidden'
@@ -63560,7 +63593,7 @@ const theme2 = createTheme({ palette: {
 	      margin: '10px 0 0 0',
 	      fontSize: '18px'
 	    }
-	  }, reportName, " ", /*#__PURE__*/React$1.createElement("span", {
+	  }, partner.reportName, " ", /*#__PURE__*/React$1.createElement("span", {
 	    style: {
 	      margin: '0 0 0 0',
 	      fontSize: '10px'
@@ -63571,12 +63604,12 @@ const theme2 = createTheme({ palette: {
 	      fontSize: '12px'
 	    }
 	  }, /*#__PURE__*/React$1.createElement("img", {
-	    src: image,
+	    src: partner.image,
 	    style: {
 	      height: '40px',
 	      color: 'black'
 	    },
-	    alt: PartnerName
+	    alt: partner.PartnerName
 	  })), /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement(ToggleButtonGroup$1, {
 	    style: {
 	      padding: '1px 0 0 0',
@@ -63619,41 +63652,19 @@ const theme2 = createTheme({ palette: {
 	    onClick: onToggleFilters
 	  }, /*#__PURE__*/React$1.createElement(default_1, null), "\xA0Filters")))), /*#__PURE__*/React$1.createElement(CardWidget, {
 	    flex: cardflex,
-	    Partner: props.Partner,
-	    PartnerID: PartnerID,
-	    PartnerName: PartnerName,
-	    PersonID: PersonID,
-	    SMEOnly: SMEOnly
+	    Partner: partner
 	  }), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(MapWidget, {
 	    flex: mapflex,
-	    Partner: props.Partner,
-	    PartnerID: PartnerID,
-	    PartnerName: PartnerName,
-	    PersonID: PersonID
-	  })), /*#__PURE__*/React$1.createElement(Splitter, null), PartnerID !== 409 && /*#__PURE__*/React$1.createElement(Vertical, {
+	    Partner: partner
+	  })), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      display: filterdisplay
 	    }
 	  }, /*#__PURE__*/React$1.createElement(CardWidgetProperties2, {
-	    Partner: props.Partner,
-	    PartnerID: PartnerID,
-	    PartnerName: PartnerName,
-	    PersonID: PersonID,
-	    SMEOnly: SMEOnly,
-	    showlob: showlob
-	  })), PartnerID === 409 && /*#__PURE__*/React$1.createElement(Vertical, {
-	    style: {
-	      display: filterdisplay
-	    }
-	  }, /*#__PURE__*/React$1.createElement(CardWidgetProperties2, {
-	    Partner: props.Partner,
-	    PartnerID: PartnerID,
-	    PartnerName: PartnerName,
-	    PersonID: PersonID,
-	    SMEOnly: SMEOnly,
-	    showlob: showlob
-	  })));
+	    Partner: partner
+	  }))));
 	};
+	 //        <CardWidgetProperties2 Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
 
 	var reactComponentSymbol = Symbol.for("r2wc.reactComponent");
 	var renderSymbol = Symbol.for("r2wc.reactRender");
@@ -63772,32 +63783,20 @@ const theme2 = createTheme({ palette: {
 	}
 
 	const Index = props => {
-	  var Partner = JSON.parse(sessionStorage.getItem('Partner'));
+	  var PartnerID = JSON.parse(sessionStorage.getItem('PartnerID'));
 	  return /*#__PURE__*/React$1.createElement(React$1.StrictMode, null, /*#__PURE__*/React$1.createElement(HashRouter, null, /*#__PURE__*/React$1.createElement(CardReport, {
-	    Partner: Partner
+	    PartnerID: PartnerID
 	  })));
 	};
 
-	customElements.define('card-report', reactToWebComponent(Index, React$1, ReactDOM)); // var Partner = { //CNA
-	//   PartnerID: 395,
-	//   PartnerShort: 'CNA',
-	//   PartnerName: 'CNA',
-	//   PersonID: 275399,
-	//   GroupID: 33582,
-	//   //showratings: false,
-	//   //ratingsources: '4', //ManagerRating
-	//   //SMEOnly: true,
-	//   //showlob: false,
-	//   showskills: false,
-	//   reportName: 'Risk Control Skills Report',
-	//   image: './images/CNA.png',
-	//   largerButton: false
-	// }
+	customElements.define('card-report', reactToWebComponent(Index, React$1, ReactDOM)); // var PartnerID = 395; //CNA
+	// //var PartnerID = 409; //CBET
+	// //var PartnerID = 434; //GMI
 	// ReactDOM.render(
 	//   <React.StrictMode>
 	//     <HashRouter>
 	//        {/* <App /> */}
-	//        <CardReport Partner={Partner}/>
+	//        <CardReport PartnerID={PartnerID}/>
 	//     </HashRouter> 
 	//   </React.StrictMode>,
 	//   document.getElementById('root')

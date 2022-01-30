@@ -17,69 +17,26 @@
 </style>
 </head>
   <body style="font-family:Roboto, Helvetica, Arial, sans-serif;width:100vw;height:100vh;margin:0;padding:0;border:0px solid blue;">
-    <script>
-      sessionStorage.setItem("userID", 12345);
-      sessionStorage.setItem('partnerID',448);
 
-      var PartnerCNA = { //CNA
-        PartnerID: 395,
-        PartnerShort: 'CNA',
-        PartnerName: 'CNA',
-        PersonID: 275399,
-        GroupID: 33582,
-        //showratings: false,
-        //ratingsources: '4', //ManagerRating
-        //SMEOnly: true,
-        //showlob: false,
-        showskills: true,
-        reportName: 'Risk Control Skills Report',
-        image: './images/CNA.png',
-        largerButton: false
-      }
-
-      var PartnerGMIsb = {
-        PartnerID: 434,
-        PartnerShort: 'GMIsb',
-        PartnerName: 'General Mills',
-        PersonID: 281326,
-        GroupID: 33931,
-        //showratings: true,
-        //ratingsources: '1000', //SelfRating
-        //SMEOnly: false,
-        //showlob: false,
-        showskills: true,
-        reportName: 'Card Report',
-        image: './images/GMI.png',
-        largerButton: true
-      }
-
-      var PartnerCBET = {
-        PartnerID: 409,
-        PartnerShort: 'CBET',
-        PartnerName: 'College of Biomedical Equipment Technology',
-        PersonID: 284348,
-        GroupID: 33660,
-        //showratings: true,
-        //ratingsources: '1000', //SelfRating
-        //SMEOnly: false,
-        //showlob: false,
-        showskills: true,
-        reportName: 'Card Report',
-        image: './images/BIO.png',
-        largerButton: true
-      }
-
-      sessionStorage.setItem('Partner',JSON.stringify(PartnerCNA));
-      //sessionStorage.setItem('Partner',JSON.stringify(PartnerGMIsb));
-      //sessionStorage.setItem('Partner',JSON.stringify(PartnerCBET));
-      console.log(sessionStorage.getItem('Partner'));
-
-    </script>
 
     <div style="width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden">
       <div style="background:rgb(51, 124, 182);color:white;padding:10px 0 10px 10px;font-size:24px;">SkillNet</div>
       <div style="flex:1;overflow:auto">
-        <card-report partner={Partner}/>
+
+        <script>
+          const urlParams = new URLSearchParams(window.location.search);
+          var PartnerID = 395; //CNA
+          //var PartnerID = 409; //CBET
+          //var PartnerID = 434; //GMI
+          for (const [key, value] of urlParams) {
+              if (key === 'PartnerID') {
+                PartnerID = value
+              }
+          }
+          sessionStorage.setItem('PartnerID',PartnerID);
+        </script>
+        <card-report/>
+        
       </div>
     </div>
 

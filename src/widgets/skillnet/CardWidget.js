@@ -4,7 +4,9 @@ import axios from "axios";
 import Card from'./Card'
 
 const CardWidget = (props) => {
-  const { Partner } = props
+  const { Partner } = props;
+  console.log(Partner)
+
   const { PersonID, GroupID } = Partner;
   const [waiting, setWaiting] = useState(false)
   const [users, setUsers] = useState(null)
@@ -33,7 +35,7 @@ const CardWidget = (props) => {
       if (filters.length !== 0) {
         axiosParams.data = filters
       }
-      //console.log(url)
+      console.log(url)
       const response = await axios(axiosParams)
       //console.log('filtered users', response)
       setUsers(response.data)

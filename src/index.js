@@ -6,33 +6,24 @@ import CardReport from './CardReport';
 
 // import reactToWebComponent from 'react-to-webcomponent';
 // const Index = (props) =>{
-//   var Partner = JSON.parse(sessionStorage.getItem('Partner')); 
+//   var PartnerID= JSON.parse(sessionStorage.getItem('PartnerID')); 
 //   return (
 //     <React.StrictMode>
 //       <HashRouter>
-//       <CardReport Partner={Partner}/>
+//       <CardReport PartnerID={PartnerID}/>
 //       </HashRouter> 
 //     </React.StrictMode>
 //   )
 // };
 // customElements.define('card-report', reactToWebComponent(Index, React, ReactDOM));
 
-var Partner = { //CNA
-  PartnerID: 395,
-  PartnerShort: 'CNA',
-  PartnerName: 'CNA',
-  PersonID: 275399,
-  GroupID: 33582,
-  showskills: false,
-  reportName: 'Risk Control Skills Report',
-  image: './images/CNA.png',
-  largerButton: false
-}
+var PartnerID = 395; //CNA
+//var PartnerID = 409; //CBET
+//var PartnerID = 434; //GMI
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
-       {/* <App /> */}
-       <CardReport Partner={Partner}/>
+       <CardReport PartnerID={PartnerID}/>
     </HashRouter> 
   </React.StrictMode>,
   document.getElementById('root')

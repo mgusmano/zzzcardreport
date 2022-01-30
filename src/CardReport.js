@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //import logoImg from './images/logo.png';
 
 import CardWidget from './widgets/skillnet/CardWidget'
@@ -14,14 +14,47 @@ import AllInclusive from '@mui/icons-material/AllInclusive';
 import Menu from '@mui/icons-material/Menu';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import axios from "axios";
 
 const CardReport = (props) => {
-  const { PartnerID, PartnerName, PersonID, SMEOnly, showlob, reportName, image } = props.Partner;
+  //console.log(props)
+  const { PartnerID } = props;
+  //console.log
+  //const { PartnerID, PartnerName, reportName, image } = Partner;
   //const [addWidgetOpen, setAddWidgetOpen] = useState(false);
   const [filterdisplay, setFilterDisplay] = useState('block')
   const [cardflex, setCardflex] = useState(1)
   const [mapflex, setMapflex] = useState(0)
   const [alignment, setAlignment] = React.useState('Card');
+  const [waiting, setWaiting] = useState(false)
+  const [partner, setPartner] = useState(null)
+
+
+  async function getPartner(PartnerID) {
+    setWaiting(true)
+    try {
+      //var blankString = ''
+      var url = 'data/' + PartnerID + '.json'
+      var axiosParams = {
+        method: 'get',
+        url: url,
+        auth: {username: 'skillnet',password: 'demo'}
+      }
+      const response = await axios(axiosParams)
+      //console.log('response.data', response.data)
+      //setPartner(JSON.parse(response.data))
+      setPartner(response.data)
+      //etUsers(response.data)
+      //SendIt('fromcardwidget', {number: response.data.length})
+      setWaiting(false)
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    getPartner(PartnerID)
+  }, []);
 
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -53,7 +86,11 @@ const CardReport = (props) => {
     }
   };
 
+  //console.log(partner)
+
   return (
+    <>
+    {partner !== null &&
     <Horizontal >
       {/* column 1 */}
       <Vertical style={{flex:'1',overflow:'hidden'}}>
@@ -62,11 +99,11 @@ const CardReport = (props) => {
 
           <div style={{padding:'5px 0 0 10px',fontSize:'12px'}}>
               {/* <img src={'../images/logo.png'} alt="SKILLNET" style={{width:'90px'}} /> */}
-              <div style={{margin:'10px 0 0 0',fontSize:'18px'}}>{reportName} <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-28-a</span></div>
+              <div style={{margin:'10px 0 0 0',fontSize:'18px'}}>{partner.reportName} <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-28-a</span></div>
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>
-            <img src={image} style={{height:'40px',color:'black'}} alt={PartnerName} />
+            <img src={partner.image} style={{height:'40px',color:'black'}} alt={partner.PartnerName} />
           </div>
 
           <div>
@@ -94,29 +131,26 @@ const CardReport = (props) => {
 
         </div>
 
-        <CardWidget flex={cardflex} Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly}/>
+        <CardWidget flex={cardflex} Partner={partner}/>
         <Splitter/>
-        <MapWidget flex={mapflex} Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID}/>
+        <MapWidget flex={mapflex} Partner={partner}/>
 
       </Vertical>
       <Splitter/>
 
       {/* column 2 */}
-      {PartnerID !== 409 &&
-      <Vertical style={{display:filterdisplay}}>
-        <CardWidgetProperties2 Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
-      </Vertical>
-      }
 
-      {/* column 2 */}
-      {PartnerID === 409 &&
       <Vertical style={{display:filterdisplay}}>
-        <CardWidgetProperties2 Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
+        <CardWidgetProperties2 Partner={partner}/>
       </Vertical>
-      }
+
 
     </Horizontal>
+    }
+    </>
   )
 }
 
 export default CardReport
+
+//        <CardWidgetProperties2 Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>

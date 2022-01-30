@@ -1,0 +1,11 @@
+{
+  "PartnerID": 395,
+  "PartnerShort": "CNA",
+  "PartnerName": "CNA",
+  "PersonID": 275399,
+  "GroupID": 33582,
+  "showskills": false,
+  "reportName": "Risk Control Skills Report",
+  "image": "./images/CNA.png",
+  "largerButton": false
+}

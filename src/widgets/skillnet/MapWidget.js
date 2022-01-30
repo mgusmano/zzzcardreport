@@ -4,10 +4,13 @@ import Marker from './Marker';
 import GoogleMap from './GoogleMap';
 
 const MapWidget = (props) => {
+  //console.log(props)
   // const { Partner } = props
   // const { PartnerID } = Partner;
   const { Partner } = props
   const { PartnerID, PersonID, GroupID } = Partner;
+  //console.log(PartnerID)
+  //console.log(Partner)
   const [waiting, setWaiting] = useState(false)
   const [filteredlocations, setFilteredlocations] = useState(null)
   const [currid, setCurrId] = useState(null)
@@ -28,7 +31,7 @@ const MapWidget = (props) => {
       'jobids=' + blankString  + '&' +
       'percentages=' + blankString + '&' +
       'skillids=' + blankString
-      //console.log(url)
+      console.log(url)
       var axiosParams = {
         method: 'post',
         url: url,

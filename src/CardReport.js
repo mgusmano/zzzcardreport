@@ -17,9 +17,8 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import axios from "axios";
 
 const CardReport = (props) => {
-  //console.log(props)
+  console.log(props)
   const { PartnerID } = props;
-  //console.log
   //const { PartnerID, PartnerName, reportName, image } = Partner;
   //const [addWidgetOpen, setAddWidgetOpen] = useState(false);
   const [filterdisplay, setFilterDisplay] = useState('block')
@@ -99,7 +98,7 @@ const CardReport = (props) => {
 
           <div style={{padding:'5px 0 0 10px',fontSize:'12px'}}>
               {/* <img src={'../images/logo.png'} alt="SKILLNET" style={{width:'90px'}} /> */}
-              <div style={{margin:'10px 0 0 0',fontSize:'18px'}}>{partner.reportName} <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-a</span></div>
+              <div style={{margin:'10px 0 0 0',fontSize:'18px'}}>{partner.reportName} <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-b</span></div>
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>

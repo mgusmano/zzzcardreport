@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-//import './CardWidget.css'
+import './CardWidget.css'
 import Card from'./Card'
 
 const CardWidget = (props) => {

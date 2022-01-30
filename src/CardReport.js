@@ -107,7 +107,7 @@ const CardReport = (props) => {
               <div 
                 style={{margin:'10px 0 0 0',fontSize:'18px'}}>
                 {partner.reportName} 
-                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-f</span>
+                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-g</span>
               </div>
           </div>
 

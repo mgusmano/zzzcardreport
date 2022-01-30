@@ -17,9 +17,19 @@ import CardReport from './CardReport';
 // };
 // customElements.define('card-report', reactToWebComponent(Index, React, ReactDOM));
 
+//var PartnerID = 395; //CNA
+//var PartnerID = 409; //CBET
+//var PartnerID = 434; //GMI
+const urlParams = new URLSearchParams(window.location.search);
 var PartnerID = 395; //CNA
 //var PartnerID = 409; //CBET
 //var PartnerID = 434; //GMI
+for (const [key, value] of urlParams) {
+    if (key === 'PartnerID') {
+      PartnerID = value
+    }
+}
+//sessionStorage.setItem('PartnerID',PartnerID);
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>

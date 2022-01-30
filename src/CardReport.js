@@ -26,9 +26,9 @@ const CardReport = (props) => {
   const [cardflex, setCardflex] = useState(1)
   const [mapflex, setMapflex] = useState(0)
   const [alignment, setAlignment] = React.useState('Card');
-  const [waiting, setWaiting] = useState(false)
+  const [waiting, setWaiting] = useState(null)
+  const [error, setError] = useState(null)
   const [partner, setPartner] = useState(null)
-
 
   async function getPartner(PartnerID) {
     setWaiting(true)
@@ -48,7 +48,8 @@ const CardReport = (props) => {
       //SendIt('fromcardwidget', {number: response.data.length})
       setWaiting(false)
     } catch (err) {
-      console.error(err);
+      console.error(err.toString());
+      setError(err.toString())
     }
   }
 
@@ -86,10 +87,9 @@ const CardReport = (props) => {
     }
   };
 
-  //console.log(partner)
-
   return (
     <>
+    {error !== null && <div style={{margin:'20px 0 0 20px',fontSize:'24px'}}>{error}</div>}
     {partner !== null &&
     <Horizontal >
       {/* column 1 */}

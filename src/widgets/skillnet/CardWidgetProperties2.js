@@ -107,7 +107,7 @@ const CardWidgetProperties2 = (props) => {
   }, []);
 
   useEffect(() => {
-    async function doData() {
+    async function doData(when) {
       try {
         const resp = await axios.get('https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID);
         var d = []
@@ -118,16 +118,18 @@ const CardWidgetProperties2 = (props) => {
           var attributename = attributes[i].CustomAttributeName
 
           var doIt = true
-          if (PartnerID === 395) { //CNA
-            switch (attributename) {
-              case 'SMEs':
-                attributename = 'Technical SME'
-                break;
-              case 'Leaders':
-                attributename = 'R.C. Home Office Leader'
-                break;
-              default:
-                doIt = false;
+          if (when !== 'orig') {         
+            if (PartnerID === 395) { //CNA
+              switch (attributename) {
+                case 'SMEs':
+                  attributename = 'Technical SME'
+                  break;
+                case 'Leaders':
+                  attributename = 'R.C. Home Office Leader'
+                  break;
+                default:
+                  doIt = false;
+              }
             }
           }
 
@@ -152,6 +154,8 @@ const CardWidgetProperties2 = (props) => {
       }
     }
     doData()
+    //doData('orig')
+
   }, []);
 
   const filterSkillsChanged = (checked,name,a,b,c,d) => {

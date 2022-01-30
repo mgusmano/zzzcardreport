@@ -6,7 +6,7 @@ import MapWidget from './widgets/skillnet/MapWidget'
 import Horizontal from './layout/Horizontal'
 import Vertical from './layout/Vertical'
 import Splitter from './layout/Splitter'
-import CardWidgetProperties from'./widgets/skillnet/CardWidgetProperties'
+//import CardWidgetProperties from'./widgets/skillnet/CardWidgetProperties'
 import CardWidgetProperties2 from'./widgets/skillnet/CardWidgetProperties2'
 import Tv from '@mui/icons-material/Tv';
 import Map from '@mui/icons-material/Map';
@@ -25,36 +25,35 @@ const CardReport = (props) => {
   const [cardflex, setCardflex] = useState(1)
   const [mapflex, setMapflex] = useState(0)
   const [alignment, setAlignment] = React.useState('Card');
-  const [waiting, setWaiting] = useState(null)
+  //const [waiting, setWaiting] = useState(null)
   const [error, setError] = useState(null)
   const [partner, setPartner] = useState(null)
 
   async function getPartner(PartnerID) {
-    setWaiting(true)
+    //setWaiting(true)
     try {
-      //var blankString = ''
       var url = 'data/' + PartnerID + '.json'
       var axiosParams = {
         method: 'get',
         url: url,
         auth: {username: 'skillnet',password: 'demo'}
       }
-      console.log(url)
+      //console.log(url)
       const response = await axios(axiosParams)
-      console.log('response', response)
-      console.log('response.data', response.data)
+      //console.log('response', response)
+      //console.log('response.data', response.data)
       if (typeof response.data !== 'object') {
-        setError('data returned is not an object')
+        setError('Error: data returned is not an object')
       }
       else {
         //setPartner(JSON.parse(response.data))
         setPartner(response.data)
         //etUsers(response.data)
         //SendIt('fromcardwidget', {number: response.data.length})
-        setWaiting(false)
+        //setWaiting(false)
       }
     } catch (err) {
-      console.error(err.toString());
+      //console.error(err.toString());
       setError(err.toString())
     }
   }
@@ -108,7 +107,7 @@ const CardReport = (props) => {
               <div 
                 style={{margin:'10px 0 0 0',fontSize:'18px'}}>
                 {partner.reportName} 
-                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-e</span>
+                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-f</span>
               </div>
           </div>
 
@@ -149,11 +148,9 @@ const CardReport = (props) => {
       <Splitter/>
 
       {/* column 2 */}
-
       <Vertical style={{display:filterdisplay}}>
         <CardWidgetProperties2 Partner={partner}/>
       </Vertical>
-
 
     </Horizontal>
     }
@@ -162,5 +159,3 @@ const CardReport = (props) => {
 }
 
 export default CardReport
-
-//        <CardWidgetProperties2 Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>

@@ -107,7 +107,7 @@ const CardReport = (props) => {
               <div 
                 style={{margin:'10px 0 0 0',fontSize:'18px'}}>
                 {partner.reportName} 
-                <span style={{margin:'0 0 0 0',fontSize:'10px'}}>v2022-01-30-g</span>
+                {/* <span style={{margin:'0 0 0 10px',fontSize:'10px'}}>v2022-01-30-g</span> */}
               </div>
           </div>
 
@@ -144,6 +144,10 @@ const CardReport = (props) => {
         <Splitter/>
         <MapWidget flex={mapflex} Partner={partner}/>
 
+        <div style={{overflow:'hidden',height:'20px',display:'flex',xjustifyContent:'space-between',flexDirection:'row-reverse',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
+          <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>v2022-01-31-a</div>
+        </div>
+
       </Vertical>
       <Splitter/>
 
@@ -151,6 +155,8 @@ const CardReport = (props) => {
       <Vertical style={{display:filterdisplay}}>
         <CardWidgetProperties2 Partner={partner}/>
       </Vertical>
+
+
 
     </Horizontal>
     }

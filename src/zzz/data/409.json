@@ -1,0 +1,11 @@
+{
+  "PartnerID": 409,
+  "PartnerShort": "CBET",
+  "PartnerName": "College of Biomedical Equipment Technology",
+  "PersonID": 284348,
+  "GroupID": 33660,
+  "showskills": true,
+  "reportName": "Card Report",
+  "image": "./images/BIO.png",
+  "largerButton": false
+}

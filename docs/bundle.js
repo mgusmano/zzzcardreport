@@ -59431,11 +59431,10 @@ const theme2 = createTheme({ palette: {
 	  }, ratinglabel, ": ", user.Rating)));
 	};
 
-	const CardWidget = props => {
+	const CardReportCardWidget = props => {
 	  const {
 	    Partner
 	  } = props;
-	  console.log(Partner);
 	  const {
 	    PersonID,
 	    GroupID
@@ -59452,12 +59451,13 @@ const theme2 = createTheme({ palette: {
 	    }));
 	  };
 
-	  async function doData2(filters) {
+	  async function getCardData(filters) {
 	    setWaiting(true);
 
 	    try {
 	      var blankString = '';
-	      var url = 'https://skillnetusersapi.azurewebsites.net/api/CardReportUsersNew?' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString;
+	      var url = 'https://skillnetusersapi.azurewebsites.net/api/CardReportUsersNew?' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString; //console.log(url)
+
 	      var axiosParams = {
 	        method: 'post',
 	        url: url,
@@ -59471,9 +59471,7 @@ const theme2 = createTheme({ palette: {
 	        axiosParams.data = filters;
 	      }
 
-	      console.log(url);
-	      const response = await axios(axiosParams); //console.log('filtered users', response)
-
+	      const response = await axios(axiosParams);
 	      setUsers(response.data);
 	      SendIt('fromcardwidget', {
 	        number: response.data.length
@@ -59494,10 +59492,8 @@ const theme2 = createTheme({ palette: {
 
 	    switch (type) {
 	      case 'fromcardfilters':
-	        setUsers([]); //console.log('fromcardfilters')
-	        //console.log(payload.filters)
-
-	        doData2(payload.filters);
+	        setUsers([]);
+	        getCardData(payload.filters);
 	        break;
 
 	      case 'fromcardfilteredusers':
@@ -59527,8 +59523,7 @@ const theme2 = createTheme({ palette: {
 	    return function cleanup() {
 	      window.removeEventListener('mjg', onMessage);
 	    };
-	  }, [onMessage]); //    <div ref={cardRef} style={{display:'flex',flex:props.flex,flexWrap:'wrap',flexDirection:'row',overflow:'auto',alignContent:'flex-start'}} xstyle={{flex:'auto',flexWrap:'wrap',flexDirection:'row',justifyContent:'space-between',display:'flex',overflow:'auto'}}>
-
+	  }, [onMessage]);
 	  return /*#__PURE__*/React$1.createElement("div", {
 	    style: {
 	      display: 'flex',
@@ -61270,10 +61265,7 @@ const theme2 = createTheme({ palette: {
 	  children: null
 	};
 
-	const MapWidget = props => {
-	  //console.log(props)
-	  // const { Partner } = props
-	  // const { PartnerID } = Partner;
+	const CardReportMapWidget = props => {
 	  const {
 	    Partner
 	  } = props;
@@ -61281,24 +61273,18 @@ const theme2 = createTheme({ palette: {
 	    PartnerID,
 	    PersonID,
 	    GroupID
-	  } = Partner; //console.log(PartnerID)
-	  //console.log(Partner)
-
+	  } = Partner;
 	  const [waiting, setWaiting] = react.exports.useState(false);
 	  const [filteredlocations, setFilteredlocations] = react.exports.useState(null);
 	  const [currid, setCurrId] = react.exports.useState(null);
 
-	  async function doData2(filters) {
+	  async function getMapData(filters) {
 	    setWaiting(true);
 
 	    try {
-	      //var url = 'https://skillnetpartnerlocationsapi.azurewebsites.net/api/PartnerLocations?' + 
-	      //'partnerid=' + PartnerID;
-	      // var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 
-	      // 'partnerid=' + PartnerID;
 	      var blankString = '';
-	      var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 'partnerid=' + PartnerID + '&' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString;
-	      console.log(url);
+	      var url = 'https://skillnetusersapi.azurewebsites.net/api/PartnerLocationsFiltered?' + 'partnerid=' + PartnerID + '&' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString; //console.log(url)
+
 	      var axiosParams = {
 	        method: 'post',
 	        url: url,
@@ -61307,13 +61293,8 @@ const theme2 = createTheme({ palette: {
 	          password: 'demo'
 	        },
 	        data: filters
-	      }; // if (filters.length !== 0) {
-	      //   axiosParams.data = filters
-	      // }
-	      //console.log(axiosParams)
-
-	      const response = await axios(axiosParams); //console.log(response.data)
-
+	      };
+	      const response = await axios(axiosParams);
 	      var arrayLocations = response.data.map(item => {
 	        return {
 	          num: item.Users.length,
@@ -61323,14 +61304,17 @@ const theme2 = createTheme({ palette: {
 	          Longitude: item.Longitude,
 	          Users: item.Users
 	        };
-	      }); //console.log('locations',arrayLocations)
-
+	      });
 	      setFilteredlocations(arrayLocations);
 	      setWaiting(false);
 	    } catch (err) {
 	      console.error(err);
 	    }
 	  }
+
+	  react.exports.useEffect(() => {
+	    getMapData([]);
+	  }, []);
 
 	  const onMessage = e => {
 	    if (!e.detail) {
@@ -61342,17 +61326,12 @@ const theme2 = createTheme({ palette: {
 
 	    switch (type) {
 	      case 'fromcardfilters':
-	        setFilteredlocations([]); //console.log('fromcardfilters')
-	        //console.log(payload.filters)
-
-	        doData2(payload.filters);
+	        setFilteredlocations([]);
+	        getMapData(payload.filters);
 	        break;
 	    }
 	  };
 
-	  react.exports.useEffect(() => {
-	    doData2([]);
-	  }, []);
 	  react.exports.useEffect(() => {
 	    window.addEventListener('mjg', onMessage);
 	    return function cleanup() {
@@ -61424,14 +61403,6 @@ const theme2 = createTheme({ palette: {
 	      flexDirection: 'row',
 	      overflow: 'auto',
 	      alignContent: 'flex-start'
-	    },
-	    xstyle: {
-	      flex: 'auto',
-	      flexWrap: 'wrap',
-	      flexDirection: 'row',
-	      justifyContent: 'space-between',
-	      display: 'flex',
-	      overflow: 'auto'
 	    }
 	  }, waiting === true && /*#__PURE__*/React$1.createElement("div", {
 	    style: {
@@ -61467,28 +61438,6 @@ const theme2 = createTheme({ palette: {
 	    });
 	  })));
 	};
-
-	const Horizontal = props => /*#__PURE__*/React$1.createElement("div", {
-	  "data-flex-splitter-horizontal": true,
-	  style: {
-	    flex: 'auto',
-	    display: 'flex',
-	    flexDirection: 'row',
-	    border: '0px solid red'
-	  }
-	}, props.children);
-
-	const Vertical = props => /*#__PURE__*/React$1.createElement("div", {
-	  className: props.className,
-	  "data-flex-splitter-vertical": true,
-	  style: props.style
-	}, props.children);
-
-	addEventListener("pointerdown",(function(t){var e,i=t.target,n=i.parentElement;if(n&&t.isPrimary&&0===t.button&&"separator"===i.getAttribute("role")){var r=n.hasAttribute("data-flex-splitter-vertical"),a=n.hasAttribute("data-flex-splitter-horizontal");if(r||a){t.preventDefault();var o=t.pointerId,s=i.previousElementSibling,p=i.nextElementSibling,l=getComputedStyle(n);(-1!==l.flexDirection.indexOf("reverse")?-1:1)*(a&&"rtl"===l.direction?-1:1)==-1&&(s=(e=[p,s])[0],p=e[1]);var h,d=getComputedStyle(s),m=getComputedStyle(p),f=s.getBoundingClientRect();if(r){var v=f.top+t.offsetY,u=s.offsetHeight+p.offsetHeight,x=Math.max(parseInt(d.minHeight,10)||0,u-(parseInt(m.maxHeight,10)||u)),g=Math.min(parseInt(d.maxHeight,10)||u,u-(parseInt(m.minHeight,10)||0));h=function(t){if(t.pointerId===o){var e=Math.round(Math.min(Math.max(t.clientY-v,x),g));s.style.height=e+"px",p.style.height=u-e+"px";}};}else {var c=f.left+t.offsetX,I=s.offsetWidth+p.clientWidth,y=Math.max(parseInt(d.minWidth,10)||0,I-(parseInt(m.maxWidth,10)||I)),E=Math.min(parseInt(d.maxWidth,10)||I,I-(parseInt(m.minWidth,10)||0));h=function(t){if(t.pointerId===o){var e=Math.round(Math.min(Math.max(t.clientX-c,y),E));s.style.width=e+"px",p.style.width=I-e+"px";}};}var M=function(t){t.pointerId===o&&(i.releasePointerCapture(o),i.removeEventListener("pointermove",h),i.removeEventListener("pointerup",M),i.removeEventListener("pointercancel",M));};h(t),s.style.flexShrink=p.style.flexShrink=1,i.addEventListener("pointercancel",M),i.addEventListener("pointerup",M),i.addEventListener("pointermove",h),i.setPointerCapture(o);}}}));
-
-	const Splitter = () => /*#__PURE__*/React$1.createElement("div", {
-	  role: "separator"
-	});
 
 	var index_browser = {exports: {}};
 
@@ -63121,7 +63070,7 @@ const theme2 = createTheme({ palette: {
 	  });
 	};
 
-	const CardWidgetProperties2 = props => {
+	const CardReportProperties = props => {
 	  const {
 	    Partner
 	  } = props;
@@ -63189,7 +63138,7 @@ const theme2 = createTheme({ palette: {
 	    }
 	  }, []);
 	  react.exports.useEffect(() => {
-	    async function doData() {
+	    async function doData(when) {
 	      try {
 	        const resp = await axios.get('https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID);
 	        var d = [];
@@ -63199,19 +63148,21 @@ const theme2 = createTheme({ palette: {
 	          var attributename = attributes[i].CustomAttributeName;
 	          var doIt = true;
 
-	          if (PartnerID === 395) {
-	            //CNA
-	            switch (attributename) {
-	              case 'SMEs':
-	                attributename = 'Technical SME';
-	                break;
+	          if (when !== 'orig') {
+	            if (PartnerID === 395) {
+	              //CNA
+	              switch (attributename) {
+	                case 'SMEs':
+	                  attributename = 'Technical SME';
+	                  break;
 
-	              case 'Leaders':
-	                attributename = 'R.C. Home Office Leader';
-	                break;
+	                case 'Leaders':
+	                  attributename = 'R.C. Home Office Leader';
+	                  break;
 
-	              default:
-	                doIt = false;
+	                default:
+	                  doIt = false;
+	              }
 	            }
 	          }
 
@@ -63251,9 +63202,10 @@ const theme2 = createTheme({ palette: {
 	      } catch (err) {
 	        console.error(err);
 	      }
-	    }
+	    } //doData()
 
-	    doData();
+
+	    doData('orig');
 	  }, []);
 
 	  const filterSkillsChanged = (checked, name, a, b, c, d) => {
@@ -63412,6 +63364,28 @@ const theme2 = createTheme({ palette: {
 	  }))), dropdowns && dropdowns));
 	};
 
+	const Horizontal = props => /*#__PURE__*/React$1.createElement("div", {
+	  "data-flex-splitter-horizontal": true,
+	  style: {
+	    flex: 'auto',
+	    display: 'flex',
+	    flexDirection: 'row',
+	    border: '0px solid red'
+	  }
+	}, props.children);
+
+	const Vertical = props => /*#__PURE__*/React$1.createElement("div", {
+	  className: props.className,
+	  "data-flex-splitter-vertical": true,
+	  style: props.style
+	}, props.children);
+
+	addEventListener("pointerdown",(function(t){var e,i=t.target,n=i.parentElement;if(n&&t.isPrimary&&0===t.button&&"separator"===i.getAttribute("role")){var r=n.hasAttribute("data-flex-splitter-vertical"),a=n.hasAttribute("data-flex-splitter-horizontal");if(r||a){t.preventDefault();var o=t.pointerId,s=i.previousElementSibling,p=i.nextElementSibling,l=getComputedStyle(n);(-1!==l.flexDirection.indexOf("reverse")?-1:1)*(a&&"rtl"===l.direction?-1:1)==-1&&(s=(e=[p,s])[0],p=e[1]);var h,d=getComputedStyle(s),m=getComputedStyle(p),f=s.getBoundingClientRect();if(r){var v=f.top+t.offsetY,u=s.offsetHeight+p.offsetHeight,x=Math.max(parseInt(d.minHeight,10)||0,u-(parseInt(m.maxHeight,10)||u)),g=Math.min(parseInt(d.maxHeight,10)||u,u-(parseInt(m.minHeight,10)||0));h=function(t){if(t.pointerId===o){var e=Math.round(Math.min(Math.max(t.clientY-v,x),g));s.style.height=e+"px",p.style.height=u-e+"px";}};}else {var c=f.left+t.offsetX,I=s.offsetWidth+p.clientWidth,y=Math.max(parseInt(d.minWidth,10)||0,I-(parseInt(m.maxWidth,10)||I)),E=Math.min(parseInt(d.maxWidth,10)||I,I-(parseInt(m.minWidth,10)||0));h=function(t){if(t.pointerId===o){var e=Math.round(Math.min(Math.max(t.clientX-c,y),E));s.style.width=e+"px",p.style.width=I-e+"px";}};}var M=function(t){t.pointerId===o&&(i.releasePointerCapture(o),i.removeEventListener("pointermove",h),i.removeEventListener("pointerup",M),i.removeEventListener("pointercancel",M));};h(t),s.style.flexShrink=p.style.flexShrink=1,i.addEventListener("pointercancel",M),i.addEventListener("pointerup",M),i.addEventListener("pointermove",h),i.setPointerCapture(o);}}}));
+
+	const Splitter = () => /*#__PURE__*/React$1.createElement("div", {
+	  role: "separator"
+	});
+
 	var Tv = {};
 
 	var _interopRequireDefault$3 = interopRequireDefault.exports;
@@ -63489,26 +63463,20 @@ const theme2 = createTheme({ palette: {
 	default_1 = Menu.default = _default;
 
 	const CardReport = props => {
-	  //console.log(props)
 	  const {
 	    PartnerID
-	  } = props; //console.log
-	  //const { PartnerID, PartnerName, reportName, image } = Partner;
-	  //const [addWidgetOpen, setAddWidgetOpen] = useState(false);
-
+	  } = props;
 	  const [filterdisplay, setFilterDisplay] = react.exports.useState('block');
 	  const [cardflex, setCardflex] = react.exports.useState(1);
 	  const [mapflex, setMapflex] = react.exports.useState(0);
 	  const [alignment, setAlignment] = React$1.useState('Card');
-	  const [waiting, setWaiting] = react.exports.useState(false);
+	  const [error, setError] = react.exports.useState(null);
 	  const [partner, setPartner] = react.exports.useState(null);
 
 	  async function getPartner(PartnerID) {
-	    setWaiting(true);
-
+	    //setWaiting(true)
 	    try {
-	      //var blankString = ''
-	      var url = 'data/' + PartnerID + '.json';
+	      var url = 'https://skillnetusersapi.azurewebsites.net/api/partners?partnerid=' + PartnerID;
 	      var axiosParams = {
 	        method: 'get',
 	        url: url,
@@ -63516,16 +63484,17 @@ const theme2 = createTheme({ palette: {
 	          username: 'skillnet',
 	          password: 'demo'
 	        }
-	      };
-	      const response = await axios(axiosParams); //console.log('response.data', response.data)
-	      //setPartner(JSON.parse(response.data))
+	      }; //console.log(url)
 
-	      setPartner(response.data); //etUsers(response.data)
-	      //SendIt('fromcardwidget', {number: response.data.length})
+	      const response = await axios(axiosParams);
 
-	      setWaiting(false);
+	      if (typeof response.data !== 'object') {
+	        setError('Error: data returned is not an object');
+	      } else {
+	        setPartner(response.data);
+	      }
 	    } catch (err) {
-	      console.error(err);
+	      setError(err.toString());
 	    }
 	  }
 
@@ -63563,11 +63532,17 @@ const theme2 = createTheme({ palette: {
 	    } else {
 	      setFilterDisplay('block');
 	    }
-	  }; //console.log(partner)
+	  };
 
-
-	  return /*#__PURE__*/React$1.createElement(React$1.Fragment, null, partner !== null && /*#__PURE__*/React$1.createElement(Horizontal, null, /*#__PURE__*/React$1.createElement(Vertical, {
+	  return /*#__PURE__*/React$1.createElement(React$1.Fragment, null, error !== null && /*#__PURE__*/React$1.createElement("div", {
 	    style: {
+	      margin: '20px 0 0 20px',
+	      fontSize: '24px'
+	    }
+	  }, error), partner !== null && /*#__PURE__*/React$1.createElement(Horizontal, null, /*#__PURE__*/React$1.createElement(Vertical, {
+	    style: {
+	      display: 'flex',
+	      flexDirection: 'column',
 	      flex: '1',
 	      overflow: 'hidden'
 	    }
@@ -63593,12 +63568,7 @@ const theme2 = createTheme({ palette: {
 	      margin: '10px 0 0 0',
 	      fontSize: '18px'
 	    }
-	  }, partner.reportName, " ", /*#__PURE__*/React$1.createElement("span", {
-	    style: {
-	      margin: '0 0 0 0',
-	      fontSize: '10px'
-	    }
-	  }, "v2022-01-28-a"))), /*#__PURE__*/React$1.createElement("div", {
+	  }, partner.reportName)), /*#__PURE__*/React$1.createElement("div", {
 	    style: {
 	      padding: '5px 0 0 0',
 	      fontSize: '12px'
@@ -63650,21 +63620,37 @@ const theme2 = createTheme({ palette: {
 	      width: '100px'
 	    },
 	    onClick: onToggleFilters
-	  }, /*#__PURE__*/React$1.createElement(default_1, null), "\xA0Filters")))), /*#__PURE__*/React$1.createElement(CardWidget, {
+	  }, /*#__PURE__*/React$1.createElement(default_1, null), "\xA0Filters")))), /*#__PURE__*/React$1.createElement(CardReportCardWidget, {
 	    flex: cardflex,
 	    Partner: partner
-	  }), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(MapWidget, {
+	  }), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(CardReportMapWidget, {
 	    flex: mapflex,
 	    Partner: partner
-	  })), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
+	  }), /*#__PURE__*/React$1.createElement("div", {
+	    style: {
+	      overflow: 'hidden',
+	      height: '20px',
+	      display: 'flex',
+	      xjustifyContent: 'space-between',
+	      flexDirection: 'row-reverse',
+	      background: 'lightgray',
+	      color: 'black',
+	      textAlign: 'center',
+	      fontSize: '24px'
+	    }
+	  }, /*#__PURE__*/React$1.createElement("div", {
+	    style: {
+	      margin: '5px 5px 0 0',
+	      fontSize: '10px'
+	    }
+	  }, "v2022-02-01-b"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      display: filterdisplay
 	    }
-	  }, /*#__PURE__*/React$1.createElement(CardWidgetProperties2, {
+	  }, /*#__PURE__*/React$1.createElement(CardReportProperties, {
 	    Partner: partner
 	  }))));
 	};
-	 //        <CardWidgetProperties2 Partner={props.Partner} PartnerID={PartnerID} PartnerName={PartnerName} PersonID={PersonID} SMEOnly={SMEOnly} showlob={showlob}/>
 
 	var reactComponentSymbol = Symbol.for("r2wc.reactComponent");
 	var renderSymbol = Symbol.for("r2wc.reactRender");
@@ -63789,13 +63775,19 @@ const theme2 = createTheme({ palette: {
 	  })));
 	};
 
-	customElements.define('card-report', reactToWebComponent(Index, React$1, ReactDOM)); // var PartnerID = 395; //CNA
+	customElements.define('card-report', reactToWebComponent(Index, React$1, ReactDOM)); // const urlParams = new URLSearchParams(window.location.search);
+	// var PartnerID = 395; //CNA
 	// //var PartnerID = 409; //CBET
 	// //var PartnerID = 434; //GMI
+	// for (const [key, value] of urlParams) {
+	//     if (key === 'PartnerID') {
+	//       PartnerID = value
+	//     }
+	// }
+	// //sessionStorage.setItem('PartnerID',PartnerID);
 	// ReactDOM.render(
 	//   <React.StrictMode>
 	//     <HashRouter>
-	//        {/* <App /> */}
 	//        <CardReport PartnerID={PartnerID}/>
 	//     </HashRouter> 
 	//   </React.StrictMode>,

@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from "react-router-dom";
-//import App from './App';
-import CardReport from './CardReport';
+import CardReport from './cardreport/CardReport';
 
 // import reactToWebComponent from 'react-to-webcomponent';
 // const Index = (props) =>{
@@ -17,9 +16,6 @@ import CardReport from './CardReport';
 // };
 // customElements.define('card-report', reactToWebComponent(Index, React, ReactDOM));
 
-//var PartnerID = 395; //CNA
-//var PartnerID = 409; //CBET
-//var PartnerID = 434; //GMI
 const urlParams = new URLSearchParams(window.location.search);
 var PartnerID = 395; //CNA
 //var PartnerID = 409; //CBET

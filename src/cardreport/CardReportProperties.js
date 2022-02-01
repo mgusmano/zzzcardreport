@@ -47,7 +47,7 @@ const DropDown = (props) => {
 
 const CardReportProperties = (props) => {
   const { Partner } = props
-  const { PartnerID, showskills, largerButton } = Partner;
+  const { PartnerID, showskills } = Partner;
   const [dropdowns, setDropdowns] = useState(null);
   const [skills, setSkills] = useState(null);
   const [filters, setFilters] = useState([]);
@@ -263,7 +263,7 @@ const CardReportProperties = (props) => {
       >
         {buttonlabel}
       </Button>
-      {largerButton === true && 
+      {showskills === true && 
       <button onClick={onFilterButtonClick} style={{margin:'10px 0 0 0'}}>{filterbuttontext}</button>
       }
       <div style={{marginTop:'20px',height:'20px'}}>

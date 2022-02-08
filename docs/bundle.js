@@ -59527,6 +59527,7 @@ const theme2 = createTheme({ palette: {
 	  return /*#__PURE__*/React$1.createElement("div", {
 	    style: {
 	      display: 'flex',
+	      height: '100%',
 	      flex: props.flex,
 	      flexWrap: 'wrap',
 	      flexDirection: 'row',
@@ -63076,8 +63077,7 @@ const theme2 = createTheme({ palette: {
 	  } = props;
 	  const {
 	    PartnerID,
-	    showskills,
-	    largerButton
+	    showskills
 	  } = Partner;
 	  const [dropdowns, setDropdowns] = react.exports.useState(null);
 	  const [skills, setSkills] = react.exports.useState(null);
@@ -63319,7 +63319,7 @@ const theme2 = createTheme({ palette: {
 	    },
 	    variant: "contained",
 	    onClick: onApplyClick
-	  }, buttonlabel), largerButton === true && /*#__PURE__*/React$1.createElement("button", {
+	  }, buttonlabel), showskills === true && /*#__PURE__*/React$1.createElement("button", {
 	    onClick: onFilterButtonClick,
 	    style: {
 	      margin: '10px 0 0 0'
@@ -63367,6 +63367,7 @@ const theme2 = createTheme({ palette: {
 	const Horizontal = props => /*#__PURE__*/React$1.createElement("div", {
 	  "data-flex-splitter-horizontal": true,
 	  style: {
+	    height: '100%',
 	    flex: 'auto',
 	    display: 'flex',
 	    flexDirection: 'row',
@@ -63643,7 +63644,7 @@ const theme2 = createTheme({ palette: {
 	      margin: '5px 5px 0 0',
 	      fontSize: '10px'
 	    }
-	  }, "v2022-02-01-b"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
+	  }, "v2022-02-08-a"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      display: filterdisplay
 	    }
@@ -63776,8 +63777,8 @@ const theme2 = createTheme({ palette: {
 	};
 
 	customElements.define('card-report', reactToWebComponent(Index, React$1, ReactDOM)); // const urlParams = new URLSearchParams(window.location.search);
-	// var PartnerID = 395; //CNA
-	// //var PartnerID = 409; //CBET
+	// //var PartnerID = 395; //CNA
+	// var PartnerID = 409; //CBET
 	// //var PartnerID = 434; //GMI
 	// for (const [key, value] of urlParams) {
 	//     if (key === 'PartnerID') {

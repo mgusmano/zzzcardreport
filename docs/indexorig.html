@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" style="width:100vw;height:100vh;margin:0;padding:0;border:0px solid green;">
+<head>
+  <link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>
+ 
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
+</style>
+</head>
+  <body style="font-family:Roboto, Helvetica, Arial, sans-serif;width:100vw;height:100vh;margin:0;padding:0;border:0px solid blue;">
+    <div style="width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden">
+      <div style="background:rgb(51, 124, 182);color:white;padding:10px 0 10px 10px;font-size:24px;">SkillNet</div>
+      <div style="flex:1;overflow:auto">
+
+        <script>
+          const urlParams = new URLSearchParams(window.location.search);
+          var PartnerID = 395; //CNA
+          //var PartnerID = 409; //CBET
+          //var PartnerID = 434; //GMI
+          for (const [key, value] of urlParams) {
+              if (key === 'PartnerID') {
+                PartnerID = value
+              }
+          }
+          sessionStorage.setItem('PartnerID',PartnerID);
+        </script>
+        <card-report/>
+
+      </div>
+    </div>
+
+    <script src="./bundle.js"></script>
+    <link rel="stylesheet" href="./bundle.css" />
+  </body>
+</html>

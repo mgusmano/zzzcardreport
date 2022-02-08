@@ -84,7 +84,7 @@ const CardReportCardWidget = (props) => {
   }, [onMessage]);
 
   return (
-    <div style={{display:'flex',flex:props.flex,flexWrap:'wrap',flexDirection:'row',overflow:'auto',alignContent:'flex-start'}}>
+    <div style={{display:'flex',height:'100%',flex:props.flex,flexWrap:'wrap',flexDirection:'row',overflow:'auto',alignContent:'flex-start'}}>
       {waiting === true && <div style={{padding:'30px',fontSize:'48px'}}>Loading...</div>}
       {users !== null && 
         users.map((user, index) => {

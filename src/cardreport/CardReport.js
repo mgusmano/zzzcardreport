@@ -85,7 +85,7 @@ const CardReport = (props) => {
     <>
     {error !== null && <div style={{margin:'20px 0 0 20px',fontSize:'24px'}}>{error}</div>}
     {partner !== null &&
-    <Horizontal >
+    <Horizontal>
 
       {/* column 1 */}
       <Vertical style={{display:'flex',flexDirection:'column',flex:'1',overflow:'hidden'}}>
@@ -135,7 +135,7 @@ const CardReport = (props) => {
         <CardReportMapWidget flex={mapflex} Partner={partner}/>
 
         <div style={{overflow:'hidden',height:'20px',display:'flex',xjustifyContent:'space-between',flexDirection:'row-reverse',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
-          <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>v2022-02-01-c</div>
+          <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>v2022-02-08-a</div>
         </div>
 
       </Vertical>

@@ -1,0 +1,15 @@
+          attributes[i].active = true
+          if (PartnerID === 395) {
+            if (ReportID === 1) {
+              if (attributename === "R.C. Home Office Leader" ||
+                  attributename === "Technical SME") {
+                  attributes[i].active = false
+              }
+            }
+            if (ReportID === 2) {
+              if (attributename !== "R.C. Home Office Leader" &&
+                  attributename !== "Technical SME") {
+                  attributes[i].active = false
+              }
+            }
+          }

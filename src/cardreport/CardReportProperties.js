@@ -47,7 +47,7 @@ const DropDown = (props) => {
 
 const CardReportProperties = (props) => {
   const { Partner } = props
-  const { PartnerID, showskills } = Partner;
+  const { PartnerID, ReportID, showskills } = Partner;
   const [dropdowns, setDropdowns] = useState(null);
   const [skills, setSkills] = useState(null);
   const [filters, setFilters] = useState([]);
@@ -109,31 +109,35 @@ const CardReportProperties = (props) => {
   useEffect(() => {
     async function doData(when) {
       try {
-        const resp = await axios.get('https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID);
+        var url = 'https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID
+        console.log(url)
+        const resp = await axios.get(url);
         var d = []
         var attributes = resp.data
-
-
+        console.log(attributes)
         for (let i = 0; i < attributes.length; i++) {
           var attributename = attributes[i].CustomAttributeName
+          attributes[i].active = true
 
-          var doIt = true
-          if (when !== 'orig') {         
-            if (PartnerID === 395) { //CNA
-              switch (attributename) {
-                case 'SMEs':
-                  attributename = 'Technical SME'
-                  break;
-                case 'Leaders':
-                  attributename = 'R.C. Home Office Leader'
-                  break;
-                default:
-                  doIt = false;
+/******* */
+          if (PartnerID === 395) {
+            if (ReportID === 1) {
+              if (attributename === "Skills" ||
+                  attributename === "R.C. Home Office Leader" ||
+                  attributename === "Technical SME") {
+                  attributes[i].active = false
+              }
+            }
+            if (ReportID === 2) {
+              if (attributename !== "R.C. Home Office Leader" &&
+                  attributename !== "Technical SME") {
+                  attributes[i].active = false
               }
             }
           }
+/******* */
 
-          if (doIt === true) {
+          if (attributes[i].active === true) {    
             var attributeid = attributes[i].CustomAttributeID
             var CustomAttributeValues = attributes[i].clsCustomAttributeValues
             var values = []
@@ -145,7 +149,7 @@ const CardReportProperties = (props) => {
             d.push(<DropDown multiple={true} key={i} name='value' attributeid={attributeid} attributename={attributename} who={attributename} options={values} onChanged={(event,checked,reason,currentFilters) => {
               filterChanged(currentFilters)
             }}/>)
-          }
+          }     
         }
         setDropdowns(d)
         onApplyClick()

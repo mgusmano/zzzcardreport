@@ -17,7 +17,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import axios from "axios";
 
 const CardReport = (props) => {
-  const { PartnerID } = props;
+  const { PartnerID, ReportID } = props;
   const [filterdisplay, setFilterDisplay] = useState('block')
   const [cardflex, setCardflex] = useState(1)
   const [mapflex, setMapflex] = useState(0)
@@ -34,12 +34,31 @@ const CardReport = (props) => {
         url: url,
         auth: {username: 'skillnet',password: 'demo'}
       }
-      //console.log(url)
+      console.log(url)
       const response = await axios(axiosParams)
       if (typeof response.data !== 'object') {
         setError('Error: data returned is not an object')
       }
       else {
+
+/******* */
+        if (ReportID === undefined) {
+          ReportID = 1
+        }
+        if (response.data.PartnerID === 395) {
+          response.data.ReportID = ReportID
+          if (ReportID === 1) {
+            response.data.reportName = 'Risk Control Skills Report'
+            response.data.showskills = true           
+          }
+          if (ReportID === 2) {
+            response.data.reportName = 'Risk Control SME Report'
+            response.data.showskills = false 
+          }
+        }
+/******* */
+
+        console.log(response.data)
         setPartner(response.data)
       }
     } catch (err) {

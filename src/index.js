@@ -17,9 +17,18 @@ import CardReport from './cardreport/CardReport';
 // customElements.define('card-report', reactToWebComponent(Index, React, ReactDOM));
 
 const urlParams = new URLSearchParams(window.location.search);
-//var PartnerID = 395; //CNA
-var PartnerID = 409; //CBET
+//448 Toshiba
+var PartnerID = 395; //CNA
+//var PartnerID = 409; //CBET
 //var PartnerID = 434; //GMI
+//var PartnerID = 418; //pmdemo
+
+//var ReportID = 1; //SME
+//var ReportID = 2; //Skills
+
+const last = window.location.href.charAt(window.location.href.length - 1);
+var ReportID = parseInt(last)
+
 for (const [key, value] of urlParams) {
     if (key === 'PartnerID') {
       PartnerID = value
@@ -29,7 +38,7 @@ for (const [key, value] of urlParams) {
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
-       <CardReport PartnerID={PartnerID}/>
+       <CardReport PartnerID={PartnerID} ReportID={ReportID}/>
     </HashRouter> 
   </React.StrictMode>,
   document.getElementById('root')

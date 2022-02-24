@@ -42,27 +42,8 @@ const CardReport = (props) => {
       }
       else {
         var data = Partner395Customizations(ReportID, response.data)
-        console.log(data)
+        console.log('partner',data)
         setPartner(data)
-
-        /******* */
-        // if (ReportID === undefined) {
-        //   ReportID = 1
-        // }
-        // if (response.data.PartnerID === 395) {
-        //   response.data.ReportID = ReportID
-        //   if (ReportID === 1) {
-        //     response.data.reportName = 'Risk Control Skills Report'
-        //     response.data.showskills = true           
-        //   }
-        //   if (ReportID === 2) {
-        //     response.data.reportName = 'Risk Control SME Report'
-        //     response.data.showskills = false 
-        //   }
-        // }
-        /******* */
-        //console.log(response.data)
-        //setPartner(response.data)
       }
     } catch (err) {
       setError(err.toString())
@@ -124,7 +105,7 @@ const CardReport = (props) => {
           </div>
 
           <div style={{padding:'5px 0 0 0',fontSize:'12px'}}>
-            <img src={partner.image} style={{height:'40px',color:'black'}} alt={partner.PartnerName} />
+            {/* <img src={partner.image} style={{height:'40px',color:'black'}} alt={partner.PartnerName} /> */}
           </div>
 
           <div>
@@ -157,7 +138,7 @@ const CardReport = (props) => {
         <CardReportMapWidget flex={mapflex} Partner={partner}/>
 
         <div style={{overflow:'hidden',height:'20px',display:'flex',xjustifyContent:'space-between',flexDirection:'row-reverse',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
-          <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>v2022-02-23-b</div>
+          <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>v2022-02-24-c</div>
         </div>
 
       </Vertical>

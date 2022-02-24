@@ -6,15 +6,18 @@ import CardReport from './cardreport/CardReport';
 // import reactToWebComponent from 'react-to-webcomponent';
 // const Index = (props) =>{
 //   var PartnerID= JSON.parse(sessionStorage.getItem('PartnerID')); 
+//   var ReportID= JSON.parse(sessionStorage.getItem('ReportID'));
 //   return (
 //     <React.StrictMode>
 //       <HashRouter>
-//       <CardReport PartnerID={PartnerID}/>
+//       <CardReport PartnerID={PartnerID} ReportID={ReportID}/>
 //       </HashRouter> 
 //     </React.StrictMode>
 //   )
 // };
 // customElements.define('card-report', reactToWebComponent(Index, React, ReactDOM));
+
+
 
 const urlParams = new URLSearchParams(window.location.search);
 //448 Toshiba

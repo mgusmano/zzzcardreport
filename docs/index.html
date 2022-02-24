@@ -39,15 +39,20 @@
             });
 
             const urlParams = new URLSearchParams(window.location.search);
-            //var PartnerID = 395;   //CNA
-            var PartnerID = 409; //CBET
+            var PartnerID = 395;   //CNA
+            //var PartnerID = 409; //CBET
             //var PartnerID = 434; //GMI
+            var ReportID = 1;
             for (const [key, value] of urlParams) {
                 if (key === 'PartnerID') {
                   PartnerID = value
                 }
+                if (key === 'ReportID') {
+                  ReportID = value
+                }
             }
             sessionStorage.setItem('PartnerID',PartnerID);
+            sessionStorage.setItem('ReportID',ReportID);
           </script>
           <div id="ContentPlaceHolder1_plhContainer">
             <div>sub header</div>

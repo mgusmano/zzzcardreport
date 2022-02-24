@@ -59471,6 +59471,7 @@ const theme2 = createTheme({ palette: {
 	        axiosParams.data = filters;
 	      }
 
+	      console.log(axiosParams);
 	      const response = await axios(axiosParams);
 	      setUsers(response.data);
 	      SendIt('fromcardwidget', {
@@ -63027,6 +63028,47 @@ const theme2 = createTheme({ palette: {
 
 	default_1$4 = ArrowDropUp.default = _default$4;
 
+	function Partner395Customizations(ReportID, data) {
+	  if (ReportID === undefined) {
+	    ReportID = 1;
+	  }
+
+	  data.ReportID = ReportID;
+
+	  if (data.PartnerID === 395) {
+	    if (ReportID === 1) {
+	      data.reportName = 'Risk Control Skills Report';
+	      data.showskills = true;
+	    }
+
+	    if (ReportID === 2) {
+	      data.reportName = 'Risk Control SME Report';
+	      data.showskills = false;
+	    }
+	  }
+
+	  return data;
+	}
+	function Partner395Attributes(PartnerID, ReportID, attributename) {
+	  if (PartnerID === 395) {
+	    if (ReportID === 1) {
+	      if (attributename === "Skills" || attributename === "R.C. Home Office Leader" || attributename === "Technical SME") {
+	        return false; //attributes[i].active = false
+	      }
+	    }
+
+	    if (ReportID === 2) {
+	      if (attributename !== "R.C. Home Office Leader" && attributename !== "Technical SME") {
+	        return false; //attributes[i].active = false
+	      }
+	    }
+
+	    return true;
+	  }
+
+	  return true;
+	}
+
 	const DropDown = props => {
 	  const {
 	    attributeid,
@@ -63077,6 +63119,7 @@ const theme2 = createTheme({ palette: {
 	  } = props;
 	  const {
 	    PartnerID,
+	    ReportID,
 	    showskills
 	  } = Partner;
 	  const [dropdowns, setDropdowns] = react.exports.useState(null);
@@ -63109,8 +63152,9 @@ const theme2 = createTheme({ palette: {
 
 	    switch (type) {
 	      case 'fromcardwidget':
-	        setNumberofusersdisplayed(payload.number);
-	        setButtonLabel('Apply All Filters');
+	        console.log('fromcardwidget');
+	        setNumberofusersdisplayed(payload.number); //setButtonLabel('Apply All Filters')
+
 	        break;
 	    }
 	  };
@@ -63124,10 +63168,14 @@ const theme2 = createTheme({ palette: {
 	  react.exports.useEffect(() => {
 	    async function doDataSkills() {
 	      try {
-	        const response = await axios.get('https://skillnetusersapi.azurewebsites.net/api/PortalSkills?partnerid=' + PartnerID);
+	        var url = 'https://skillnetusersapi.azurewebsites.net/api/PortalSkills?partnerid=' + PartnerID;
+	        console.log(url);
+	        const response = await axios.get(url);
 	        var d = JSON.parse(response.data);
+	        console.log('skills', d);
 	        var uniqueD = d.filter((value, index, self) => index === self.findIndex(t => t.value === value.value));
 	        setSkills(uniqueD);
+	        setButtonLabel('No Filters Selected');
 	      } catch (err) {
 	        console.error(err);
 	      }
@@ -63138,35 +63186,20 @@ const theme2 = createTheme({ palette: {
 	    }
 	  }, []);
 	  react.exports.useEffect(() => {
-	    async function doData(when) {
+	    async function doData() {
 	      try {
-	        const resp = await axios.get('https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID);
+	        var url = 'https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID;
+	        console.log(url);
+	        const resp = await axios.get(url);
 	        var d = [];
 	        var attributes = resp.data;
+	        console.log('attributes', attributes);
 
 	        for (let i = 0; i < attributes.length; i++) {
 	          var attributename = attributes[i].CustomAttributeName;
-	          var doIt = true;
+	          attributes[i].active = Partner395Attributes(PartnerID, ReportID, attributename);
 
-	          if (when !== 'orig') {
-	            if (PartnerID === 395) {
-	              //CNA
-	              switch (attributename) {
-	                case 'SMEs':
-	                  attributename = 'Technical SME';
-	                  break;
-
-	                case 'Leaders':
-	                  attributename = 'R.C. Home Office Leader';
-	                  break;
-
-	                default:
-	                  doIt = false;
-	              }
-	            }
-	          }
-
-	          if (doIt === true) {
+	          if (attributes[i].active === true) {
 	            var attributeid = attributes[i].CustomAttributeID;
 	            var CustomAttributeValues = attributes[i].clsCustomAttributeValues;
 	            var values = [];
@@ -63199,13 +63232,16 @@ const theme2 = createTheme({ palette: {
 
 	        setDropdowns(d);
 	        onApplyClick();
+
+	        if (showskills !== true) {
+	          setButtonLabel('No Filters Selected');
+	        }
 	      } catch (err) {
 	        console.error(err);
 	      }
-	    } //doData()
+	    }
 
-
-	    doData('orig');
+	    doData(); //doData('orig')
 	  }, []);
 
 	  const filterSkillsChanged = (checked, name, a, b, c, d) => {
@@ -63257,6 +63293,8 @@ const theme2 = createTheme({ palette: {
 	  };
 
 	  const filterChanged = currentFilters => {
+	    console.log(JSON.stringify(currentFilters, null, 2));
+	    console.log(JSON.stringify(filters, null, 2));
 	    var objIndex = filters.findIndex(obj => obj.attributeid === currentFilters.attributeid);
 
 	    if (objIndex !== -1) {
@@ -63273,9 +63311,14 @@ const theme2 = createTheme({ palette: {
 	      }
 	    }
 
-	    setFilters(filters); //console.log(JSON.stringify(filters,null,2))
+	    setFilters(filters);
+	    console.log(JSON.stringify(filters, null, 2));
 
-	    setButtonLabel('Click to Apply All Filters');
+	    if (filters.length === 0) {
+	      setButtonLabel('Click to apply No Filters');
+	    } else {
+	      setButtonLabel('Click to Apply All Filters');
+	    }
 	  };
 
 	  const onApplyClick = event => {
@@ -63291,6 +63334,8 @@ const theme2 = createTheme({ palette: {
 	  };
 
 	  const onFilterButtonClick = event => {
+	    event.preventDefault();
+
 	    if (filterbuttontext === 'Make Filter Panel Larger') {
 	      setFilterButtonText('Make Filter Panel Smaller');
 	      setPropertyWidth('550px');
@@ -63465,7 +63510,8 @@ const theme2 = createTheme({ palette: {
 
 	const CardReport = props => {
 	  const {
-	    PartnerID
+	    PartnerID,
+	    ReportID
 	  } = props;
 	  const [filterdisplay, setFilterDisplay] = react.exports.useState('block');
 	  const [cardflex, setCardflex] = react.exports.useState(1);
@@ -63485,14 +63531,16 @@ const theme2 = createTheme({ palette: {
 	          username: 'skillnet',
 	          password: 'demo'
 	        }
-	      }; //console.log(url)
-
+	      };
+	      console.log(url);
 	      const response = await axios(axiosParams);
 
 	      if (typeof response.data !== 'object') {
 	        setError('Error: data returned is not an object');
 	      } else {
-	        setPartner(response.data);
+	        var data = Partner395Customizations(ReportID, response.data);
+	        console.log('partner', data);
+	        setPartner(data);
 	      }
 	    } catch (err) {
 	      setError(err.toString());
@@ -63574,14 +63622,7 @@ const theme2 = createTheme({ palette: {
 	      padding: '5px 0 0 0',
 	      fontSize: '12px'
 	    }
-	  }, /*#__PURE__*/React$1.createElement("img", {
-	    src: partner.image,
-	    style: {
-	      height: '40px',
-	      color: 'black'
-	    },
-	    alt: partner.PartnerName
-	  })), /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement(ToggleButtonGroup$1, {
+	  }), /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement(ToggleButtonGroup$1, {
 	    style: {
 	      padding: '1px 0 0 0',
 	      border: 'none',
@@ -63644,7 +63685,7 @@ const theme2 = createTheme({ palette: {
 	      margin: '5px 5px 0 0',
 	      fontSize: '10px'
 	    }
-	  }, "v2022-02-08-a"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
+	  }, "v2022-02-24-b"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      display: filterdisplay
 	    }
@@ -63771,15 +63812,23 @@ const theme2 = createTheme({ palette: {
 
 	const Index = props => {
 	  var PartnerID = JSON.parse(sessionStorage.getItem('PartnerID'));
+	  var ReportID = JSON.parse(sessionStorage.getItem('ReportID'));
 	  return /*#__PURE__*/React$1.createElement(React$1.StrictMode, null, /*#__PURE__*/React$1.createElement(HashRouter, null, /*#__PURE__*/React$1.createElement(CardReport, {
-	    PartnerID: PartnerID
+	    PartnerID: PartnerID,
+	    ReportID: ReportID
 	  })));
 	};
 
 	customElements.define('card-report', reactToWebComponent(Index, React$1, ReactDOM)); // const urlParams = new URLSearchParams(window.location.search);
-	// //var PartnerID = 395; //CNA
-	// var PartnerID = 409; //CBET
+	// //448 Toshiba
+	// var PartnerID = 395; //CNA
+	// //var PartnerID = 409; //CBET
 	// //var PartnerID = 434; //GMI
+	// //var PartnerID = 418; //pmdemo
+	// //var ReportID = 1; //SME
+	// //var ReportID = 2; //Skills
+	// const last = window.location.href.charAt(window.location.href.length - 1);
+	// var ReportID = parseInt(last)
 	// for (const [key, value] of urlParams) {
 	//     if (key === 'PartnerID') {
 	//       PartnerID = value
@@ -63789,7 +63838,7 @@ const theme2 = createTheme({ palette: {
 	// ReactDOM.render(
 	//   <React.StrictMode>
 	//     <HashRouter>
-	//        <CardReport PartnerID={PartnerID}/>
+	//        <CardReport PartnerID={PartnerID} ReportID={ReportID}/>
 	//     </HashRouter> 
 	//   </React.StrictMode>,
 	//   document.getElementById('root')

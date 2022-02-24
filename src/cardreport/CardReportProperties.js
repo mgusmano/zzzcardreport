@@ -70,8 +70,9 @@ const CardReportProperties = (props) => {
     var payload = e.detail.payload
     switch (type) {
       case 'fromcardwidget':
+        console.log('fromcardwidget')
         setNumberofusersdisplayed(payload.number)
-        setButtonLabel('Apply All Filters')
+        //setButtonLabel('Apply All Filters')
         break;
       default:
         break;
@@ -88,14 +89,18 @@ const CardReportProperties = (props) => {
   useEffect(() => {
     async function doDataSkills() {
       try {
-        const response = await axios.get('https://skillnetusersapi.azurewebsites.net/api/PortalSkills?partnerid=' + PartnerID);
+        var url = 'https://skillnetusersapi.azurewebsites.net/api/PortalSkills?partnerid=' + PartnerID
+        console.log(url)
+        const response = await axios.get(url);
         var d = JSON.parse(response.data)
+        console.log('skills',d)
         var uniqueD = d.filter((value, index, self) =>
           index === self.findIndex((t) => (
             t.value === value.value
           ))
         )
         setSkills(uniqueD)
+        setButtonLabel('No Filters Selected')
       } catch (err) {
         console.error(err);
       }
@@ -108,38 +113,17 @@ const CardReportProperties = (props) => {
   }, []);
 
   useEffect(() => {
-    async function doData(when) {
+    async function doData() {
       try {
         var url = 'https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID
         console.log(url)
         const resp = await axios.get(url);
         var d = []
         var attributes = resp.data
-        console.log(attributes)
+        console.log('attributes',attributes)
         for (let i = 0; i < attributes.length; i++) {
           var attributename = attributes[i].CustomAttributeName
-
           attributes[i].active = Partner395Attributes(PartnerID, ReportID, attributename)
-
-          //attributes[i].active = true
-          /******* */
-          // if (PartnerID === 395) {
-          //   if (ReportID === 1) {
-          //     if (attributename === "Skills" ||
-          //         attributename === "R.C. Home Office Leader" ||
-          //         attributename === "Technical SME") {
-          //         attributes[i].active = false
-          //     }
-          //   }
-          //   if (ReportID === 2) {
-          //     if (attributename !== "R.C. Home Office Leader" &&
-          //         attributename !== "Technical SME") {
-          //         attributes[i].active = false
-          //     }
-          //   }
-          // }
-          /******* */
-
           if (attributes[i].active === true) {    
             var attributeid = attributes[i].CustomAttributeID
             var CustomAttributeValues = attributes[i].clsCustomAttributeValues
@@ -156,13 +140,15 @@ const CardReportProperties = (props) => {
         }
         setDropdowns(d)
         onApplyClick()
+        if (showskills !== true) {
+          setButtonLabel('No Filters Selected')
+        }
       } catch (err) {
         console.error(err);
       }
     }
-    //doData()
-    doData('orig')
-
+    doData()
+    //doData('orig')
   }, []);
 
   const filterSkillsChanged = (checked,name,a,b,c,d) => {
@@ -231,7 +217,12 @@ const CardReportProperties = (props) => {
     }
     setFilters(filters)
     console.log(JSON.stringify(filters,null,2))
-    setButtonLabel('Click to Apply All Filters')
+    if (filters.length === 0) {
+      setButtonLabel('Click to apply No Filters')
+    }
+    else {
+      setButtonLabel('Click to Apply All Filters')
+    }
   };
 
   const onApplyClick = (event) => {
@@ -242,6 +233,7 @@ const CardReportProperties = (props) => {
   };
 
   const onFilterButtonClick = (event) => {
+    event.preventDefault()
     if (filterbuttontext === 'Make Filter Panel Larger') {
       setFilterButtonText('Make Filter Panel Smaller')
       setPropertyWidth('550px')

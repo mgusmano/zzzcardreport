@@ -34,6 +34,7 @@ const CardReportCardWidget = (props) => {
       if (filters.length !== 0) {
         axiosParams.data = filters
       }
+      console.log(axiosParams)
       const response = await axios(axiosParams)
       setUsers(response.data)
       SendIt('fromcardwidget', {number: response.data.length})

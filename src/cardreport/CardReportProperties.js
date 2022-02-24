@@ -207,6 +207,8 @@ const CardReportProperties = (props) => {
   }
 
   const filterChanged = (currentFilters) => {
+    console.log(JSON.stringify(currentFilters,null,2))
+    console.log(JSON.stringify(filters,null,2))
     var objIndex = filters.findIndex((obj => obj.attributeid === currentFilters.attributeid));
     if (objIndex !== -1) { //found it
       if (currentFilters.values.length !== 0) {
@@ -225,7 +227,7 @@ const CardReportProperties = (props) => {
       }
     }
     setFilters(filters)
-    //console.log(JSON.stringify(filters,null,2))
+    console.log(JSON.stringify(filters,null,2))
     setButtonLabel('Click to Apply All Filters')
   };
 

@@ -7,6 +7,7 @@ import Chip from '@mui/material/Chip';
 import CheckboxWidget from './CheckboxWidget'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import { Partner395Attributes } from './CardReport395';
 
 const DropDown = (props) => {
   const { attributeid, attributename, onChanged, options, name} = props;
@@ -117,25 +118,27 @@ const CardReportProperties = (props) => {
         console.log(attributes)
         for (let i = 0; i < attributes.length; i++) {
           var attributename = attributes[i].CustomAttributeName
-          attributes[i].active = true
 
-/******* */
-          if (PartnerID === 395) {
-            if (ReportID === 1) {
-              if (attributename === "Skills" ||
-                  attributename === "R.C. Home Office Leader" ||
-                  attributename === "Technical SME") {
-                  attributes[i].active = false
-              }
-            }
-            if (ReportID === 2) {
-              if (attributename !== "R.C. Home Office Leader" &&
-                  attributename !== "Technical SME") {
-                  attributes[i].active = false
-              }
-            }
-          }
-/******* */
+          attributes[i].active = Partner395Attributes(PartnerID, ReportID, attributename)
+
+          //attributes[i].active = true
+          /******* */
+          // if (PartnerID === 395) {
+          //   if (ReportID === 1) {
+          //     if (attributename === "Skills" ||
+          //         attributename === "R.C. Home Office Leader" ||
+          //         attributename === "Technical SME") {
+          //         attributes[i].active = false
+          //     }
+          //   }
+          //   if (ReportID === 2) {
+          //     if (attributename !== "R.C. Home Office Leader" &&
+          //         attributename !== "Technical SME") {
+          //         attributes[i].active = false
+          //     }
+          //   }
+          // }
+          /******* */
 
           if (attributes[i].active === true) {    
             var attributeid = attributes[i].CustomAttributeID

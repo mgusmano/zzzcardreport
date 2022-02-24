@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CardReportCardWidget from './CardReportCardWidget';
 import CardReportMapWidget from './CardReportMapWidget';
 import CardReportProperties from'./CardReportProperties';
+import { Partner395Customizations } from './CardReport395';
 
 import Horizontal from '../layout/Horizontal';
 import Vertical from '../layout/Vertical';
@@ -40,26 +41,28 @@ const CardReport = (props) => {
         setError('Error: data returned is not an object')
       }
       else {
+        var data = Partner395Customizations(ReportID, response.data)
+        console.log(data)
+        setPartner(data)
 
-/******* */
-        if (ReportID === undefined) {
-          ReportID = 1
-        }
-        if (response.data.PartnerID === 395) {
-          response.data.ReportID = ReportID
-          if (ReportID === 1) {
-            response.data.reportName = 'Risk Control Skills Report'
-            response.data.showskills = true           
-          }
-          if (ReportID === 2) {
-            response.data.reportName = 'Risk Control SME Report'
-            response.data.showskills = false 
-          }
-        }
-/******* */
-
-        console.log(response.data)
-        setPartner(response.data)
+        /******* */
+        // if (ReportID === undefined) {
+        //   ReportID = 1
+        // }
+        // if (response.data.PartnerID === 395) {
+        //   response.data.ReportID = ReportID
+        //   if (ReportID === 1) {
+        //     response.data.reportName = 'Risk Control Skills Report'
+        //     response.data.showskills = true           
+        //   }
+        //   if (ReportID === 2) {
+        //     response.data.reportName = 'Risk Control SME Report'
+        //     response.data.showskills = false 
+        //   }
+        // }
+        /******* */
+        //console.log(response.data)
+        //setPartner(response.data)
       }
     } catch (err) {
       setError(err.toString())
@@ -154,7 +157,7 @@ const CardReport = (props) => {
         <CardReportMapWidget flex={mapflex} Partner={partner}/>
 
         <div style={{overflow:'hidden',height:'20px',display:'flex',xjustifyContent:'space-between',flexDirection:'row-reverse',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
-          <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>v2022-02-23-a</div>
+          <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>v2022-02-23-b</div>
         </div>
 
       </Vertical>

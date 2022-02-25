@@ -20,8 +20,8 @@ import CardReport from './cardreport/CardReport';
 
 
 const urlParams = new URLSearchParams(window.location.search);
-//448 Toshiba
-var PartnerID = 395; //CNA
+//var PartnerID = 448; //Toshiba
+var PartnerID = 395;   //CNA
 //var PartnerID = 409; //CBET
 //var PartnerID = 434; //GMI
 //var PartnerID = 418; //pmdemo

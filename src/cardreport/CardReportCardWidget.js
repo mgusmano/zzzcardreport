@@ -5,7 +5,7 @@ import Card from'./Card'
 
 const CardReportCardWidget = (props) => {
   const { Partner } = props;
-  const { PersonID, GroupID } = Partner;
+  const { PersonID, GroupID, SMEOnly } = Partner;
   const [waiting, setWaiting] = useState(false)
   const [users, setUsers] = useState(null)
 
@@ -89,7 +89,7 @@ const CardReportCardWidget = (props) => {
       {waiting === true && <div style={{padding:'30px',fontSize:'48px'}}>Loading...</div>}
       {users !== null && 
         users.map((user, index) => {
-          return <Card key={index} user={user} Partner={props.Partner} SMEOnly={props.SMEOnly}/>
+          return <Card key={index} user={user} Partner={props.Partner} SMEOnly={SMEOnly}/>
         }) 
       }
     </div>

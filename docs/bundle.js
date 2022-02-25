@@ -58770,25 +58770,7 @@ const theme2 = createTheme({ palette: {
 	      marginTop: '1px',
 	      textAlign: 'right'
 	    }
-	  }, user.SME !== '' && /*#__PURE__*/React$1.createElement("div", null, all))), PartnerName === 'General Mills' && /*#__PURE__*/React$1.createElement(React$1.Fragment, null, /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      fontSize: '11px',
-	      marginTop: '1px',
-	      textAlign: 'right'
-	    }
-	  }, user.Segment !== '' && /*#__PURE__*/React$1.createElement("div", null, "Segment: ", user.Segment)), /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      fontSize: '11px',
-	      marginTop: '1px',
-	      textAlign: 'right'
-	    }
-	  }, user.Function !== '' && /*#__PURE__*/React$1.createElement("div", null, "Function: ", user.Function)), /*#__PURE__*/React$1.createElement("div", {
-	    style: {
-	      fontSize: '11px',
-	      marginTop: '1px',
-	      textAlign: 'right'
-	    }
-	  }, user.Subfunction !== '' && /*#__PURE__*/React$1.createElement("div", null, "SubFunction: ", user.Subfunction))))), /*#__PURE__*/React$1.createElement("div", {
+	  }, user.SME !== '' && /*#__PURE__*/React$1.createElement("div", null, all))))), /*#__PURE__*/React$1.createElement("div", {
 	    style: {
 	      marginTop: '10px',
 	      display: 'flex',
@@ -58826,7 +58808,8 @@ const theme2 = createTheme({ palette: {
 	  } = props;
 	  const {
 	    PersonID,
-	    GroupID
+	    GroupID,
+	    SMEOnly
 	  } = Partner;
 	  const [waiting, setWaiting] = react.exports.useState(false);
 	  const [users, setUsers] = react.exports.useState(null); //const cardRef = useRef(null);
@@ -58934,7 +58917,7 @@ const theme2 = createTheme({ palette: {
 	      key: index,
 	      user: user,
 	      Partner: props.Partner,
-	      SMEOnly: props.SMEOnly
+	      SMEOnly: SMEOnly
 	    });
 	  }));
 	};
@@ -62431,6 +62414,7 @@ const theme2 = createTheme({ palette: {
 	    }
 
 	    if (data.ReportID === 2) {
+	      data.SMEOnly = true;
 	      data.reportName = 'Risk Control SME Report';
 	      data.showskills = false;
 	    }
@@ -62464,11 +62448,10 @@ const theme2 = createTheme({ palette: {
 
 	const DropDown = props => {
 	  const {
-	    attributeid,
-	    attributename,
+	    id,
+	    name,
 	    onChanged,
-	    options,
-	    name
+	    options
 	  } = props;
 	  return /*#__PURE__*/React$1.createElement(Autocomplete$1, {
 	    style: {
@@ -62478,20 +62461,20 @@ const theme2 = createTheme({ palette: {
 	    multiple: true,
 	    onChange: (event, checked, reason) => {
 	      var currentFilters = {
-	        attributeid,
-	        attributename,
+	        id,
+	        name,
 	        values: []
 	      };
 
 	      for (let i = 0; i < checked.length; i++) {
-	        var objIndex = options.findIndex(obj => obj[name] === checked[i]);
+	        var objIndex = options.findIndex(obj => obj['value'] === checked[i]);
 	        currentFilters.values.push(options[objIndex]);
 	      }
 
 	      onChanged(event, checked, reason, currentFilters);
 	    },
 	    id: "tags-filled",
-	    options: options.map(option => option[name]),
+	    options: options.map(option => option['value']),
 	    renderTags: (value, getTagProps) => value.map((option, index) => /*#__PURE__*/React$1.createElement(Chip$1, _extends({
 	      variant: "outlined",
 	      label: option
@@ -62500,11 +62483,50 @@ const theme2 = createTheme({ palette: {
 	    })))),
 	    renderInput: params => /*#__PURE__*/React$1.createElement(TextField$1, _extends({}, params, {
 	      variant: "standard",
-	      label: attributename,
+	      label: name,
 	      placeholder: ""
 	    }))
 	  });
-	};
+	}; // import React, { useState, useEffect } from 'react';
+	// import Autocomplete from '@mui/material/Autocomplete';
+	// import TextField from '@mui/material/TextField';
+	// import Chip from '@mui/material/Chip';
+	// export const DropDown = (props) => {
+	//     const { attributeid, attributename, onChanged, options, name} = props;
+	//     return (
+	//       <Autocomplete
+	//         style={{width:'100%',marginTop:'20px'}}
+	//         multiple
+	//         onChange={(event,checked,reason)=>{
+	//           var currentFilters = {
+	//             attributeid,
+	//             attributename,
+	//             values: []
+	//           }
+	//           for (let i = 0; i < checked.length; i++) {
+	//             var objIndex = options.findIndex((obj => obj[name] === checked[i]));
+	//             currentFilters.values.push(options[objIndex])
+	//           }
+	//           onChanged(event,checked,reason,currentFilters)
+	//         }}
+	//         id="tags-filled"
+	//         options={options.map((option) => option[name])}
+	//         renderTags={(value, getTagProps) =>
+	//           value.map((option, index) => (
+	//             <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+	//           ))
+	//         }
+	//         renderInput={(params) => (
+	//           <TextField
+	//             {...params}
+	//             variant="standard"
+	//             label={attributename}
+	//             placeholder=""
+	//           />
+	//         )}
+	//       />
+	//     )
+	// }
 
 	const CardReportProperties = props => {
 	  const {
@@ -62602,20 +62624,22 @@ const theme2 = createTheme({ palette: {
 	                attributeid: attributeid,
 	                attributename: attributename
 	              });
-	            }
+	            } // console.log(attributeid)
+	            // console.log(attributename)
+	            // console.log(JSON.stringify(values,null,2))
+
 
 	            d.push( /*#__PURE__*/React$1.createElement(DropDown, {
-	              multiple: true,
 	              key: i,
-	              name: "value",
-	              attributeid: attributeid,
-	              attributename: attributename,
-	              who: attributename,
+	              id: attributeid,
+	              name: attributename,
 	              options: values,
 	              onChanged: (event, checked, reason, currentFilters) => {
 	                filterChanged(currentFilters);
 	              }
-	            }));
+	            })); // d.push(<DropDown multiple={true} key={i} name='value' attributeid={attributeid} attributename={attributename} who={attributename} options={values} onChanged={(event,checked,reason,currentFilters) => {
+	            //   filterChanged(currentFilters)
+	            // }}/>)
 	          }
 	        }
 
@@ -63074,7 +63098,7 @@ const theme2 = createTheme({ palette: {
 	      margin: '5px 5px 0 0',
 	      fontSize: '10px'
 	    }
-	  }, "v2022-02-25-e"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
+	  }, "v2022-02-25-g"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      display: filterdisplay
 	    }
@@ -63198,17 +63222,6 @@ const theme2 = createTheme({ palette: {
 
 		return WebComponent;
 	}
-
-	//   var PartnerID= JSON.parse(sessionStorage.getItem('PartnerID')); 
-	//   var ReportID= JSON.parse(sessionStorage.getItem('ReportID'));
-	//   return (
-	//     <React.StrictMode>
-	//       <HashRouter>
-	//       <CardReport PartnerID={PartnerID} ReportID={ReportID}/>
-	//       </HashRouter> 
-	//     </React.StrictMode>
-	//   )
-	// };
 
 	const Index = () => /*#__PURE__*/React$1.createElement(CardReport, null);
 

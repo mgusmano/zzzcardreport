@@ -135,13 +135,13 @@ const Card = (props) => {
         </>
         }
 
-        {PartnerName === 'General Mills' &&
+        {/* {PartnerName === 'General Mills' &&
         <>
         <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.Segment !== '' && <div>Segment: {user.Segment}</div>}</div>
         <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.Function !== '' && <div>Function: {user.Function}</div>}</div>
         <div style={{fontSize:'11px',marginTop:'1px',textAlign:'right'}}>{user.Subfunction !== '' && <div>SubFunction: {user.Subfunction}</div>}</div>
         </>
-        }
+        } */}
 
       </div>
 

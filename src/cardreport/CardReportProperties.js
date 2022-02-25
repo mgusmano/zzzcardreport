@@ -1,50 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Button from '@mui/material/Button';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import Chip from '@mui/material/Chip';
 import CheckboxWidget from './CheckboxWidget'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { Partner395Attributes } from './CardReport395';
-
-const DropDown = (props) => {
-  const { attributeid, attributename, onChanged, options, name} = props;
-  return (
-    <Autocomplete
-      style={{width:'100%',marginTop:'20px'}}
-      multiple
-      onChange={(event,checked,reason)=>{
-        var currentFilters = {
-          attributeid,
-          attributename,
-          values: []
-        }
-        for (let i = 0; i < checked.length; i++) {
-          var objIndex = options.findIndex((obj => obj[name] === checked[i]));
-          currentFilters.values.push(options[objIndex])
-        }
-        onChanged(event,checked,reason,currentFilters)
-      }}
-      id="tags-filled"
-      options={options.map((option) => option[name])}
-      renderTags={(value, getTagProps) =>
-        value.map((option, index) => (
-          <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-        ))
-      }
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          variant="standard"
-          label={attributename}
-          placeholder=""
-        />
-      )}
-    />
-  )
-}
+import { DropDown } from './DropDown'
 
 const CardReportProperties = (props) => {
   const { Partner } = props
@@ -129,9 +90,15 @@ const CardReportProperties = (props) => {
               var value = CustomAttributeValues[j].CustomAttributeValue
               values.push({id:id,value:value,attributeid:attributeid,attributename:attributename})
             }
-            d.push(<DropDown multiple={true} key={i} name='value' attributeid={attributeid} attributename={attributename} who={attributename} options={values} onChanged={(event,checked,reason,currentFilters) => {
-              filterChanged(currentFilters)
-            }}/>)
+            // console.log(attributeid)
+            // console.log(attributename)
+            // console.log(JSON.stringify(values,null,2))
+            d.push(<DropDown key={i} id={attributeid} name={attributename} options={values}
+              onChanged={(event,checked,reason,currentFilters) => {filterChanged(currentFilters)}}
+            />)
+            // d.push(<DropDown multiple={true} key={i} name='value' attributeid={attributeid} attributename={attributename} who={attributename} options={values} onChanged={(event,checked,reason,currentFilters) => {
+            //   filterChanged(currentFilters)
+            // }}/>)
           }     
         }
         setDropdowns(d)

@@ -9,6 +9,7 @@ export function Partner395Customizations (ReportID, data) {
             data.showskills = true           
         }
         if (data.ReportID === 2) {
+            data.SMEOnly = true
             data.reportName = 'Risk Control SME Report'
             data.showskills = false 
         }

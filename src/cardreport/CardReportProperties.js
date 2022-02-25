@@ -88,7 +88,8 @@ const CardReportProperties = (props) => {
             for (let j = 0; j < CustomAttributeValues.length; j++) {
               var id = CustomAttributeValues[j].CustomAttributeValueID
               var value = CustomAttributeValues[j].CustomAttributeValue
-              values.push({id:id,value:value,attributeid:attributeid,attributename:attributename})
+              //values.push({id:id,value:value,attributeid:attributeid,attributename:attributename})
+              values.push({id:id,value:value})
             }
             // console.log(attributeid)
             // console.log(attributename)
@@ -114,44 +115,62 @@ const CardReportProperties = (props) => {
     //doData('orig')
   }, []);
 
-  const filterSkillsChanged = (checked,name,a,b,c,d) => {
+  const filterSkillsChanged = ({checked,item}) => {
+    // console.log('filterSkillsChanged')
+    // console.log(item)
+    // console.log(checked)
+    // console.log(JSON.stringify(filters,null,2))
     try {
-      console.log(checked.length)
+      //console.log(checked.length)
       setSkillsChecked(checked.length)
       var skillsAttributeID = '444'
-      var objIndex = filters.findIndex((obj => obj.attributeid === skillsAttributeID));
+      var skillsAttributeName = 'Skills'
+      var objIndex = filters.findIndex((obj => obj.attributeid === skillsAttributeID));   
       if (objIndex !== -1) { //found it
-        filters[objIndex].values = []
-        for (let i = 0; i < checked.length; i++) {
-          var v = {
-            id: checked[i],
-            value: 'value',
-            attributeid: '444',
-            attributename: 'skills',
+        //console.log(JSON.stringify(filters[objIndex].values,null,2))
+        if (filters[objIndex].values.length > checked.length) {
+          //console.log('deleted',filters[objIndex].values.length-checked.length)
+          //console.log(filters[objIndex].values)
+          //console.log(checked)
+          for (let f = 0; f < filters[objIndex].values.length; f++) {
+            if (!checked.includes(filters[objIndex].values[f].id)) {
+              filters[objIndex].values.splice(f, 1)
+            }
           }
-          filters[objIndex].values.push(v)
         }
-        if (checked.length === 0) {
-          filters.splice(objIndex, 1);
+        else {
+          for (let i = 0; i < checked.length; i++) {
+            var valuesIndex = filters[objIndex].values.findIndex((obj => obj.id === checked[i]));
+            if (valuesIndex === -1) {
+              var v = {
+                id: checked[i],
+                value: item.label,
+              }
+              filters[objIndex].values.push(v)
+            }
+          }
+          if (checked.length === 0) {
+            filters.splice(objIndex, 1);
+          }
         }
       }
       else {
         var skillAttribute = {
-          attributeid: '444',
-          attributename: 'skills',
+          attributeid: skillsAttributeID,
+          attributename: skillsAttributeName,
           values: []
         }
         for (let i = 0; i < checked.length; i++) {
           var v2 = {
             id: checked[i],
-            value: 'value',
-            attributeid: '444',
-            attributename: 'skills',
+            value: item.label,
           }
           skillAttribute.values.push(v2)
         }
         filters.push(skillAttribute)     
       }
+      setFilters(filters)
+      console.log(JSON.stringify(filters,null,2))
     }
     catch(e) {
       console.log(e)
@@ -251,7 +270,7 @@ const CardReportProperties = (props) => {
               }
           </div>
           <div style={{margin:'10px 0 0 0',display:checkboxdisplay}}>
-            <CheckboxWidget nodes={skills} Partner={Partner} onCheck={(checked,a,b,c,d) => filterSkillsChanged(checked,'skills',a,b,c,d)}/>
+            <CheckboxWidget nodes={skills} Partner={Partner} onCheck={(o) => filterSkillsChanged(o)}/>
           </div>
           </>      
         }

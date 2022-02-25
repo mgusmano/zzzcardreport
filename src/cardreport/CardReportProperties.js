@@ -273,9 +273,12 @@ const CardReportProperties = (props) => {
         }  
       </div>
       <div style={{display:'flex',flexDirection:'column'}}>
+
+        {dropdowns && dropdowns}
+
         {skills !== null && 
           <>
-          <div style={{borderBottom:'1px solid black',margin:'20px 0 0 0',padding:'0 0 6px 0',width:'100%',display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+          <div style={{borderBottom:'1px solid black',margin:'40px 0 0 0',padding:'0 0 6px 0',width:'100%',display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
               <div style={{fontWeight:'100'}}>Skills ({skillschecked} selected)</div>
               {checkboxdisplay === 'none' &&
               <ArrowDropDownIcon onClick={changeIt}/>
@@ -289,7 +292,6 @@ const CardReportProperties = (props) => {
           </div>
           </>      
         }
-        {dropdowns && dropdowns}
       </div>
     </div>
   )

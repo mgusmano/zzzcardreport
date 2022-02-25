@@ -26,22 +26,26 @@ var PartnerID = 395;   //CNA
 //var PartnerID = 434; //GMI
 //var PartnerID = 418; //pmdemo
 
-//var ReportID = 1; //SME
-//var ReportID = 2; //Skills
+var ReportID = 1; //Skills
+//var ReportID = 2; //SME
 
-const last = window.location.href.charAt(window.location.href.length - 1);
-var ReportID = parseInt(last)
+//const last = window.location.href.charAt(window.location.href.length - 1);
+//var ReportID = parseInt(last)
 
 for (const [key, value] of urlParams) {
     if (key === 'PartnerID') {
       PartnerID = value
     }
+    if (key === 'ReportID') {
+      ReportID = value
+    }
 }
-//sessionStorage.setItem('PartnerID',PartnerID);
+sessionStorage.setItem('PartnerID',PartnerID);
+sessionStorage.setItem('ReportID',ReportID);
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
-       <CardReport PartnerID={PartnerID} ReportID={ReportID}/>
+       <CardReport/>
     </HashRouter> 
   </React.StrictMode>,
   document.getElementById('root')

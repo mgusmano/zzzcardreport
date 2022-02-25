@@ -17,8 +17,10 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import axios from "axios";
 
-const CardReport = (props) => {
-  const { PartnerID, ReportID } = props;
+const CardReport = () => {
+  //const { PartnerID, ReportID } = props;
+  var PartnerID = null
+  var ReportID = null
   const [filterdisplay, setFilterDisplay] = useState('block')
   const [cardflex, setCardflex] = useState(1)
   const [mapflex, setMapflex] = useState(0)
@@ -41,6 +43,7 @@ const CardReport = (props) => {
         setError('Error: data returned is not an object')
       }
       else {
+        console.log(JSON.stringify(response.data,null,2))
         var data = Partner395Customizations(ReportID, response.data)
         console.log('partner',data)
         setPartner(data)
@@ -51,6 +54,9 @@ const CardReport = (props) => {
   }
 
   useEffect(() => {
+    PartnerID = sessionStorage.getItem('PartnerID')
+    ReportID = sessionStorage.getItem('ReportID')
+    console.log(PartnerID)
     getPartner(PartnerID)
   }, []);
 
@@ -139,7 +145,7 @@ const CardReport = (props) => {
 
         <div style={{overflow:'hidden',height:'20px',display:'flex',xjustifyContent:'space-between',flexDirection:'row-reverse',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
           <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>
-            v2022-02-25-a
+            v2022-02-25-b
           </div>
         </div>
 

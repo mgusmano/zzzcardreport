@@ -70,9 +70,7 @@ const CardReportProperties = (props) => {
     var payload = e.detail.payload
     switch (type) {
       case 'fromcardwidget':
-        console.log('fromcardwidget')
         setNumberofusersdisplayed(payload.number)
-        //setButtonLabel('Apply All Filters')
         break;
       default:
         break;
@@ -90,10 +88,9 @@ const CardReportProperties = (props) => {
     async function doDataSkills() {
       try {
         var url = 'https://skillnetusersapi.azurewebsites.net/api/PortalSkills?partnerid=' + PartnerID
-        console.log(url)
+        //console.log(url)
         const response = await axios.get(url);
         var d = JSON.parse(response.data)
-        console.log('skills',d)
         var uniqueD = d.filter((value, index, self) =>
           index === self.findIndex((t) => (
             t.value === value.value
@@ -116,11 +113,10 @@ const CardReportProperties = (props) => {
     async function doData() {
       try {
         var url = 'https://skillnetusersapi.azurewebsites.net/api/customattributes?partnerid=' + PartnerID
-        console.log(url)
+        //console.log(url)
         const resp = await axios.get(url);
         var d = []
         var attributes = resp.data
-        console.log('attributes',attributes)
         for (let i = 0; i < attributes.length; i++) {
           var attributename = attributes[i].CustomAttributeName
           attributes[i].active = Partner395Attributes(PartnerID, ReportID, attributename)

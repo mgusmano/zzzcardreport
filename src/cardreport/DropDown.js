@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
@@ -11,8 +11,8 @@ export const DropDown = (props) => {
         multiple
         onChange={(event,checked,reason)=>{
           var currentFilters = {
-            id,
-            name,
+            attributeid: id,
+            attributename: name,
             values: []
           }
           for (let i = 0; i < checked.length; i++) {

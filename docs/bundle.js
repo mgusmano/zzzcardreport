@@ -62304,7 +62304,7 @@ const theme2 = createTheme({ palette: {
 	    "value": "36679",
 	    "label": "Clean Room (Life Science)"
 	  }]
-	}]; //const nodes2 = [{"value":"root","label":"Skills","children":[{"value":"39806","label":"Integrated SC Mindset","children":[{"value":"39807","label":"Explains Key Enablers to Logistics Networks"},{"value":"39808","label":"Demonstrates Basic Tenets of Zero Loss Philosophy"},{"value":"39809","label":"Identifies Tools and Techniques"},{"value":"39810","label":"Recognizes Qualities that Provide Advantaged Contract Management"}]},{"value":"39811","label":"Business Partnership","children":[{"value":"39812","label":"Explains Customer Strategies"},{"value":"39813","label":"Describes Supply Chain Concepts"},{"value":"39814","label":"Shares Point of View Openly"},{"value":"39815","label":"Defines How Role Enables Org Goals"}]},{"value":"39816","label":"Data & Process Driven Decision Making","children":[{"value":"39817","label":"Describes Data-Based Decision Making"},{"value":"39818","label":"Demonstrates Adherence to Processes"},{"value":"39819","label":"Applies Data Tools"},{"value":"39820","label":"Utilizes Digital Data"}]},{"value":"39821","label":"Initiative Mgmt","children":[{"value":"39822","label":"Establishes Policies and Procedures"},{"value":"39823","label":"Estimates Types and Quantities of Materials"},{"value":"39824","label":"Monitors Status of Project and Product Scope"},{"value":"39825","label":"Collaborates to Keep Project Costs Within Budget"}]},{"value":"39826","label":"Financial Acumen","children":[{"value":"39827","label":"Explains KPIs"},{"value":"39828","label":"Utlizies Supply Chain Metrics to Tell Stories"},{"value":"39829","label":"Demonstrates Budgeting Principles"},{"value":"39830","label":"Demonstrates a Strong Profit and Loss Perspective"}]},{"value":"39831","label":"Strategic Influence","children":[{"value":"39832","label":"Explains Goals in Simple Terms"},{"value":"39833","label":"Negotiates Skillfully"},{"value":"39834","label":"Refers to Broad Range of Ideas"},{"value":"39835","label":"Takes Initiative"}]},{"value":"39836","label":"External Focus","children":[{"value":"39837","label":"Recognizes Market Environment"},{"value":"39838","label":"Gives Examples of Outside Factors that Affect GMI"},{"value":"39839","label":"Accurately Judges New Ideas"},{"value":"39840","label":"Effectively Communicates How Ideas Relate to Business Goals"}]},{"value":"39841","label":"Integrated SC Planning","children":[{"value":"39842","label":"Explains Logistical Strategies"},{"value":"39843","label":"Understands Inventory Strategy"},{"value":"39844","label":"Explains System Rates, Bottlenecks, and Available Days"},{"value":"39845","label":"Translates Projected Demand into Strategy"}]},{"value":"39846","label":"Coaching for Capability Building","children":[{"value":"39847","label":"Designs Practices and Procedures for Autonomous Teams"},{"value":"39848","label":"Shares Expertise As a Teacher"},{"value":"39849","label":"Explains Efficient Work Flows"},{"value":"39850","label":"Demonstrates Commitment to Continuous Improvement"}]},{"value":"39851","label":"Sourcing Skills","children":[{"value":"39852","label":"Supplier relationship management"},{"value":"39853","label":"Supplier risk assessment"},{"value":"39854","label":"Spend analysis"},{"value":"39855","label":"Contracting"},{"value":"39856","label":"Category management"},{"value":"39857","label":"Industry knowledge/market analysis"},{"value":"39858","label":"Purchase order/requisition processing"},{"value":"39859","label":"Market research"},{"value":"39860","label":"Statistical analysis"},{"value":"39861","label":"Commercial management"}]}]}]
+	}]; //const nodes2 = [{"value":"root","label":"Skills","children":[{"value":"39806","label":"xIntegrated SC Mindset","children":[{"value":"39807","label":"Explains Key Enablers to Logistics Networks"},{"value":"39808","label":"Demonstrates Basic Tenets of Zero Loss Philosophy"},{"value":"39809","label":"Identifies Tools and Techniques"},{"value":"39810","label":"Recognizes Qualities that Provide Advantaged Contract Management"}]},{"value":"39811","label":"Business Partnership","children":[{"value":"39812","label":"Explains Customer Strategies"},{"value":"39813","label":"Describes Supply Chain Concepts"},{"value":"39814","label":"Shares Point of View Openly"},{"value":"39815","label":"Defines How Role Enables Org Goals"}]},{"value":"39816","label":"Data & Process Driven Decision Making","children":[{"value":"39817","label":"Describes Data-Based Decision Making"},{"value":"39818","label":"Demonstrates Adherence to Processes"},{"value":"39819","label":"Applies Data Tools"},{"value":"39820","label":"Utilizes Digital Data"}]},{"value":"39821","label":"Initiative Mgmt","children":[{"value":"39822","label":"Establishes Policies and Procedures"},{"value":"39823","label":"Estimates Types and Quantities of Materials"},{"value":"39824","label":"Monitors Status of Project and Product Scope"},{"value":"39825","label":"Collaborates to Keep Project Costs Within Budget"}]},{"value":"39826","label":"Financial Acumen","children":[{"value":"39827","label":"Explains KPIs"},{"value":"39828","label":"Utlizies Supply Chain Metrics to Tell Stories"},{"value":"39829","label":"Demonstrates Budgeting Principles"},{"value":"39830","label":"Demonstrates a Strong Profit and Loss Perspective"}]},{"value":"39831","label":"Strategic Influence","children":[{"value":"39832","label":"Explains Goals in Simple Terms"},{"value":"39833","label":"Negotiates Skillfully"},{"value":"39834","label":"Refers to Broad Range of Ideas"},{"value":"39835","label":"Takes Initiative"}]},{"value":"39836","label":"External Focus","children":[{"value":"39837","label":"Recognizes Market Environment"},{"value":"39838","label":"Gives Examples of Outside Factors that Affect GMI"},{"value":"39839","label":"Accurately Judges New Ideas"},{"value":"39840","label":"Effectively Communicates How Ideas Relate to Business Goals"}]},{"value":"39841","label":"Integrated SC Planning","children":[{"value":"39842","label":"Explains Logistical Strategies"},{"value":"39843","label":"Understands Inventory Strategy"},{"value":"39844","label":"Explains System Rates, Bottlenecks, and Available Days"},{"value":"39845","label":"Translates Projected Demand into Strategy"}]},{"value":"39846","label":"Coaching for Capability Building","children":[{"value":"39847","label":"Designs Practices and Procedures for Autonomous Teams"},{"value":"39848","label":"Shares Expertise As a Teacher"},{"value":"39849","label":"Explains Efficient Work Flows"},{"value":"39850","label":"Demonstrates Commitment to Continuous Improvement"}]},{"value":"39851","label":"Sourcing Skills","children":[{"value":"39852","label":"Supplier relationship management"},{"value":"39853","label":"Supplier risk assessment"},{"value":"39854","label":"Spend analysis"},{"value":"39855","label":"Contracting"},{"value":"39856","label":"Category management"},{"value":"39857","label":"Industry knowledge/market analysis"},{"value":"39858","label":"Purchase order/requisition processing"},{"value":"39859","label":"Market research"},{"value":"39860","label":"Statistical analysis"},{"value":"39861","label":"Commercial management"}]}]}]
 
 	class CheckboxWidget extends React$1.Component {
 	  // state = {
@@ -62315,6 +62315,7 @@ const theme2 = createTheme({ palette: {
 	  constructor(props) {
 	    super(props);
 	    var nodes;
+	    console.log(props);
 
 	    if (props.nodes === undefined) {
 	      if (this.props.Partner.PartnerID === 395) {
@@ -62346,10 +62347,13 @@ const theme2 = createTheme({ palette: {
 	      checkModel: "leaf",
 	      showExpandAll: true,
 	      onlyLeafCheckboxes: true,
-	      onCheck: (checked, a) => {
+	      onCheck: (checked, item) => {
 	        console.log(checked);
-	        console.log(a);
-	        this.props.onCheck(checked);
+	        console.log(item);
+	        this.props.onCheck({
+	          checked,
+	          item
+	        });
 	        this.setState({
 	          checked
 	        });
@@ -62461,8 +62465,8 @@ const theme2 = createTheme({ palette: {
 	    multiple: true,
 	    onChange: (event, checked, reason) => {
 	      var currentFilters = {
-	        id,
-	        name,
+	        attributeid: id,
+	        attributename: name,
 	        values: []
 	      };
 
@@ -62617,12 +62621,11 @@ const theme2 = createTheme({ palette: {
 
 	            for (let j = 0; j < CustomAttributeValues.length; j++) {
 	              var id = CustomAttributeValues[j].CustomAttributeValueID;
-	              var value = CustomAttributeValues[j].CustomAttributeValue;
+	              var value = CustomAttributeValues[j].CustomAttributeValue; //values.push({id:id,value:value,attributeid:attributeid,attributename:attributename})
+
 	              values.push({
 	                id: id,
-	                value: value,
-	                attributeid: attributeid,
-	                attributename: attributename
+	                value: value
 	              });
 	            } // console.log(attributeid)
 	            // console.log(attributename)
@@ -62657,49 +62660,70 @@ const theme2 = createTheme({ palette: {
 	    doData(); //doData('orig')
 	  }, []);
 
-	  const filterSkillsChanged = (checked, name, a, b, c, d) => {
+	  const filterSkillsChanged = ({
+	    checked,
+	    item
+	  }) => {
+	    // console.log('filterSkillsChanged')
+	    // console.log(item)
+	    // console.log(checked)
+	    // console.log(JSON.stringify(filters,null,2))
 	    try {
-	      console.log(checked.length);
+	      //console.log(checked.length)
 	      setSkillsChecked(checked.length);
 	      var skillsAttributeID = '444';
+	      var skillsAttributeName = 'Skills';
 	      var objIndex = filters.findIndex(obj => obj.attributeid === skillsAttributeID);
 
 	      if (objIndex !== -1) {
 	        //found it
-	        filters[objIndex].values = [];
+	        //console.log(JSON.stringify(filters[objIndex].values,null,2))
+	        if (filters[objIndex].values.length > checked.length) {
+	          //console.log('deleted',filters[objIndex].values.length-checked.length)
+	          //console.log(filters[objIndex].values)
+	          //console.log(checked)
+	          for (let f = 0; f < filters[objIndex].values.length; f++) {
+	            if (!checked.includes(filters[objIndex].values[f].id)) {
+	              filters[objIndex].values.splice(f, 1);
+	            }
+	          }
+	        } else {
+	          for (let i = 0; i < checked.length; i++) {
+	            var valuesIndex = filters[objIndex].values.findIndex(obj => obj.id === checked[i]);
 
-	        for (let i = 0; i < checked.length; i++) {
-	          var v = {
-	            id: checked[i],
-	            value: 'value',
-	            attributeid: '444',
-	            attributename: 'skills'
-	          };
-	          filters[objIndex].values.push(v);
-	        }
+	            if (valuesIndex === -1) {
+	              var v = {
+	                id: checked[i],
+	                value: item.label
+	              };
+	              filters[objIndex].values.push(v);
+	            }
+	          }
 
-	        if (checked.length === 0) {
-	          filters.splice(objIndex, 1);
+	          if (checked.length === 0) {
+	            filters.splice(objIndex, 1);
+	          }
 	        }
 	      } else {
 	        var skillAttribute = {
-	          attributeid: '444',
-	          attributename: 'skills',
+	          attributeid: skillsAttributeID,
+	          attributename: skillsAttributeName,
 	          values: []
 	        };
 
 	        for (let i = 0; i < checked.length; i++) {
 	          var v2 = {
 	            id: checked[i],
-	            value: 'value',
-	            attributeid: '444',
-	            attributename: 'skills'
+	            value: item.label
 	          };
 	          skillAttribute.values.push(v2);
 	        }
 
 	        filters.push(skillAttribute);
 	      }
+
+	      setFilters(filters);
+	      console.log(JSON.stringify(filters, null, 2));
 	    } catch (e) {
 	      console.log(e);
 	    }
@@ -62818,7 +62842,7 @@ const theme2 = createTheme({ palette: {
 	  }, /*#__PURE__*/React$1.createElement(CheckboxWidget, {
 	    nodes: skills,
 	    Partner: Partner,
-	    onCheck: (checked, a, b, c, d) => filterSkillsChanged(checked)
+	    onCheck: o => filterSkillsChanged(o)
 	  })))));
 	};
 
@@ -63098,7 +63122,7 @@ const theme2 = createTheme({ palette: {
 	      margin: '5px 5px 0 0',
 	      fontSize: '10px'
 	    }
-	  }, "v2022-02-25-g"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
+	  }, "v2022-02-25-h"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      display: filterdisplay
 	    }

@@ -48,6 +48,31 @@ const CardReportProperties = (props) => {
   useEffect(() => {
     async function doDataSkills() {
       try {
+
+        // for testing
+        // var nodes = [
+        //   {
+        //     "value": 43533,
+        //     "label": "Core EB",
+        //     "children": [
+        //       {
+        //         "value": 43534,
+        //         "label": "Boiler"
+        //       },
+        //       {
+        //         "value": 43535,
+        //         "label": "Emergency Generator"
+        //       },
+        //       {
+        //         "value": 43536,
+        //         "label": "Electrical Distribution Systems"
+        //       }
+        //     ]
+        //   }
+        // ]
+        // setSkills(nodes)
+        // return
+
         var url = 'https://skillnetusersapi.azurewebsites.net/api/PortalSkills?partnerid=' + PartnerID
         //console.log(url)
         const response = await axios.get(url);

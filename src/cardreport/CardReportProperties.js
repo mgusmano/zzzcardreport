@@ -49,7 +49,7 @@ const CardReportProperties = (props) => {
     async function doDataSkills() {
       try {
 
-        // for testing
+        // //for testing
         // var nodes = [
         //   {
         //     "value": 43533,
@@ -76,12 +76,15 @@ const CardReportProperties = (props) => {
         var url = 'https://skillnetusersapi.azurewebsites.net/api/PortalSkills?partnerid=' + PartnerID
         //console.log(url)
         const response = await axios.get(url);
+        //console.log(response.data)
+        //setSkills(response.data)
         var d = JSON.parse(response.data)
         var uniqueD = d.filter((value, index, self) =>
           index === self.findIndex((t) => (
             t.value === value.value
           ))
         )
+        console.log(uniqueD)
         setSkills(uniqueD)
         setButtonLabel('No Filters Selected')
       } catch (err) {
@@ -91,6 +94,7 @@ const CardReportProperties = (props) => {
 
     if (showskills === true) {
       doDataSkills()
+      setPropertyWidth('550px')
     }
 
   }, []);
@@ -162,6 +166,9 @@ const CardReportProperties = (props) => {
               filters[objIndex].values.splice(f, 1)
             }
           }
+          if (filters[objIndex].values.length === 0) {
+            filters.splice(objIndex, 1);
+          }
         }
         else {
           for (let i = 0; i < checked.length; i++) {
@@ -196,6 +203,12 @@ const CardReportProperties = (props) => {
       }
       setFilters(filters)
       console.log(JSON.stringify(filters,null,2))
+      if (filters.length === 0) {
+        setButtonLabel('Click to apply No Filters')
+      }
+      else {
+        setButtonLabel('Click to Apply All Filters')
+      }
     }
     catch(e) {
       console.log(e)
@@ -271,9 +284,9 @@ const CardReportProperties = (props) => {
       >
         {buttonlabel}
       </Button>
-      {showskills === true && 
+      {/* {showskills === true && 
       <button onClick={onFilterButtonClick} style={{margin:'10px 0 0 0'}}>{filterbuttontext}</button>
-      }
+      } */}
       <div style={{marginTop:'20px',height:'20px'}}>
         {numberofusersdisplayed !== null &&
         <div>Number of Users Displayed: {numberofusersdisplayed}</div>

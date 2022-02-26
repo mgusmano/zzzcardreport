@@ -9,6 +9,8 @@ import ArrowDropDownSharpIcon from '@mui/icons-material/ArrowDropDownSharp';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
 
+import AcUnitSharpIcon from '@mui/icons-material/AcUnitSharp';
+
 export default class CheckboxWidget extends React.Component {
     constructor(props) {
       super(props);
@@ -23,12 +25,19 @@ export default class CheckboxWidget extends React.Component {
       return (
         <CheckboxTree
           icons={{
-            check: <CheckBoxSharpIcon fontSize="10px"/>,
-            uncheck: <CheckBoxOutlineBlankSharpIcon fontSize="10px"/>,      
-            expandClose: <ArrowRightSharpIcon />,
-            expandOpen: <ArrowDropDownSharpIcon />,
-            expandAll: <AddSharpIcon />,
-            collapseAll: <RemoveSharpIcon />,
+            check: <CheckBoxSharpIcon/>,
+            uncheck: <CheckBoxOutlineBlankSharpIcon/>,      
+            expandClose: <ArrowRightSharpIcon/>,
+            expandOpen: <ArrowDropDownSharpIcon/>,
+            expandAll: <AddSharpIcon/>,
+            collapseAll: <RemoveSharpIcon/>,
+
+
+            halfCheck: <AcUnitSharpIcon/>,
+
+            parentClose: <AcUnitSharpIcon/>,
+            parentOpen: <AcUnitSharpIcon/>,
+            leaf: <AcUnitSharpIcon/>,
           }}
           showNodeIcon={false}
           nodes={this.state.nodes}

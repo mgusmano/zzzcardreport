@@ -61357,8 +61357,6 @@ const theme2 = createTheme({ palette: {
 	            }
 	          }
 
-	          console.log(filters[objIndex].values.length);
-
 	          if (filters[objIndex].values.length === 0) {
 	            filters.splice(objIndex, 1);
 	          }
@@ -61786,7 +61784,7 @@ const theme2 = createTheme({ palette: {
 	      margin: '5px 5px 0 0',
 	      fontSize: '10px'
 	    }
-	  }, "v2022-02-26-a"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
+	  }, "v2022-02-26-c"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      display: filterdisplay
 	    }

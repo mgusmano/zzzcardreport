@@ -25,7 +25,7 @@ const CardReportCardWidget = (props) => {
       'jobids=' + blankString  + '&' +
       'percentages=' + blankString + '&' +
       'skillids=' + blankString
-      //console.log(url)
+      console.log(url)
       var axiosParams = {
         method: 'post',
         url: url,

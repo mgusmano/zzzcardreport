@@ -21,6 +21,7 @@ const CardReport = () => {
   //const { PartnerID, ReportID } = props;
   var PartnerID = null
   var ReportID = null
+  var PersonID = null
   const [filterdisplay, setFilterDisplay] = useState('block')
   const [cardflex, setCardflex] = useState(1)
   const [mapflex, setMapflex] = useState(0)
@@ -44,6 +45,7 @@ const CardReport = () => {
       }
       else {
         var data = Partner395Customizations(ReportID, response.data)
+        data.PersonID = PersonID
         setPartner(data)
       }
     } catch (err) {
@@ -54,6 +56,7 @@ const CardReport = () => {
   useEffect(() => {
     PartnerID = sessionStorage.getItem('PartnerID')
     ReportID = sessionStorage.getItem('ReportID')
+    PersonID = sessionStorage.getItem('PersonID')
     getPartner(PartnerID)
   }, []);
 
@@ -142,7 +145,7 @@ const CardReport = () => {
 
         <div style={{overflow:'hidden',height:'20px',display:'flex',xjustifyContent:'space-between',flexDirection:'row-reverse',background:'lightgray',color:'black',textAlign:'center',fontSize:'24px'}}>
           <div style={{margin:'5px 5px 0 0',fontSize:'10px'}}>
-            v2022-02-26-c
+            v2022-03-08-a
           </div>
         </div>
 

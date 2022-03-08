@@ -19,6 +19,8 @@ var PartnerID = 395;   //CNA
 var ReportID = 1; //Skills
 //var ReportID = 2; //SME
 
+var PersonID = 1;
+
 const urlParams = new URLSearchParams(window.location.search);
 for (const [key, value] of urlParams) {
     if (key === 'PartnerID') {
@@ -27,9 +29,13 @@ for (const [key, value] of urlParams) {
     if (key === 'ReportID') {
       ReportID = value
     }
+    if (key === 'PersonID') {
+        PersonID = value
+      }
 }
 sessionStorage.setItem('PartnerID',PartnerID);
 sessionStorage.setItem('ReportID',ReportID);
+sessionStorage.setItem('PersonID',PersonID);
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>

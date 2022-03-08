@@ -16,8 +16,8 @@ var PartnerID = 395;   //CNA
 //var PartnerID = 434; //GMI
 //var PartnerID = 418; //pmdemo
 
-var ReportID = 1; //Skills
-//var ReportID = 2; //SME
+//var ReportID = 1; //Skills
+var ReportID = 2; //SME
 
 var PersonID = 1;
 

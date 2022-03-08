@@ -34,10 +34,27 @@ const CardReportCardWidget = (props) => {
       if (filters.length !== 0) {
         axiosParams.data = filters
       }
-      //console.log(axiosParams)
       const response = await axios(axiosParams)
-      setUsers(response.data)
-      SendIt('fromcardwidget', {number: response.data.length})
+
+      if (SMEOnly === true) {
+        //*** just for CNA ReportID=2 */
+        var toShow = []
+        response.data.map(user => {
+          if (user.Leader === '' && user.SME === '') {
+          }
+          else {
+            toShow.push(user)
+          }
+          return null
+        })
+        setUsers(toShow)
+        SendIt('fromcardwidget', {number: toShow.length})
+      }
+      else {
+        setUsers(response.data)
+        SendIt('fromcardwidget', {number: response.data.length})
+      }
+
       setWaiting(false)
     } catch (err) {
       console.error(err);

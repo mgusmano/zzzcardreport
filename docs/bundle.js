@@ -58828,8 +58828,8 @@ const theme2 = createTheme({ palette: {
 
 	    try {
 	      var blankString = '';
-	      var url = 'https://skillnetusersapi.azurewebsites.net/api/CardReportUsersNew?' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString; //console.log(url)
-
+	      var url = 'https://skillnetusersapi.azurewebsites.net/api/CardReportUsersNew?' + 'personid=' + PersonID + '&' + 'groupid=' + GroupID + '&' + 'jobids=' + blankString + '&' + 'percentages=' + blankString + '&' + 'skillids=' + blankString;
+	      console.log(url);
 	      var axiosParams = {
 	        method: 'post',
 	        url: url,
@@ -61611,6 +61611,7 @@ const theme2 = createTheme({ palette: {
 	  //const { PartnerID, ReportID } = props;
 	  var PartnerID = null;
 	  var ReportID = null;
+	  var PersonID = null;
 	  const [filterdisplay, setFilterDisplay] = react.exports.useState('block');
 	  const [cardflex, setCardflex] = react.exports.useState(1);
 	  const [mapflex, setMapflex] = react.exports.useState(0);
@@ -61637,6 +61638,7 @@ const theme2 = createTheme({ palette: {
 	        setError('Error: data returned is not an object');
 	      } else {
 	        var data = Partner395Customizations(ReportID, response.data);
+	        data.PersonID = PersonID;
 	        setPartner(data);
 	      }
 	    } catch (err) {
@@ -61647,6 +61649,7 @@ const theme2 = createTheme({ palette: {
 	  react.exports.useEffect(() => {
 	    PartnerID = sessionStorage.getItem('PartnerID');
 	    ReportID = sessionStorage.getItem('ReportID');
+	    PersonID = sessionStorage.getItem('PersonID');
 	    getPartner(PartnerID);
 	  }, []);
 
@@ -61784,7 +61787,7 @@ const theme2 = createTheme({ palette: {
 	      margin: '5px 5px 0 0',
 	      fontSize: '10px'
 	    }
-	  }, "v2022-02-26-c"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
+	  }, "v2022-03-08-a"))), /*#__PURE__*/React$1.createElement(Splitter, null), /*#__PURE__*/React$1.createElement(Vertical, {
 	    style: {
 	      display: filterdisplay
 	    }
@@ -61918,6 +61921,7 @@ const theme2 = createTheme({ palette: {
 	// //var PartnerID = 418; //pmdemo
 	// var ReportID = 1; //Skills
 	// //var ReportID = 2; //SME
+	// var PersonID = 1;
 	// const urlParams = new URLSearchParams(window.location.search);
 	// for (const [key, value] of urlParams) {
 	//     if (key === 'PartnerID') {
@@ -61926,9 +61930,13 @@ const theme2 = createTheme({ palette: {
 	//     if (key === 'ReportID') {
 	//       ReportID = value
 	//     }
+	//     if (key === 'PersonID') {
+	//         PersonID = value
+	//       }
 	// }
 	// sessionStorage.setItem('PartnerID',PartnerID);
 	// sessionStorage.setItem('ReportID',ReportID);
+	// sessionStorage.setItem('PersonID',PersonID);
 	// ReactDOM.render(
 	//   <React.StrictMode>
 	//     <HashRouter>

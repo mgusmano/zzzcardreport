@@ -28,7 +28,9 @@ const CardReportMapWidget = (props) => {
         auth: {username: 'skillnet',password: 'demo'},
         data: filters
       }
+      console.log(axiosParams)
       const response = await axios(axiosParams)
+      console.log(response)
       var arrayLocations = response.data.map(item => {
         return {
           num: item.Users.length,
@@ -57,6 +59,7 @@ const CardReportMapWidget = (props) => {
     switch (type) {    
       case 'fromcardfilters':
         setFilteredlocations([])
+        console.log(payload.filters)
         getMapData(payload.filters)
         break;
       default:

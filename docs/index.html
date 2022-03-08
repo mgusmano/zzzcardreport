@@ -16,6 +16,7 @@
   //var PartnerID = 409; //CBET
   //var PartnerID = 434; //GMI
   var ReportID = 1;
+  var PersonID = 1;
   for (const [key, value] of urlParams) {
       if (key === 'PartnerID') {
         PartnerID = value
@@ -23,9 +24,13 @@
       if (key === 'ReportID') {
         ReportID = value
       }
+      if (key === 'PersonID') {
+        PersonID = value
+      }
   }
   sessionStorage.setItem('PartnerID',PartnerID);
   sessionStorage.setItem('ReportID',ReportID);
+  sessionStorage.setItem('PersonID',PersonID);
 </script>
 <script src="./bundle.js"></script>
 <link rel="stylesheet" href="./bundle.css" />
